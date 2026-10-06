@@ -1,12 +1,125 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Copy, Check, Bookmark, ArrowRight, Sparkles, SlidersHorizontal, Sun } from 'lucide-react';
+import { Copy, Check, Bookmark, ArrowRight, Sparkles, SlidersHorizontal, Sun, Layers, Eye } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
-import { roomTypes, moodTypes, curatedPalettes } from '../data/colours';
+import { roomTypes } from '../data/colours';
+import { texturesData } from '../data/textures';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
 
+// 6 Room Mood Modes modulating wall colour, lighting atmosphere, accent, and texture overlay
+const roomMoodModes = {
+  WARM: {
+    id: "WARM",
+    label: "WARM AMBER",
+    subtitle: "Sun-drenched terracotta, oiled honey teak & candle-like 2700K cove glow",
+    wallHex: "#B85C38",
+    accentTone: "#B85C38",
+    lightTint: "rgba(255, 175, 90, 0.22)",
+    textureName: "Stucco Venetian Plaster",
+    lightKelvin: "2700K Warm",
+    filter: "brightness(0.96) contrast(1.08) saturate(1.2) sepia(0.15)",
+    palette: [
+      { name: "Terracotta Earth", hex: "#B85C38", role: "Focal Wall" },
+      { name: "Oatmeal Plaster", hex: "#E8DEC8", role: "Perimeter Envelope" },
+      { name: "Honey Burma Teak", hex: "#8A5428", role: "Joinery & Doors" },
+      { name: "Burnished Brass", hex: "#B89648", role: "Light Profiles" },
+      { name: "Alabaster White", hex: "#F7F4EC", role: "Gypsum Soffit" }
+    ]
+  },
+  CALM: {
+    id: "CALM",
+    label: "CALM BOTANICAL",
+    subtitle: "Bangalore eucalyptus sage, chalk minerals & diffused 3500K natural daylight",
+    wallHex: "#7A8B7B",
+    accentTone: "#5C6F5D",
+    lightTint: "rgba(122, 139, 123, 0.14)",
+    textureName: "Anticco Aged Stone Plaster",
+    lightKelvin: "3500K Soft",
+    filter: "brightness(1.02) contrast(0.98) saturate(0.92)",
+    palette: [
+      { name: "Botanical Sage", hex: "#7A8B7B", role: "Accent Plane" },
+      { name: "Limestone Sand", hex: "#DFD7C4", role: "Primary Walls" },
+      { name: "Bleached Oak", hex: "#BFA98F", role: "Wood Elements" },
+      { name: "Dull Pewter", hex: "#6E726D", role: "Trim Detailing" },
+      { name: "Morning Chalk", hex: "#FAF8F2", role: "False Ceiling" }
+    ]
+  },
+  MODERN: {
+    id: "MODERN",
+    label: "MODERN MONOLITH",
+    subtitle: "Gallery off-white, basalt slate lines & 4000K high-CRI recessed magnetic tracks",
+    wallHex: "#46484A",
+    accentTone: "#383B3D",
+    lightTint: "rgba(220, 230, 240, 0.1)",
+    textureName: "Satin Gyproc Architectural Plane",
+    lightKelvin: "4000K Neutral",
+    filter: "brightness(1.0) contrast(1.1) saturate(0.95)",
+    palette: [
+      { name: "Basalt Slate", hex: "#46484A", role: "Media Backdrop" },
+      { name: "Gallery White", hex: "#F3F1EA", role: "Perimeter Skin" },
+      { name: "Smoked American Walnut", hex: "#4C3322", role: "Floating Credenza" },
+      { name: "Matte Black", hex: "#1A1A1B", role: "Concealed Profiles" },
+      { name: "Pure Canvas", hex: "#FFFFFF", role: "Ceiling Island" }
+    ]
+  },
+  LUXE: {
+    id: "LUXE",
+    label: "LUXE BRONZE",
+    subtitle: "High-burnish marble luster, champagne mica glazes & rich velvet illumination",
+    wallHex: "#8C6D46",
+    accentTone: "#8C6D46",
+    lightTint: "rgba(220, 180, 110, 0.18)",
+    textureName: "Royals Play Dune Metallic Glaze",
+    lightKelvin: "3000K Ambient",
+    filter: "brightness(0.98) contrast(1.12) saturate(1.15)",
+    palette: [
+      { name: "Warm Bronze Luster", hex: "#8C6D46", role: "Feature Plaster" },
+      { name: "Champagne Glaze", hex: "#D6C7AA", role: "Wall Weave" },
+      { name: "Rosewood Polish", hex: "#3E1E19", role: "Entrance Door & Bar" },
+      { name: "Antiqued Gold", hex: "#CCA44E", role: "Hardware & Trim" },
+      { name: "Warm Ivory", hex: "#F5EFE4", role: "Cove Ceiling" }
+    ]
+  },
+  EARTH: {
+    id: "EARTH",
+    label: "EARTH STONE",
+    subtitle: "Tuscan sandstone, raw lime textures & warm granite plinth reflections",
+    wallHex: "#A88D56",
+    accentTone: "#A88D56",
+    lightTint: "rgba(180, 150, 100, 0.15)",
+    textureName: "Rough-Cast Architectural Plaster",
+    lightKelvin: "3200K Natural",
+    filter: "brightness(0.98) contrast(1.04) saturate(1.02) sepia(0.1)",
+    palette: [
+      { name: "Jayanagar Sandstone", hex: "#A88D56", role: "Masonry Wall" },
+      { name: "Clay Adobe", hex: "#9F634A", role: "Niche Accent" },
+      { name: "Weathered Teak", hex: "#7A5030", role: "Door Frames" },
+      { name: "Basalt Stone", hex: "#3A3835", role: "Baseboard Skirting" },
+      { name: "Travertine Cream", hex: "#EFE8DA", role: "Ceiling Plane" }
+    ]
+  },
+  BOLD: {
+    id: "BOLD",
+    label: "BOLD NOCTURNE",
+    subtitle: "Deep Mysore indigo, midnight charcoal & dramatic perimeter grazing spots",
+    wallHex: "#2B3A4A",
+    accentTone: "#2A455E",
+    lightTint: "rgba(35, 45, 65, 0.24)",
+    textureName: "Dark Burnished Stucco Plaster",
+    lightKelvin: "2800K Intimate",
+    filter: "brightness(0.92) contrast(1.16) saturate(1.1)",
+    palette: [
+      { name: "Deep Mysore Indigo", hex: "#2B3A4A", role: "Nocturne Wall" },
+      { name: "Midnight Charcoal", hex: "#222426", role: "Media Unit" },
+      { name: "Warm Greige", hex: "#C8BEAE", role: "Balancing Surface" },
+      { name: "Burnished Brass", hex: "#C5A869", role: "Sconce Metal" },
+      { name: "Whisper White", hex: "#EAE6DE", role: "Reflective Soffit" }
+    ]
+  }
+};
+
 const roomVisuals = {
-  LIVING: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg",
+  LIVING: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85",
   BEDROOM: "https://d3k88l35vy59af.cloudfront.net/A001/colour-nest/1591620955826.jpg",
   KITCHEN: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1600&q=80",
   EXTERIOR: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453192427.jpg"
@@ -15,25 +128,20 @@ const roomVisuals = {
 export const ColourStudio = () => {
   const navigate = useNavigate();
   const [selectedRoom, setSelectedRoom] = useState("LIVING");
-  const [selectedMood, setSelectedMood] = useState("CALM");
+  const [selectedModeKey, setSelectedModeKey] = useState("WARM");
   const [copiedHex, setCopiedHex] = useState(null);
-  const [savedPalettes, setSavedPalettes] = useState(() => {
+  const [savedMoods, setSavedMoods] = useState(() => {
     try {
-      const saved = localStorage.getItem('colournest_saved_palettes');
+      const saved = localStorage.getItem('colournest_saved_moods');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
     }
   });
-  const [isSavedCurrent, setIsSavedCurrent] = useState(false);
 
-  const paletteKey = `${selectedRoom}_${selectedMood}`;
-  const currentPalette = curatedPalettes[paletteKey] || curatedPalettes["LIVING_CALM"];
-
-  useEffect(() => {
-    const isSaved = savedPalettes.some(p => p.key === paletteKey);
-    setIsSavedCurrent(isSaved);
-  }, [paletteKey, savedPalettes]);
+  const activeMood = roomMoodModes[selectedModeKey] || roomMoodModes["WARM"];
+  const moodStorageKey = `${selectedRoom}_${selectedModeKey}`;
+  const isSaved = savedMoods.some(m => m.key === moodStorageKey);
 
   const handleCopyHex = (hex) => {
     navigator.clipboard.writeText(hex);
@@ -41,28 +149,26 @@ export const ColourStudio = () => {
     setTimeout(() => setCopiedHex(null), 1800);
   };
 
-  const handleSavePalette = () => {
-    const newEntry = {
-      key: paletteKey,
+  const handleSaveMood = () => {
+    const entry = {
+      key: moodStorageKey,
       room: selectedRoom,
-      mood: selectedMood,
-      name: currentPalette.name,
-      colors: currentPalette.colors
+      mode: selectedModeKey,
+      name: activeMood.label,
+      palette: activeMood.palette
     };
-    const updated = [newEntry, ...savedPalettes.filter(p => p.key !== paletteKey)];
-    setSavedPalettes(updated);
-    localStorage.setItem('colournest_saved_palettes', JSON.stringify(updated));
-    setIsSavedCurrent(true);
+    const updated = [entry, ...savedMoods.filter(m => m.key !== moodStorageKey)];
+    setSavedMoods(updated);
+    localStorage.setItem('colournest_saved_moods', JSON.stringify(updated));
   };
 
   const handleUseThisLook = () => {
-    // Navigate to contact with state
     navigate('/contact', {
       state: {
-        paletteName: currentPalette.name,
         roomType: selectedRoom,
-        mood: selectedMood,
-        colors: currentPalette.colors
+        mood: activeMood.label,
+        suggestedService: "Customised Interiors & Stucco Finishing",
+        notes: `Selected from Room Mood Studio: ${selectedRoom} space in ${activeMood.label} atmosphere with ${activeMood.textureName} and ${activeMood.lightKelvin} lighting.`
       }
     });
   };
@@ -70,8 +176,8 @@ export const ColourStudio = () => {
   return (
     <>
       <SEOHead
-        title="Colour Studio — Architectural Palettes"
-        description="Explore curated 5-colour architectural interior palettes in contextual 3D spaces. Living, bedroom, culinary and exterior tones designed for Bangalore light."
+        title="Room Mood Studio — Holistic Spatial Atmosphere"
+        description="Room Mood Studio by Colour Nest. Colour is one essential layer of the interior. Test complete room environments across Warm, Calm, Modern, Luxe, Earth and Bold atmospheres."
       />
 
       <section
@@ -84,22 +190,22 @@ export const ColourStudio = () => {
       >
         <div className="container-wide">
           {/* Header */}
-          <div style={{ maxWidth: '920px', marginBottom: 'clamp(2rem, 5vw, 4rem)' }}>
+          <div style={{ maxWidth: '960px', marginBottom: 'clamp(2rem, 5vw, 4rem)' }}>
             <span className="meta-tag" style={{ marginBottom: '1rem' }}>
-              FLAGSHIP COLOUR LABORATORY
+              SPATIAL ATMOSPHERE LABORATORY
             </span>
             <h1 className="heading-monumental" style={{ marginBottom: '1rem' }}>
-              COLOUR, <br />
-              <span className="heading-editorial-italic">IN CONTEXT.</span>
+              ROOM MOOD <br />
+              <span className="heading-editorial-italic">STUDIO.</span>
             </h1>
-            <ArchitecturalLine label="CURATED 5-COLOUR HARMONIES" coordinates="LIGHT-INDEXED EQUATIONS" />
+            <ArchitecturalLine label="COLOUR IS ONE LAYER OF THE COMPLETE INTERIOR" coordinates="SPATIAL EQUILIBRIUM" />
             <p style={{ fontSize: 'clamp(1.05rem, 2vw, 1.35rem)', color: 'var(--ink-secondary)', lineHeight: 1.6 }}>
-              Paint chips in isolation deceive the eye. The Colour Studio tests pigment performance
-              directly inside rooms under daylight simulation.
+              A paint chip in isolation tells only a fraction of the story. The Room Mood Studio integrates
+              wall tone, joinery timber, lighting temperature, and surface texture into a complete living scene.
             </p>
           </div>
 
-          {/* 3-Column Studio Interface (Left: Room Type, Center: Visualizer, Right: Palette) */}
+          {/* 3-Column Studio Interface (Left: Room & Moods, Center: Full Room Visualizer, Right: Material Palette) */}
           <div
             style={{
               display: 'grid',
@@ -108,105 +214,116 @@ export const ColourStudio = () => {
               alignItems: 'start'
             }}
           >
-            {/* LEFT: ROOM TYPE & MOOD SELECTOR (3 cols) */}
-            <div
-              style={{
-                gridColumn: 'span 12',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '2rem'
-              }}
-              className="studio-left-col"
-            >
-              <div className="arch-card" style={{ padding: '1.75rem' }}>
-                <span className="meta-tag" style={{ marginBottom: '1rem' }}>
-                  01 • SPATIAL TYPOLOGY
-                </span>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: '0.65rem' }}>
-                  {roomTypes.map((room) => (
+            {/* LEFT: ROOM TYPOLOGY & 6 MOOD MODES */}
+            <div style={{ gridColumn: 'span 12' }} className="mood-studio-left">
+              {/* Room Typologies */}
+              <div className="arch-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
+                <span className="meta-tag" style={{ marginBottom: '0.75rem' }}>01 • ENVIRONMENT</span>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: '0.5rem' }}>
+                  {roomTypes.map((r) => (
                     <button
-                      key={room.id}
-                      onClick={() => setSelectedRoom(room.id)}
+                      key={r.id}
+                      onClick={() => setSelectedRoom(r.id)}
                       className="filter-pill"
                       style={{
                         padding: '0.75rem 0.5rem',
-                        textAlign: 'center',
                         fontSize: '0.7rem',
-                        backgroundColor: selectedRoom === room.id ? 'var(--accent)' : 'var(--surface-elevated)',
-                        color: selectedRoom === room.id ? '#FFFFFF' : 'var(--ink-primary)',
-                        borderColor: selectedRoom === room.id ? 'var(--accent)' : 'var(--border-subtle)'
+                        textAlign: 'center',
+                        backgroundColor: selectedRoom === r.id ? 'var(--accent)' : 'var(--surface-elevated)',
+                        color: selectedRoom === r.id ? '#FFFFFF' : 'var(--ink-primary)',
+                        borderColor: selectedRoom === r.id ? 'var(--accent)' : 'var(--border-subtle)'
                       }}
                       data-cursor="SELECT"
                     >
-                      {room.id}
+                      {r.id}
                     </button>
                   ))}
                 </div>
               </div>
 
-              <div className="arch-card" style={{ padding: '1.75rem' }}>
-                <span className="meta-tag" style={{ marginBottom: '1rem' }}>
-                  02 • ATMOSPHERE / MOOD
-                </span>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: '0.65rem' }}>
-                  {moodTypes.map((mood) => (
-                    <button
-                      key={mood.id}
-                      onClick={() => setSelectedMood(mood.id)}
-                      className="filter-pill"
-                      style={{
-                        padding: '0.75rem 0.5rem',
-                        textAlign: 'center',
-                        fontSize: '0.7rem',
-                        backgroundColor: selectedMood === mood.id ? 'var(--accent)' : 'var(--surface-elevated)',
-                        color: selectedMood === mood.id ? '#FFFFFF' : 'var(--ink-primary)',
-                        borderColor: selectedMood === mood.id ? 'var(--accent)' : 'var(--border-subtle)'
-                      }}
-                      data-cursor="SELECT"
-                    >
-                      {mood.id}
-                    </button>
-                  ))}
+              {/* 6 Mood Modes: WARM, CALM, MODERN, LUXE, EARTH, BOLD */}
+              <div className="arch-card" style={{ padding: '1.5rem' }}>
+                <span className="meta-tag" style={{ marginBottom: '0.75rem' }}>02 • SPATIAL MOOD MODE</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  {Object.keys(roomMoodModes).map((mKey) => {
+                    const m = roomMoodModes[mKey];
+                    const isSelected = selectedModeKey === mKey;
+                    return (
+                      <button
+                        key={mKey}
+                        onClick={() => setSelectedModeKey(mKey)}
+                        className="arch-card"
+                        style={{
+                          padding: '0.85rem 1.15rem',
+                          textAlign: 'left',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
+                          backgroundColor: isSelected ? 'var(--accent-soft)' : 'var(--surface-elevated)'
+                        }}
+                        data-cursor="MOOD"
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                          <div style={{ width: '18px', height: '18px', borderRadius: '50%', backgroundColor: m.wallHex }} />
+                          <strong style={{ fontSize: '0.82rem' }}>{m.label}</strong>
+                        </div>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: isSelected ? 'var(--accent)' : 'var(--ink-muted)' }}>
+                          {isSelected ? 'ACTIVE' : m.lightKelvin}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
 
-            {/* CENTER: ROOM VISUALIZER (6 cols on desktop) */}
-            <div
-              style={{
-                gridColumn: 'span 12',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1.5rem'
-              }}
-              className="studio-center-col"
-            >
+            {/* CENTER: COMPLETE ROOM VISUALIZER */}
+            <div style={{ gridColumn: 'span 12' }} className="mood-studio-center">
               <div
                 style={{
                   position: 'relative',
                   width: '100%',
                   aspectRatio: '16/10',
-                  minHeight: '360px',
+                  minHeight: '380px',
                   borderRadius: 'var(--radius-xs)',
                   overflow: 'hidden',
                   boxShadow: 'var(--shadow-dramatic)',
                   border: '1px solid var(--border-medium)',
-                  backgroundColor: '#161514'
+                  backgroundColor: '#161514',
+                  marginBottom: '1.25rem'
                 }}
               >
-                {/* Room Geometry Image */}
+                {/* Complete Room Photography Base */}
                 <img
                   src={roomVisuals[selectedRoom]}
-                  alt={`${selectedRoom} Room View`}
+                  alt={`${selectedRoom} Complete Interior`}
                   style={{
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',
-                    filter: 'contrast(1.05)'
+                    filter: activeMood.filter,
+                    transition: 'filter 0.6s ease'
                   }}
                 />
 
-                {/* Primary Feature Accent Tint Layer */}
+                {/* Vertical Focal Wall Tint Layer */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '8%',
+                    left: '4%',
+                    width: '44%',
+                    height: '76%',
+                    backgroundColor: activeMood.wallHex,
+                    opacity: 0.42,
+                    mixBlendMode: 'multiply',
+                    clipPath: 'polygon(0 0, 100% 5%, 92% 100%, 0 95%)',
+                    transition: 'background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
+                  }}
+                />
+
+                {/* Atmospheric Ambient Lighting Wash */}
                 <div
                   style={{
                     position: 'absolute',
@@ -214,103 +331,81 @@ export const ColourStudio = () => {
                     left: 0,
                     width: '100%',
                     height: '100%',
-                    backgroundColor: currentPalette.colors[2]?.hex || '#B85C38',
-                    opacity: 0.42,
-                    mixBlendMode: 'multiply',
-                    clipPath: 'polygon(0 0, 70% 0, 60% 100%, 0 100%)',
-                    transition: 'background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
+                    backgroundColor: activeMood.lightTint,
+                    mixBlendMode: 'screen',
+                    pointerEvents: 'none',
+                    transition: 'background-color 0.6s ease'
                   }}
                 />
 
-                {/* Secondary Wall Tint Layer */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    width: '45%',
-                    height: '100%',
-                    backgroundColor: currentPalette.colors[1]?.hex || '#E2D9C5',
-                    opacity: 0.35,
-                    mixBlendMode: 'multiply',
-                    transition: 'background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
-                  }}
-                />
-
-                {/* In-Room Context HUD */}
+                {/* In-Room Live HUD */}
                 <div
                   style={{
                     position: 'absolute',
                     bottom: '1.25rem',
                     left: '1.25rem',
-                    backgroundColor: 'rgba(18, 18, 19, 0.8)',
+                    backgroundColor: 'rgba(18, 18, 19, 0.85)',
                     backdropFilter: 'blur(8px)',
-                    padding: '0.6rem 1rem',
+                    padding: '0.65rem 1.15rem',
                     borderRadius: 'var(--radius-xs)',
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.72rem',
                     color: '#FAF7F2',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.75rem'
+                    gap: '0.85rem'
                   }}
                 >
-                  <div
-                    style={{
-                      width: '10px',
-                      height: '10px',
-                      borderRadius: '50%',
-                      backgroundColor: currentPalette.colors[2]?.hex || '#B85C38'
-                    }}
-                  />
-                  <span>{currentPalette.name.toUpperCase()}</span>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: activeMood.wallHex }} />
+                  <span>MOOD: {activeMood.label}</span>
+                  <span style={{ color: 'rgba(255, 255, 255, 0.4)' }}>|</span>
+                  <span>SURFACE: {activeMood.textureName}</span>
                 </div>
               </div>
 
-              {/* Architectural Recommendation Box */}
+              {/* Integrated Atmosphere Blueprint Details */}
               <div
                 className="arch-card"
                 style={{
                   padding: '1.25rem 1.75rem',
-                  backgroundColor: 'var(--surface-secondary)'
+                  backgroundColor: 'var(--surface-secondary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: '1rem'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
-                  <Sun size={15} color="var(--accent)" />
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700 }}>
-                    FINISH &amp; LIGHTING GUIDANCE
-                  </span>
+                <div>
+                  <strong style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent)', display: 'block', marginBottom: '2px' }}>
+                    LIGHT &amp; TEXTURE INTERACTION:
+                  </strong>
+                  <p style={{ fontSize: '0.88rem', color: 'var(--ink-secondary)' }}>
+                    {activeMood.subtitle}
+                  </p>
                 </div>
-                <p style={{ fontSize: '0.88rem', color: 'var(--ink-secondary)', lineHeight: 1.5 }}>
-                  {currentPalette.recommendedFinish} — {currentPalette.lightingTip}
-                </p>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--ink-muted)' }}>
+                  {activeMood.lightKelvin}
+                </div>
               </div>
             </div>
 
-            {/* RIGHT: SELECTED PALETTE (5-COLOURS, COPY, SAVE, USE LOOK) */}
-            <div
-              style={{
-                gridColumn: 'span 12',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1.5rem'
-              }}
-              className="studio-right-col"
-            >
+            {/* RIGHT: HARMONIZED SPATIAL PALETTE & ACTIONS */}
+            <div style={{ gridColumn: 'span 12' }} className="mood-studio-right">
               <div className="arch-card" style={{ padding: '1.75rem' }}>
                 <span className="meta-tag" style={{ marginBottom: '0.5rem' }}>
-                  CURATED 5-COLOUR FORMULA
+                  HARMONIZED SPATIAL PALETTE
                 </span>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', marginBottom: '0.4rem' }}>
-                  {currentPalette.name}
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', marginBottom: '0.25rem' }}>
+                  {activeMood.label}
                 </h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--ink-muted)', marginBottom: '1.5rem', lineHeight: 1.4 }}>
-                  {currentPalette.concept}
+                <p style={{ fontSize: '0.82rem', color: 'var(--ink-muted)', marginBottom: '1.5rem' }}>
+                  Texture: {activeMood.textureName}
                 </p>
 
-                {/* 5 Colors List */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
-                  {currentPalette.colors.map((c, i) => (
+                {/* 5 Layered Colors */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.7rem', marginBottom: '1.75rem' }}>
+                  {activeMood.palette.map((c, i) => (
                     <div
                       key={c.hex + i}
                       style={{
@@ -324,15 +419,7 @@ export const ColourStudio = () => {
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-                        <div
-                          style={{
-                            width: '28px',
-                            height: '28px',
-                            borderRadius: 'var(--radius-xs)',
-                            backgroundColor: c.hex,
-                            boxShadow: 'inset 0 0 0 1px rgba(0, 0, 0, 0.1)'
-                          }}
-                        />
+                        <div style={{ width: '26px', height: '26px', borderRadius: 'var(--radius-xs)', backgroundColor: c.hex }} />
                         <div>
                           <strong style={{ fontSize: '0.85rem', display: 'block' }}>{c.name}</strong>
                           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: 'var(--ink-muted)' }}>
@@ -344,24 +431,17 @@ export const ColourStudio = () => {
                       <button
                         onClick={() => handleCopyHex(c.hex)}
                         className="btn-ghost"
-                        style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.72rem',
-                          padding: '0.2rem 0.5rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.35rem'
-                        }}
+                        style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', padding: '0.2rem 0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
                         data-cursor="COPY"
                       >
-                        {copiedHex === c.hex ? <Check size={13} color="var(--accent)" /> : <Copy size={13} />}
+                        {copiedHex === c.hex ? <Check size={12} color="var(--accent)" /> : <Copy size={12} />}
                         <span>{copiedHex === c.hex ? 'Copied' : c.hex}</span>
                       </button>
                     </div>
                   ))}
                 </div>
 
-                {/* Action Buttons: Save Palette & Use This Look */}
+                {/* Actions */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   <button
                     onClick={handleUseThisLook}
@@ -369,18 +449,18 @@ export const ColourStudio = () => {
                     style={{ width: '100%', justifyContent: 'center' }}
                     data-cursor="USE"
                   >
-                    <span>Use This Look In Consultation</span>
+                    <span>Use This Mood In Consultation</span>
                     <ArrowRight size={15} />
                   </button>
 
                   <button
-                    onClick={handleSavePalette}
+                    onClick={handleSaveMood}
                     className="btn-secondary"
                     style={{ width: '100%', justifyContent: 'center' }}
                     data-cursor="SAVE"
                   >
-                    <Bookmark size={15} color={isSavedCurrent ? 'var(--accent)' : 'currentColor'} />
-                    <span>{isSavedCurrent ? 'Palette Saved to Studio' : 'Save Palette to Studio'}</span>
+                    <Bookmark size={15} color={isSaved ? 'var(--accent)' : 'currentColor'} />
+                    <span>{isSaved ? 'Mood Saved In Studio' : 'Save Spatial Mood'}</span>
                   </button>
                 </div>
               </div>
@@ -389,18 +469,11 @@ export const ColourStudio = () => {
         </div>
       </section>
 
-      {/* Responsive layout CSS for Studio */}
       <style>{`
         @media (min-width: 1024px) {
-          .studio-left-col {
-            grid-column: span 3 !important;
-          }
-          .studio-center-col {
-            grid-column: span 5 !important;
-          }
-          .studio-right-col {
-            grid-column: span 4 !important;
-          }
+          .mood-studio-left { grid-column: span 3 !important; }
+          .mood-studio-center { grid-column: span 5 !important; }
+          .mood-studio-right { grid-column: span 4 !important; }
         }
       `}</style>
     </>

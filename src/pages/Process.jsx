@@ -1,87 +1,113 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, Ruler, Eye, Compass, Layers, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
 
 const processSteps = [
   {
     number: "01",
-    title: "DISCOVER",
-    subtitle: "Spatial Context & Light Audit",
-    description: "Every interior starts with careful observation. We inspect site orientation, evaluate natural daylight trajectories across rooms, review artificial lighting points, and record humidity conditions before recommending any primer or plaster finish.",
+    title: "CONSULTATION",
+    subtitle: "Spatial Brief & Lifestyle Dialogue",
+    description: "Every interior begins with attentive listening. Mr. Abhishek Rao personally conducts an initial dialogue to understand your family's daily rituals, functional requirements, aesthetic tastes, and project scope — from single-room updates to full turnkey residences.",
     details: [
-      "Substrate moisture meter testing across all masonry surfaces",
-      "Daylight intensity mapping from dawn to twilight",
-      "Identification of hairline structural fractures and efflorescence",
-      "Evaluation of architectural moldings, skirting, and ceiling soffits"
-    ],
-    image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1400&q=80"
-  },
-  {
-    number: "02",
-    title: "UNDERSTAND",
-    subtitle: "Client Lifestyle Brief & Vision Mapping",
-    description: "We don't impose generic trends. Mr. Abhishek Rao personally conducts a consultation to understand your family's daily rituals: how spaces are used, sensory preferences (calm vs bold), acoustic requirements, and cleaning maintenance expectations.",
-    details: [
-      "In-depth dialogue on spatial usage and emotional intent",
-      "Analysis of existing furniture timber tones and floor stone",
-      "Establishing tactile finish preferences (velvet Stucco vs matte Anticco)",
+      "In-depth dialogue on spatial usage, family habits, and sensory preferences",
+      "Evaluation of architectural drawings, floor plans, and spatial priorities",
+      "Discussion of complete interior components: ceilings, woodwork, lighting, finishes",
       "Clear timeline and budget alignment without ambiguous extras"
     ],
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80"
   },
   {
-    number: "03",
-    title: "PLAN",
-    subtitle: "Material Harmony & Physical Sample Boards",
-    description: "Colour chips on paper can mislead. We prepare physical onsite 2x2 ft sample swatches showing real plaster texture, metallic glazes, and wood stains under your actual room illumination before any wall is touched.",
+    number: "02",
+    title: "UNDERSTAND THE SPACE",
+    subtitle: "Spatial Context & Substrate Audit",
+    description: "We rigorously assess the architectural canvas. We inspect room geometry, ceiling heights, ventilation, natural daylight trajectories from sunrise to twilight, and conduct electronic substrate moisture testing before recommending any material.",
     details: [
-      "On-wall live test swatches under 3000K warm vs 4000K daylight",
-      "Coordinated mood boards uniting ceilings, walls, and woodwork",
-      "Structured phase execution schedule with daily milestones",
-      "Protective packing plan for existing flooring and precious fixtures"
+      "Substrate moisture meter and efflorescence testing across masonry surfaces",
+      "Daylight intensity mapping and shadow path analysis across key rooms",
+      "Inspection of existing walls, beams, electrical conduits, and floor transitions",
+      "Laser-measured dimensional survey for precise surface and joinery calculations"
+    ],
+    image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1400&q=80"
+  },
+  {
+    number: "03",
+    title: "DESIGN & MATERIAL DIRECTION",
+    subtitle: "Holistic Palette & Spatial Harmony",
+    description: "True luxury is cohesive. We build an integrated material direction that unites woodwork tones, wallpaper patterns, false ceiling elevations, cove lighting schemes, and artisanal wall plasters into one balanced environment.",
+    details: [
+      "Tactile mood board synthesis: timber veneers, stone, metal accents, and plaster",
+      "False ceiling drop designs coordinated with indirect architectural cove lighting",
+      "Hierarchical surface mapping: focal walls, quiet zones, and architectural joinery",
+      "3D spatial mood boards and interior lighting zone schematics"
     ],
     image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg"
   },
   {
     number: "04",
-    title: "PREPARE",
-    subtitle: "Immersion Masking & Substrate Perfection",
-    description: "Craftsmanship is 70% preparation. Floors are triple-masked with heavy-duty protective sheets; door hardware, switches, and glass panes are sealed with precision painter's tape. Walls are scraped, vacuum-sanded, and stabilized with bonding primer.",
+    title: "COLOUR / FINISH SELECTION",
+    subtitle: "Live On-Site Swatches & Light Calibration",
+    description: "Colour chips on paper can mislead under real-world home illumination. We prepare on-site 2x2 ft physical sample swatches of Italian Stucco, Anticco, Royals Play glazes, and wood stains directly under your home's actual lighting.",
     details: [
-      "Full floor protective poly-corrugated sheet underlayment",
-      "Edge taping with zero-bleed architectural masking tapes",
-      "Fiberglass mesh reinforcement over structural joints and coves",
-      "Multi-grit dustless mechanical sanding to glass-like uniformity"
-    ],
-    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1400&q=80"
-  },
-  {
-    number: "05",
-    title: "CRAFT",
-    subtitle: "Master Artisan Application",
-    description: "Our dedicated master applicators take over. Whether hand-troweling Italian Venetian Stucco with flexible Japanese spatulas, spraying 2-pack Polycoat wood finish in dust-isolated chambers, or laser-squaring gypsum false ceiling grids.",
-    details: [
-      "Layer-by-layer progressive thickness calibration",
-      "Hand-burnishing of marble aggregate using stainless steel trowels",
-      "Airless spray execution for flawless acoustic ceiling soffits",
-      "Intermediate inspection between every single applied coat"
+      "On-wall live test swatches inspected under 3000K warm vs 4000K ambient light",
+      "Selection of tactile surface sheen: velvet Stucco, aged Anticco, or satin wood",
+      "Polycoat and PU wood stain testing on target teak and oak timber samples",
+      "Final client sign-off on physical tactile samples before material procurement"
     ],
     image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453044604.jpg"
   },
   {
-    number: "06",
-    title: "FINISH",
-    subtitle: "White-Glove Handover & Long-Term Care",
-    description: "The transformation is finalized with comprehensive post-application inspection under high-lux inspection lamps. Floors are uncovered and vacuumed, fixtures polished, and a detailed care manual is handed over for enduring beauty.",
+    number: "05",
+    title: "QUOTATION",
+    subtitle: "Transparent, Itemized Investment Plan",
+    description: "Honesty is the foundation of our studio. You receive a structured, transparent bill of quantities detailing exact material grades, brand tiers, labor stages, protective masking, and clear milestone schedules with zero hidden extras.",
     details: [
-      "Full-perimeter high-intensity raking light inspection",
-      "Complete residue-free protective masking removal & vacuum cleanup",
-      "Client walkthrough with touch-up kit and exact color formula records",
-      "Ongoing maintenance advice and future care recommendations"
+      "Transparent line-item breakdown of walls, false ceilings, timber, and finishes",
+      "Explicit specification of premium coatings, primers, and Italian plaster formulations",
+      "Phase-linked milestone payment schedule tied to verified inspection stages",
+      "Firm execution timeline with guaranteed commencement and handover dates"
     ],
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453855356.jpg"
+    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1400&q=80"
+  },
+  {
+    number: "06",
+    title: "EXECUTION",
+    subtitle: "Protective Masking & Master Craftsmanship",
+    description: "We treat your space with surgical care. Floors and furniture are sealed with heavy-duty protective underlayment. Master applicators and interior technicians execute false ceilings, woodwork polishing, surface preparation, and specialized finishes.",
+    details: [
+      "Multi-layer protective floor masking and zero-bleed tape seal around fixtures",
+      "Dustless mechanical vacuum sanding to establish mirror-flat substrates",
+      "Laser-aligned false ceiling grid erection and cove lighting installation",
+      "Layer-by-layer hand troweling of Italian Stucco and airless spray applications"
+    ],
+    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1400&q=80"
+  },
+  {
+    number: "07",
+    title: "DETAILING",
+    subtitle: "Micro-Finishing, Trim Alignment & Lighting Tuning",
+    description: "Exceptional spaces are distinguished by meticulous micro-details. We fine-tune joinery interfaces, align switch plates, burnish high-traffic plaster corners, seal wallpaper borders, and calibrate indirect LED cove temperatures.",
+    details: [
+      "High-intensity raking light inspection across all wall planes and ceiling soffits",
+      "Precision caulking between woodwork, stone skirting, and gypsum coves",
+      "Dimmer module and 3000K warm LED cove lumen calibration for seamless ambience",
+      "Final protective finishing coats applied to architectural wood and plaster accents"
+    ],
+    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453573110.jpg"
+  },
+  {
+    number: "08",
+    title: "HANDOVER",
+    subtitle: "White-Glove Deep Clean & Living Room Reveal",
+    description: "The transformation is unveiled. Protective masking is gently removed, surfaces are vacuumed clean, and your space is presented in pristine, move-in ready elegance accompanied by a complete care dossier and touch-up formulas.",
+    details: [
+      "Residue-free masking removal and comprehensive post-transformation deep cleanup",
+      "Client walkthrough with Mr. Abhishek Rao verifying every spatial detail",
+      "Handover of touch-up kit and exact tint formula records for future reference",
+      "Comprehensive interior care dossier for lasting finish longevity"
+    ],
+    image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80"
   }
 ];
 
@@ -93,8 +119,8 @@ export const Process = () => {
   return (
     <>
       <SEOHead
-        title="Process — Architectural Execution Timeline"
-        description="Not just a finish. A process. Discover Colour Nest's 6-phase disciplined execution: Discover, Understand, Plan, Prepare, Craft, Finish in Bangalore."
+        title="Interior Workflow — 8-Stage Spatial Transformation Process"
+        description="From initial consultation to white-glove handover. Discover Colour Nest's disciplined 8-stage interior project workflow in Jayanagar, Bangalore."
       />
 
       <section
@@ -109,25 +135,25 @@ export const Process = () => {
           {/* Header */}
           <div style={{ maxWidth: '920px', marginBottom: 'clamp(2rem, 5vw, 4rem)' }}>
             <span className="meta-tag" style={{ marginBottom: '1rem' }}>
-              METHODOLOGY &amp; WORKFLOW
+              INTERIOR PROJECT WORKFLOW
             </span>
             <h1 className="heading-monumental" style={{ marginBottom: '1rem' }}>
-              NOT JUST A FINISH. <br />
-              <span className="heading-editorial-italic">A PROCESS.</span>
+              HOW A COMPLETE SPACE <br />
+              <span className="heading-editorial-italic">COMES TOGETHER.</span>
             </h1>
-            <ArchitecturalLine label="6-PHASE EXECUTION PROTOCOL" coordinates="STRICT CRAFTSMANSHIP STANDARDS" />
+            <ArchitecturalLine label="8-STAGE INTERIOR EXECUTION PROTOCOL" coordinates="STRICT CRAFTSMANSHIP STANDARDS" />
             <p style={{ fontSize: 'clamp(1.05rem, 2vw, 1.35rem)', color: 'var(--ink-secondary)', lineHeight: 1.6 }}>
-              Excellence in interior finishing requires methodical discipline. We adhere to a structured
-              six-phase roadmap ensuring seamless execution, spotless site conditions, and enduring longevity.
+              A disciplined sequence transforms architectural intent into a living, breathing environment.
+              From spatial discovery to fine detailing, our 8-stage roadmap ensures effortless execution, clean site conditions, and enduring elegance.
             </p>
           </div>
 
-          {/* Interactive Step Navigator */}
+          {/* Interactive 8-Step Navigator */}
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-              gap: '0.75rem',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+              gap: '0.65rem',
               marginBottom: '3.5rem'
             }}
           >
@@ -137,20 +163,21 @@ export const Process = () => {
                 onClick={() => setActiveStepIdx(idx)}
                 className="filter-pill"
                 style={{
-                  padding: '1rem',
+                  padding: '0.85rem 0.75rem',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '0.25rem',
+                  gap: '0.2rem',
                   textAlign: 'left',
                   borderRadius: 'var(--radius-xs)',
                   border: activeStepIdx === idx ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
                   backgroundColor: activeStepIdx === idx ? 'var(--accent)' : 'var(--surface-elevated)',
-                  color: activeStepIdx === idx ? '#FFFFFF' : 'var(--ink-primary)'
+                  color: activeStepIdx === idx ? '#FFFFFF' : 'var(--ink-primary)',
+                  transition: 'all 0.25s ease'
                 }}
                 data-cursor="PHASE"
               >
-                <span style={{ fontSize: '0.65rem', opacity: 0.8 }}>PHASE {step.number}</span>
-                <strong style={{ fontSize: '0.9rem' }}>{step.title}</strong>
+                <span style={{ fontSize: '0.65rem', opacity: 0.8, fontFamily: 'var(--font-mono)' }}>STAGE {step.number}</span>
+                <strong style={{ fontSize: '0.78rem', lineHeight: 1.25 }}>{step.title}</strong>
               </button>
             ))}
           </div>
@@ -171,7 +198,7 @@ export const Process = () => {
                   <span className="meta-tag">{activeStep.subtitle}</span>
                 </div>
 
-                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3rem)', marginBottom: '1.25rem' }}>
+                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', marginBottom: '1.25rem' }}>
                   {activeStep.title}
                 </h2>
                 <p style={{ fontSize: '1.05rem', color: 'var(--ink-secondary)', lineHeight: 1.7, marginBottom: '2rem' }}>
@@ -179,7 +206,7 @@ export const Process = () => {
                 </p>
 
                 <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '1rem' }}>
-                  Actionable Phase Benchmarks:
+                  Stage Milestones &amp; Actions:
                 </h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '2.5rem' }}>
                   {activeStep.details.map((d, i) => (
@@ -190,26 +217,29 @@ export const Process = () => {
                   ))}
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem' }}>
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                   {activeStepIdx < processSteps.length - 1 ? (
                     <button
                       onClick={() => setActiveStepIdx(p => p + 1)}
                       className="btn-primary"
                     >
-                      <span>Advance to Phase 0{activeStepIdx + 2}</span>
+                      <span>Advance to Stage 0{activeStepIdx + 2}</span>
                       <ArrowRight size={15} />
                     </button>
                   ) : (
                     <Link to="/contact" className="btn-primary" data-cursor="START">
-                      <span>Initiate Your Project Phase 01</span>
+                      <span>Begin Stage 01 Consultation</span>
                       <ArrowRight size={15} />
                     </Link>
                   )}
+                  <Link to="/contact" className="btn-secondary">
+                    <span>Consult on Your Space</span>
+                  </Link>
                 </div>
               </div>
 
               {/* Visual Phase Documentation Photo */}
-              <div className="aspect-4-3" style={{ borderRadius: 'var(--radius-xs)', boxShadow: 'var(--shadow-dramatic)' }}>
+              <div className="aspect-4-3" style={{ borderRadius: 'var(--radius-xs)', boxShadow: 'var(--shadow-dramatic)', overflow: 'hidden' }}>
                 <img src={activeStep.image} alt={activeStep.title} className="aspect-fill" />
               </div>
             </div>
@@ -236,7 +266,7 @@ export const Process = () => {
               Zero surprises, zero dust damage, total client satisfaction.
             </p>
             <Link to="/contact" className="btn-primary" data-cursor="START">
-              <span>Schedule Initial Spatial Audit</span>
+              <span>Schedule Stage 01 Consultation</span>
               <ArrowRight size={16} />
             </Link>
           </div>
@@ -245,3 +275,4 @@ export const Process = () => {
     </>
   );
 };
+

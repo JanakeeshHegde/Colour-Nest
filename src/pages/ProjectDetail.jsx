@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle2, MapPin, Calendar, Layers } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle2, MapPin, Calendar, Layers, Sparkles, Sun, Eye, Hammer, Compass } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
 import { projectsData } from '../data/projects';
 import { BeforeAfter } from '../components/interactive/BeforeAfter';
@@ -14,11 +14,21 @@ export const ProjectDetail = () => {
     return <Navigate to="/projects" replace />;
   }
 
+  const storySteps = [
+    { number: "01", key: "theSpace", title: "THE SPACE", subtitle: "Spatial Volume & Initial Context", icon: Compass, content: project.story.theSpace },
+    { number: "02", key: "theDirection", title: "THE DIRECTION", subtitle: "Design Intent & Architectural Concept", icon: Layers, content: project.story.theDirection },
+    { number: "03", key: "theMaterials", title: "THE MATERIALS", subtitle: "Curated Textures, Timber & Stone", icon: Hammer, content: project.story.theMaterials },
+    { number: "04", key: "theFinishes", title: "THE FINISHES", subtitle: "Artisanal Plaster, Polycoat & Sheen", icon: CheckCircle2, content: project.story.theFinishes },
+    { number: "05", key: "theLight", title: "THE LIGHT", subtitle: "Cove Illuminations & Daylight Dynamics", icon: Sun, content: project.story.theLight },
+    { number: "06", key: "theDetails", title: "THE DETAILS", subtitle: "Shadow Reveals, Trim Seams & Hardware", icon: Eye, content: project.story.theDetails },
+    { number: "07", key: "theAtmosphere", title: "THE RESULTING ATMOSPHERE", subtitle: "The Complete Living Transformation", icon: Sparkles, content: project.story.theAtmosphere }
+  ];
+
   return (
     <>
       <SEOHead
-        title={`${project.title} — Architectural Narrative`}
-        description={`${project.title} (${project.location}). ${project.summary} Executed by Colour Nest, Jayanagar, Bangalore.`}
+        title={`${project.title} — Architectural Interior Case Study`}
+        description={`${project.title} (${project.location}). ${project.summary} Complete interior transformation by Colour Nest, Jayanagar, Bangalore.`}
       />
 
       <article
@@ -58,9 +68,9 @@ export const ProjectDetail = () => {
           </div>
         </header>
 
-        {/* Fullscreen Hero Image */}
+        {/* Fullscreen Hero Image showing complete space */}
         <div className="container-wide" style={{ marginBottom: 'clamp(3rem, 6vw, 5rem)' }}>
-          <div className="aspect-16-9" style={{ borderRadius: 'var(--radius-xs)', boxShadow: 'var(--shadow-dramatic)' }}>
+          <div className="aspect-16-9" style={{ borderRadius: 'var(--radius-xs)', boxShadow: 'var(--shadow-dramatic)', overflow: 'hidden' }}>
             <img
               src={project.heroImage}
               alt={project.title}
@@ -90,11 +100,11 @@ export const ProjectDetail = () => {
               <span style={{ color: 'var(--ink-primary)' }}>{project.title}</span>
             </div>
             <div>
-              <strong style={{ color: 'var(--ink-muted)', display: 'block', marginBottom: '4px' }}>CATEGORY / SPACE:</strong>
+              <strong style={{ color: 'var(--ink-muted)', display: 'block', marginBottom: '4px' }}>SPATIAL SCOPE:</strong>
               <span style={{ color: 'var(--ink-primary)' }}>{project.space}</span>
             </div>
             <div>
-              <strong style={{ color: 'var(--ink-muted)', display: 'block', marginBottom: '4px' }}>CLIENT TYPOLOGY:</strong>
+              <strong style={{ color: 'var(--ink-muted)', display: 'block', marginBottom: '4px' }}>TYPOLOGY:</strong>
               <span style={{ color: 'var(--ink-primary)' }}>{project.clientType}</span>
             </div>
             <div>
@@ -104,62 +114,69 @@ export const ProjectDetail = () => {
           </div>
         </div>
 
-        {/* 4-Stage Architectural Story Narrative: THE START, DIRECTION, TRANSFORMATION, FINISH */}
+        {/* Interior Transformation Sequence Banner */}
+        <div style={{ backgroundColor: 'var(--surface-elevated)', borderTop: '1px solid var(--border-subtle)', borderBottom: '1px solid var(--border-subtle)', padding: '1rem 0', marginBottom: '4rem' }}>
+          <div className="container-wide" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.12em', color: 'var(--ink-secondary)' }}>
+            <span>SPACE</span>
+            <span style={{ color: 'var(--accent)' }}>→</span>
+            <span>DIRECTION</span>
+            <span style={{ color: 'var(--accent)' }}>→</span>
+            <span>MATERIALS</span>
+            <span style={{ color: 'var(--accent)' }}>→</span>
+            <span>FINISHES</span>
+            <span style={{ color: 'var(--accent)' }}>→</span>
+            <span>LIGHT</span>
+            <span style={{ color: 'var(--accent)' }}>→</span>
+            <span>DETAILS</span>
+            <span style={{ color: 'var(--accent)' }}>→</span>
+            <strong style={{ color: 'var(--ink-primary)' }}>ATMOSPHERE</strong>
+          </div>
+        </div>
+
+        {/* 7-Stage Architectural Interior Story Narrative */}
         <section className="section-scene" style={{ backgroundColor: 'var(--surface-secondary)' }}>
           <div className="container-wide">
             <div style={{ maxWidth: '850px', marginBottom: '3.5rem' }}>
               <span className="meta-tag" style={{ marginBottom: '0.5rem' }}>
-                SPATIAL NARRATIVE
+                COMPLETE SPATIAL TRANSFORMATION STORY
               </span>
               <h2 className="heading-section">
-                HOW THE TRANSFORMATION <span className="heading-editorial-italic">UNFOLDED.</span>
+                HOW THE SPACE <span className="heading-editorial-italic">CAME TOGETHER.</span>
               </h2>
+              <ArchitecturalLine label="THE 7 LAYERS OF TRANSFORMATION" coordinates="BREADTH OF DISCIPLINE" />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2.5rem' }}>
-              {/* THE START */}
-              <div className="arch-card">
-                <span className="oversized-number" style={{ fontSize: '3rem' }}>01</span>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', marginTop: '0.5rem', marginBottom: '0.75rem' }}>
-                  The Start
-                </h3>
-                <p style={{ fontSize: '0.92rem', color: 'var(--ink-secondary)', lineHeight: 1.7 }}>
-                  {project.story.theStart}
-                </p>
-              </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(310px, 1fr))', gap: '2rem' }}>
+              {storySteps.map((step) => {
+                const IconComponent = step.icon;
+                const isClimax = step.key === "theAtmosphere";
 
-              {/* THE DIRECTION */}
-              <div className="arch-card">
-                <span className="oversized-number" style={{ fontSize: '3rem' }}>02</span>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', marginTop: '0.5rem', marginBottom: '0.75rem' }}>
-                  The Direction
-                </h3>
-                <p style={{ fontSize: '0.92rem', color: 'var(--ink-secondary)', lineHeight: 1.7 }}>
-                  {project.story.theDirection}
-                </p>
-              </div>
-
-              {/* THE TRANSFORMATION */}
-              <div className="arch-card">
-                <span className="oversized-number" style={{ fontSize: '3rem' }}>03</span>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', marginTop: '0.5rem', marginBottom: '0.75rem' }}>
-                  The Transformation
-                </h3>
-                <p style={{ fontSize: '0.92rem', color: 'var(--ink-secondary)', lineHeight: 1.7 }}>
-                  {project.story.theTransformation}
-                </p>
-              </div>
-
-              {/* THE FINISH */}
-              <div className="arch-card" style={{ borderLeft: '3px solid var(--accent)' }}>
-                <span className="oversized-number" style={{ fontSize: '3rem' }}>04</span>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', marginTop: '0.5rem', marginBottom: '0.75rem' }}>
-                  The Finish
-                </h3>
-                <p style={{ fontSize: '0.92rem', color: 'var(--ink-secondary)', lineHeight: 1.7 }}>
-                  {project.story.theFinish}
-                </p>
-              </div>
+                return (
+                  <div
+                    key={step.key}
+                    className="arch-card"
+                    style={{
+                      borderTop: isClimax ? '3px solid var(--accent)' : '1px solid var(--border-subtle)',
+                      backgroundColor: isClimax ? 'var(--surface-primary)' : 'var(--surface-elevated)',
+                      padding: '2rem'
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                      <span className="oversized-number" style={{ fontSize: '2.5rem', lineHeight: 1 }}>{step.number}</span>
+                      <IconComponent size={20} color="var(--accent)" />
+                    </div>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--ink-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.3rem' }}>
+                      {step.subtitle}
+                    </span>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', marginBottom: '1rem', color: isClimax ? 'var(--accent)' : 'var(--ink-primary)' }}>
+                      {step.title}
+                    </h3>
+                    <p style={{ fontSize: '0.92rem', color: 'var(--ink-secondary)', lineHeight: 1.7 }}>
+                      {step.content}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -172,7 +189,7 @@ export const ProjectDetail = () => {
                 beforeImage={project.beforeImage}
                 afterImage={project.afterImage}
                 title={`${project.title.toUpperCase()} • BEFORE & AFTER`}
-                subtitle="Slide to inspect the physical transition from site handover to white-glove finish."
+                subtitle="Slide to inspect the complete transition from unfinished shell to liveable luxury."
               />
             </div>
           </section>
@@ -184,7 +201,7 @@ export const ProjectDetail = () => {
             <div className="container-wide">
               <div style={{ maxWidth: '850px', marginBottom: '2.5rem' }}>
                 <span className="meta-tag" style={{ marginBottom: '0.5rem' }}>
-                  COLOR &amp; TONE SPECIFICATION
+                  INTEGRATED MATERIAL &amp; TONE SPECIFICATION
                 </span>
                 <h3 className="heading-section">
                   THE SPATIAL PALETTE.
@@ -204,8 +221,32 @@ export const ProjectDetail = () => {
           </section>
         )}
 
+        {/* Supporting Architectural Gallery */}
+        {project.gallery && project.gallery.length > 0 && (
+          <section className="section-scene">
+            <div className="container-wide">
+              <div style={{ maxWidth: '850px', marginBottom: '2.5rem' }}>
+                <span className="meta-tag" style={{ marginBottom: '0.5rem' }}>
+                  ARCHITECTURAL DETAILS &amp; ELEVATIONS
+                </span>
+                <h3 className="heading-section">
+                  SUPPORTING PERSPECTIVES.
+                </h3>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+                {project.gallery.map((imgUrl, i) => (
+                  <div key={i} className="aspect-4-3" style={{ borderRadius: 'var(--radius-xs)', overflow: 'hidden', boxShadow: 'var(--shadow-subtle)' }}>
+                    <img src={imgUrl} alt={`${project.title} detail ${i + 1}`} className="aspect-fill" loading="lazy" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* CTA Banner */}
-        <section className="section-scene" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+        <section className="section-scene" style={{ borderTop: '1px solid var(--border-subtle)', backgroundColor: 'var(--surface-secondary)' }}>
           <div className="container-narrow" style={{ textAlign: 'center' }}>
             <span className="meta-tag" style={{ marginBottom: '0.75rem', display: 'inline-flex' }}>
               SIMILAR ARCHITECTURAL VISION?
@@ -214,7 +255,7 @@ export const ProjectDetail = () => {
               TRANSFORM YOUR SPACE WITH COLOUR NEST.
             </h2>
             <p style={{ color: 'var(--ink-secondary)', fontSize: '1rem', maxWidth: '600px', margin: '0 auto 2.5rem auto', lineHeight: 1.6 }}>
-              Consult directly with Abhishek Rao for personalized material boards, site inspection, and transparent milestone estimates.
+              Consult directly with Abhishek Rao for personalized material boards, spatial lighting analysis, and transparent itemized estimates.
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link to="/contact" className="btn-primary" data-cursor="START">

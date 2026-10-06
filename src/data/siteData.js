@@ -1,18 +1,13 @@
-/**
- * COLOUR NEST - Source of Truth Business Data
- * Real verified data from Colour Nest, Jayanagar, Bangalore
- */
-
 export const siteData = {
   name: "COLOUR NEST",
-  tagline: "Painting & Interior Decor",
-  natureOfBusiness: "Painting and Interiors",
-  subheading: "Architectural Surface Treatments, Artisan Textures & Premium Interior Craft",
+  tagline: "Complete Interior & Finishing Solutions",
+  natureOfBusiness: "Interiors, Painting, Textures & Spatial Decor",
+  subheading: "Complete Spatial Transformations: Interiors, Woodwork, Architectural Textures, Smart Lightings & False Ceilings",
   
   owner: {
     name: "Mr. Abhishek Rao",
     title: "Proprietor & Consultant",
-    role: "Principal Architectural Decorator & Surface Consultant"
+    role: "Principal Interior & Surface Transformation Consultant"
   },
 
   contact: {

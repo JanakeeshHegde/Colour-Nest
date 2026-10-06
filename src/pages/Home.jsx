@@ -19,8 +19,64 @@ export const Home = () => {
         description="Step inside Colour Nest — a luxury architectural showroom and interactive interior laboratory in Jayanagar, Bangalore. Explore Venetian Stucco, Royals Play, Melamyne & Polycoat Wood finishes."
       />
 
-      {/* Flagship Room Walkthrough (Scene 01 to Scene 07) */}
+      {/* Flagship Complete Interior Room Walkthrough (Scene 01 to Scene 08) */}
       <RoomTransformation />
+
+      {/* ------------------------------------------------------------- */}
+      {/* ARCHITECTURAL DISCIPLINES MARQUEE (Broad Interior Spectrum)   */}
+      {/* ------------------------------------------------------------- */}
+      <div
+        style={{
+          borderTop: '1px solid var(--border-subtle)',
+          borderBottom: '1px solid var(--border-subtle)',
+          backgroundColor: 'var(--surface-secondary)',
+          padding: '1.25rem 0',
+          overflow: 'hidden',
+          position: 'relative'
+        }}
+      >
+        <div className="marquee-track" style={{ display: 'flex', gap: '3rem', whiteSpace: 'nowrap' }}>
+          {[
+            'INTERIORS',
+            'TEXTURES',
+            'WOOD',
+            'LIGHTING',
+            'CEILINGS',
+            'WALLPAPER',
+            'PAINT',
+            'DECOR',
+            'COMMERCIAL',
+            'EXTERIOR',
+            'INTERIORS',
+            'TEXTURES',
+            'WOOD',
+            'LIGHTING',
+            'CEILINGS',
+            'WALLPAPER',
+            'PAINT',
+            'DECOR',
+            'COMMERCIAL',
+            'EXTERIOR'
+          ].map((item, idx) => (
+            <span
+              key={idx}
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.85rem',
+                letterSpacing: '0.22em',
+                fontWeight: 700,
+                color: idx % 2 === 0 ? 'var(--ink-primary)' : 'var(--accent)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '1.5rem'
+              }}
+            >
+              <span>{item}</span>
+              <span style={{ opacity: 0.3 }}>•</span>
+            </span>
+          ))}
+        </div>
+      </div>
 
       {/* ------------------------------------------------------------- */}
       {/* SCENE 08 — IMMERSIVE BEFORE / AFTER TRANSFORMATION DIVIDER    */}

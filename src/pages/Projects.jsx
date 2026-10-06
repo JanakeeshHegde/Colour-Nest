@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Sparkles, Layers } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
 import { projectsData, projectFilters } from '../data/projects';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
@@ -15,8 +15,8 @@ export const Projects = () => {
   return (
     <>
       <SEOHead
-        title="Projects — Editorial Architectural Portfolio"
-        description="Explore Colour Nest's residential and commercial interior transformations across Jayanagar, Indiranagar, Koramangala, and Bangalore. Authentic project narratives."
+        title="Projects — Complete Interior Transformations & Spaces"
+        description="Explore Colour Nest's complete interior transformations: double-height penthouses, villa suites, timber pavilions, and executive offices across Bangalore."
       />
 
       <section
@@ -31,17 +31,36 @@ export const Projects = () => {
           {/* Header */}
           <div style={{ maxWidth: '920px', marginBottom: 'clamp(2rem, 5vw, 4rem)' }}>
             <span className="meta-tag" style={{ marginBottom: '1rem' }}>
-              CURATED CASE STUDIES
+              COMPLETE SPATIAL PORTFOLIO
             </span>
             <h1 className="heading-monumental" style={{ marginBottom: '1rem' }}>
-              SELECTED <br />
-              <span className="heading-editorial-italic">SPACES.</span>
+              COMPLETE SPACES. <br />
+              <span className="heading-editorial-italic">TRANSFORMED.</span>
             </h1>
-            <ArchitecturalLine label="VERIFIED RESIDENTIAL & COMMERCIAL PORTFOLIO" coordinates="BANGALORE METRO REGION" />
+            <ArchitecturalLine label="SPACE → MATERIAL → FINISH → ATMOSPHERE" coordinates="BANGALORE METRO REGION" />
             <p style={{ fontSize: 'clamp(1.05rem, 2vw, 1.35rem)', color: 'var(--ink-secondary)', lineHeight: 1.6 }}>
-              A non-uniform editorial collection of homes, villas, executive offices, and exterior facades
-              transformed through artisan plaster, fine timber glazing, and sculpted lighting.
+              We transform entire environments rather than just walls. Explore our curated portfolio of residential double-height penthouses, contemporary villa master suites, grand teak dining pavilions, creative commercial offices, and protective exterior stone facades.
             </p>
+          </div>
+
+          {/* Spatial Sequence Ribbon */}
+          <div style={{ backgroundColor: 'var(--surface-secondary)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-xs)', padding: '1rem 1.5rem', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>
+            <span style={{ color: 'var(--ink-muted)' }}>PORTFOLIO ARCHITECTURE:</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', color: 'var(--ink-secondary)' }}>
+              <span>01 / THE SPACE</span>
+              <span style={{ color: 'var(--accent)' }}>→</span>
+              <span>02 / THE DIRECTION</span>
+              <span style={{ color: 'var(--accent)' }}>→</span>
+              <span>03 / THE MATERIALS</span>
+              <span style={{ color: 'var(--accent)' }}>→</span>
+              <span>04 / THE FINISHES</span>
+              <span style={{ color: 'var(--accent)' }}>→</span>
+              <span>05 / THE LIGHT</span>
+              <span style={{ color: 'var(--accent)' }}>→</span>
+              <span>06 / THE DETAILS</span>
+              <span style={{ color: 'var(--accent)' }}>→</span>
+              <strong style={{ color: 'var(--ink-primary)' }}>07 / ATMOSPHERE</strong>
+            </div>
           </div>
 
           {/* Filters Bar */}
@@ -58,7 +77,7 @@ export const Projects = () => {
             ))}
           </div>
 
-          {/* Editorial Masonry Grid (Wide, Tall, and Balanced formats) */}
+          {/* Editorial Masonry Grid (Wide, Tall, and Balanced formats prioritizing complete spaces) */}
           <div
             style={{
               display: 'grid',
@@ -67,9 +86,7 @@ export const Projects = () => {
             }}
           >
             {filteredProjects.map((project, idx) => {
-              // Create dynamic editorial spans
               const isHeroSpan = idx === 0 || idx === 3;
-              const gridColSpan = isHeroSpan ? 'span 12' : idx % 2 === 0 ? 'span 7' : 'span 5';
 
               return (
                 <div
@@ -90,7 +107,7 @@ export const Projects = () => {
                     }}
                     data-cursor="VIEW"
                   >
-                    {/* Visual Canvas */}
+                    {/* Visual Complete Space Canvas */}
                     <div
                       className={isHeroSpan ? 'aspect-16-9' : idx % 2 === 0 ? 'aspect-4-3' : 'aspect-3-4'}
                     >
@@ -118,6 +135,23 @@ export const Projects = () => {
                         }}
                       >
                         {project.category} • {project.location}
+                      </div>
+
+                      <div
+                        style={{
+                          position: 'absolute',
+                          bottom: '1.25rem',
+                          right: '1.25rem',
+                          backgroundColor: 'rgba(18, 18, 19, 0.75)',
+                          backdropFilter: 'blur(8px)',
+                          padding: '0.35rem 0.75rem',
+                          borderRadius: 'var(--radius-xs)',
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.68rem',
+                          color: 'var(--accent)'
+                        }}
+                      >
+                        7-PART TRANSFORMATION STORY
                       </div>
                     </div>
 
@@ -156,7 +190,7 @@ export const Projects = () => {
                           color: 'var(--accent)'
                         }}
                       >
-                        <span>INSPECT ARCHITECTURAL CASE STUDY</span>
+                        <span>INSPECT COMPLETE ARCHITECTURAL CASE STUDY</span>
                         <ArrowUpRight size={16} />
                       </div>
                     </div>

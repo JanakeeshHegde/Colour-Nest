@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, ShieldCheck, MapPin, Phone, Mail, Award, Clock } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ShieldCheck, MapPin, Phone, Mail, Award, Clock, Layers, Sparkles, Compass } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
 import { siteData } from '../data/siteData';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
@@ -9,8 +9,8 @@ export const About = () => {
   return (
     <>
       <SEOHead
-        title="About Us — Studio Profile & Philosophy"
-        description="We don't just paint spaces. We transform how they feel. Meet Mr. Abhishek Rao, Proprietor & Consultant at Colour Nest, Painting and Interior Decor, Jayanagar, Bangalore."
+        title="About Us — Complete Interior, Finishing & Decor Studio"
+        description="We bring the whole space together. Meet Mr. Abhishek Rao, Proprietor & Consultant at Colour Nest — Complete Interior, Finishing & Painting Studio, Jayanagar, Bangalore."
       />
 
       <article
@@ -24,26 +24,55 @@ export const About = () => {
         <section className="container-wide" style={{ marginBottom: 'clamp(3rem, 7vw, 6rem)' }}>
           <div style={{ maxWidth: '980px' }}>
             <span className="meta-tag" style={{ marginBottom: '1.25rem' }}>
-              OUR PHILOSOPHY &amp; ETHOS
+              STUDIO PHILOSOPHY &amp; SPATIAL VISION
             </span>
             <h1 className="heading-monumental" style={{ marginBottom: '1.5rem', lineHeight: 0.95 }}>
-              WE DON'T JUST <br />
-              PAINT SPACES. <br />
-              <span className="heading-editorial-italic">WE TRANSFORM HOW THEY FEEL.</span>
+              WE BRING <br />
+              THE WHOLE SPACE <br />
+              <span className="heading-editorial-italic">TOGETHER.</span>
             </h1>
-            <ArchitecturalLine label="COLOUR NEST • ARCHITECTURAL DECOR" coordinates="JAYANAGAR 9TH BLOCK, BANGALORE" />
+            <ArchitecturalLine label="INTERIORS • PAINT • TEXTURES • LIGHT • WOOD • CEILINGS • DECOR" coordinates="JAYANAGAR 9TH BLOCK, BANGALORE" />
             <p style={{ fontSize: 'clamp(1.15rem, 2.2vw, 1.5rem)', color: 'var(--ink-secondary)', lineHeight: 1.6, maxWidth: '850px' }}>
-              Founded with the conviction that architectural surfaces shape human emotion, Colour Nest
-              bridges the gap between raw construction plaster and refined, liveable luxury.
+              Founded with the conviction that true luxury is not a coat of paint, but the seamless unity of
+              space, structure, materials, light, and finish. Colour Nest transforms bare architectural volumes into
+              complete, emotionally resonant living environments.
             </p>
           </div>
         </section>
 
+        {/* Integrated Studio Disciplines Banner */}
+        <section style={{ backgroundColor: 'var(--surface-secondary)', borderTop: '1px solid var(--border-subtle)', borderBottom: '1px solid var(--border-subtle)', padding: '2.5rem 0' }}>
+          <div className="container-wide">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
+              <div>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--accent)', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>01 / ARCHITECTURE</span>
+                <strong style={{ fontSize: '1.1rem', fontFamily: 'var(--font-display)', display: 'block', marginBottom: '0.3rem' }}>Interiors &amp; Ceilings</strong>
+                <p style={{ fontSize: '0.85rem', color: 'var(--ink-secondary)', lineHeight: 1.5 }}>Turnkey interior works, spatial planning, and gypsum false ceilings.</p>
+              </div>
+              <div>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--accent)', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>02 / SURFACES</span>
+                <strong style={{ fontSize: '1.1rem', fontFamily: 'var(--font-display)', display: 'block', marginBottom: '0.3rem' }}>Textures &amp; Wallpapers</strong>
+                <p style={{ fontSize: '0.85rem', color: 'var(--ink-secondary)', lineHeight: 1.5 }}>Venetian Stucco, Anticco mineral aggregate, Royals Play, and bespoke papers.</p>
+              </div>
+              <div>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--accent)', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>03 / TIMBER</span>
+                <strong style={{ fontSize: '1.1rem', fontFamily: 'var(--font-display)', display: 'block', marginBottom: '0.3rem' }}>Wood &amp; Polycoat Polish</strong>
+                <p style={{ fontSize: '0.85rem', color: 'var(--ink-secondary)', lineHeight: 1.5 }}>High-build Polycoat, polyurethane lacquers, and Melamyne timber preservation.</p>
+              </div>
+              <div>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--accent)', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>04 / ILLUMINATION</span>
+                <strong style={{ fontSize: '1.1rem', fontFamily: 'var(--font-display)', display: 'block', marginBottom: '0.3rem' }}>Smart Light &amp; Fans</strong>
+                <p style={{ fontSize: '0.85rem', color: 'var(--ink-secondary)', lineHeight: 1.5 }}>Architectural cove profiles, magnetic track illumination, and balanced mood scenes.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Studio Leadership & Consultant Presentation */}
-        <section className="section-scene" style={{ backgroundColor: 'var(--surface-secondary)' }}>
+        <section className="section-scene">
           <div className="container-wide">
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '4rem', alignItems: 'center' }}>
-              {/* Genuine Colour Nest Brand Image */}
+              {/* Authentic Colour Nest Brand Image */}
               <div className="aspect-1-1" style={{ maxWidth: '500px', borderRadius: 'var(--radius-xs)', boxShadow: 'var(--shadow-dramatic)', overflow: 'hidden' }}>
                 <img
                   src={siteData.brandImages.profile}
@@ -64,14 +93,13 @@ export const About = () => {
                 </p>
 
                 <p style={{ fontSize: '1rem', color: 'var(--ink-secondary)', lineHeight: 1.7, marginBottom: '1.5rem' }}>
-                  Leading Colour Nest from our studio in 9th Block Jayanagar, Mr. Abhishek Rao personally consults on every project.
-                  Rather than treating painting as simple maintenance or outsourced labor, Abhishek approaches every home as a curated
-                  dialogue between light, shadow, texture, and proportion.
+                  Leading Colour Nest from our studio in 9th Block Jayanagar, Mr. Abhishek Rao approaches every project as a holistic spatial transformation.
+                  Rather than treating painting as simple maintenance or outsourced labor, Abhishek orchestrates the entire dialogue between interior architecture,
+                  rich woodwork, tactile wall textures, cove illumination, and curated color palettes.
                 </p>
 
                 <p style={{ fontSize: '1rem', color: 'var(--ink-secondary)', lineHeight: 1.7, marginBottom: '2.5rem' }}>
-                  From specifying fine Italian marble plasters (Stucco and Anticco) to engineering monsoon-resistant exterior coatings
-                  and grain-nourishing timber varnishes, client satisfaction and transparent craftsmanship remain at the core of every endeavor.
+                  Whether executing customized false ceilings with flush magnetic tracks, hand-burnishing Italian Venetian Stucco, restoring heirloom teak with liquid-glass Polycoat, or coating multi-story exterior facades against Bangalore monsoons, client satisfaction and obsessive attention to detail remain our trademark.
                 </p>
 
                 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -88,7 +116,57 @@ export const About = () => {
           </div>
         </section>
 
-        {/* Verified Specialities (Non-generic editorial showcase) */}
+        {/* Spatial Transformation Ratio & Holistic Philosophy */}
+        <section className="section-scene" style={{ backgroundColor: 'var(--surface-secondary)' }}>
+          <div className="container-wide">
+            <div style={{ maxWidth: '850px', marginBottom: '3.5rem' }}>
+              <span className="meta-tag" style={{ marginBottom: '0.75rem' }}>
+                SPATIAL BALANCE
+              </span>
+              <h2 className="heading-display">
+                THE MULTI-LAYERED <span className="heading-editorial-italic">SPACE.</span>
+              </h2>
+              <ArchitecturalLine label="HOW WE COMPOSE AN ENVIRONMENT" coordinates="BALANCE & HARMONY" />
+              <p style={{ color: 'var(--ink-secondary)', fontSize: '1.05rem', lineHeight: 1.6 }}>
+                Painting is one essential brushstroke within a grander canvas. We engineer environments through a balanced ratio of spatial architecture, tactile materials, and curated atmosphere.
+              </p>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+              <div className="arch-card" style={{ padding: '2rem', borderTop: '3px solid var(--accent)' }}>
+                <span className="oversized-number" style={{ fontSize: '3rem' }}>45%</span>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', margin: '0.5rem 0' }}>
+                  Interiors &amp; Spatial Structure
+                </h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--ink-secondary)', lineHeight: 1.6 }}>
+                  Room geometry, false ceiling profiles, drywall partitions, acoustic zoning, and overall spatial proportion form the architectural backbone.
+                </p>
+              </div>
+
+              <div className="arch-card" style={{ padding: '2rem', borderTop: '3px solid var(--accent)' }}>
+                <span className="oversized-number" style={{ fontSize: '3rem' }}>30%</span>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', margin: '0.5rem 0' }}>
+                  Materials, Finishes &amp; Decor
+                </h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--ink-secondary)', lineHeight: 1.6 }}>
+                  Tactile Italian marble plasters, textured wallpapers, natural wood polish (Polycoat &amp; PU), and decorative elements that invite touch.
+                </p>
+              </div>
+
+              <div className="arch-card" style={{ padding: '2rem', borderTop: '3px solid var(--accent)' }}>
+                <span className="oversized-number" style={{ fontSize: '3rem' }}>25%</span>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', margin: '0.5rem 0' }}>
+                  Colour &amp; Illumination
+                </h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--ink-secondary)', lineHeight: 1.6 }}>
+                  Curated tonal palettes, high-opacity matte coatings, calibrated daylight trajectories, and indirect 3000K warm cove light dynamics.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Verified Specialities (Source of truth) */}
         <section className="section-scene">
           <div className="container-wide">
             <div style={{ maxWidth: '850px', marginBottom: '4rem' }}>
@@ -102,7 +180,7 @@ export const About = () => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid var(--border-medium)' }}>
-              {siteData.specialities.map((item, idx) => (
+              {siteData.specialities.map((item) => (
                 <div
                   key={item.id}
                   style={{
@@ -141,7 +219,7 @@ export const About = () => {
                 </h3>
                 <p style={{ fontSize: '1rem', color: 'var(--ink-secondary)', lineHeight: 1.6, marginBottom: '2rem' }}>
                   Conveniently situated in 9th Block Jayanagar, serving high-end residential apartments,
-                  heritage villas, and commercial establishments throughout Bengaluru.
+                  heritage villas, penthouses, and commercial establishments throughout Bengaluru.
                 </p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}>
@@ -173,13 +251,13 @@ export const About = () => {
               {/* Architectural Card */}
               <div className="arch-card" style={{ padding: '2.5rem', backgroundColor: 'var(--surface-primary)' }}>
                 <span className="meta-tag" style={{ marginBottom: '1rem' }}>
-                  CONSULTATION PROMISE
+                  SPATIAL TRANSFORMATION CONSULTATION
                 </span>
                 <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', marginBottom: '1rem' }}>
-                  Ready to Reimagine Your Environment?
+                  Ready to Reimagine Your Entire Environment?
                 </h4>
                 <p style={{ fontSize: '0.92rem', color: 'var(--ink-secondary)', lineHeight: 1.6, marginBottom: '2rem' }}>
-                  Whether you are planning a single Italian Stucco feature wall or an extensive turnkey penthouse transformation,
+                  From single-room feature ceilings and Italian Stucco to full turnkey interior decor, woodwork, and exterior protection,
                   we provide dedicated on-site assessments and live material swatches.
                 </p>
                 <Link to="/contact" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>

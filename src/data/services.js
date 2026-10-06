@@ -1,7 +1,40 @@
-/**
- * COLOUR NEST - Services Dataset
- * Verified 12 core offerings from reference data with genuine CloudFront photos
- */
+export const serviceFamilies = [
+  {
+    id: "SPACE_INTERIORS",
+    title: "Space & Interiors",
+    tagline: "Turnkey spatial engineering, bespoke carpentry & holistic environments",
+    description: "Complete spatial overhauls unifying partition architecture, custom modular joinery, and tailored residential or commercial layouts.",
+    visual: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+  },
+  {
+    id: "SURFACES_FINISHES",
+    title: "Surfaces & Finishes",
+    tagline: "Venetian Stucco, Italian Anticco, luxury glazes & seamless wallcoverings",
+    description: "Tactile mineral plasters and decorative wall art that capture daylight and define room character.",
+    visual: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg"
+  },
+  {
+    id: "WOOD_MATERIAL",
+    title: "Wood & Materials",
+    tagline: "Grain-nourishing Melamyne, PU coats & liquid crystal Polycoat sealers",
+    description: "Preservation and mirror-buffing of Burma teak, natural veneers, dining slabs, and main entrance doors.",
+    visual: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453157525.jpg"
+  },
+  {
+    id: "ARCHITECTURAL_ELEMENTS",
+    title: "Architectural Elements",
+    tagline: "Laser-leveled false ceilings, floating rafts & concealed cove LED profiles",
+    description: "Sculpting the ceiling plane with indirect light troughs and integrated whisper-quiet designer fans.",
+    visual: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453486066.jpg"
+  },
+  {
+    id: "EXTERIOR",
+    title: "Exterior Facades",
+    tagline: "Monsoon-tested elastomeric membranes & weather-resistant stone textures",
+    description: "Enduring architectural skins engineered to protect building masonry and elevate curb presence.",
+    visual: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453192427.jpg"
+  }
+];
 
 export const servicesData = [
   {
@@ -357,11 +390,9 @@ export const servicesData = [
 
 export const serviceCategories = [
   "ALL",
-  "PAINTING",
-  "TEXTURE",
-  "WOOD",
-  "INTERIORS",
-  "CEILING",
-  "COMMERCIAL",
+  "SPACE & INTERIORS",
+  "SURFACES & FINISHES",
+  "WOOD & MATERIAL",
+  "ARCHITECTURAL ELEMENTS",
   "EXTERIOR"
 ];
