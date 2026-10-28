@@ -8,7 +8,15 @@ import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
 
 export const ServiceDetail = () => {
   const { slug } = useParams();
-  const service = servicesData.find((s) => s.slug === slug);
+  const service = servicesData.find(
+    (s) =>
+      s.slug === slug ||
+      s.id === slug ||
+      s.slug.replace(/-/g, '') === (slug || '').replace(/-/g, '') ||
+      (slug === 'wood-polishing-melamyne-pu' && s.id === 'wood-polish-melamyne-pu') ||
+      (slug === 'false-ceiling-lights-fans' && s.id === 'false-ceilings') ||
+      (slug === 'exterior-painting-textures' && s.id === 'exterior-painting')
+  );
 
   if (!service) {
     return <Navigate to="/services" replace />;
@@ -47,7 +55,7 @@ export const ServiceDetail = () => {
 
         {/* Hero Section */}
         <section className="container-wide" style={{ marginBottom: 'clamp(3rem, 6vw, 5rem)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3.5rem', alignItems: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: 'clamp(2rem, 5vw, 3.5rem)', alignItems: 'center' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
                 <span className="oversized-number" style={{ fontSize: '3.5rem', opacity: 0.6 }}>

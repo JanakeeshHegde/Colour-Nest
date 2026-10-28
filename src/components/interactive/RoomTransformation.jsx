@@ -19,6 +19,7 @@ import { physicalSwatches } from '../../data/colours';
 import { texturesData, materialCategories } from '../../data/textures';
 import { useTheme } from '../../hooks/useTheme';
 import { ArchitecturalLine } from '../common/ArchitecturalLine';
+import { IMAGE_MANIFEST } from '../../data/imageManifest';
 
 // Spatial details for Scene 06 (Full Room -> Detail -> Full Room)
 const detailFoci = [
@@ -27,7 +28,7 @@ const detailFoci = [
     label: 'TEAK JOINERY & PU POLISH',
     category: 'WOOD CRAFT',
     desc: 'High-build polyurethane crystal seal over Burma teak credenza and fluted wall slats.',
-    image: 'https://d3k88l35vy59af.cloudfront.net/A001/802/1596453157525.jpg',
+    image: IMAGE_MANIFEST["material-wood-grain"].url,
     crop: 'center 40%'
   },
   {
@@ -35,7 +36,7 @@ const detailFoci = [
     label: 'STUCCO MARBLE PLASTER',
     category: 'MINERAL RELIEF',
     desc: 'Hand-burnished Italian lime aggregate reflecting ambient morning light with zero specular glare.',
-    image: 'https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg',
+    image: IMAGE_MANIFEST["material-stucco-finish"].url,
     crop: 'center 60%'
   },
   {
@@ -43,7 +44,7 @@ const detailFoci = [
     label: 'FALSE CEILING & COVE ILLUMINATION',
     category: 'CEILING ARCHITECTURE',
     desc: 'Precision laser-leveled gypsum drop soffit with 3000K warm indirect grazing channel.',
-    image: 'https://d3k88l35vy59af.cloudfront.net/A001/802/1596453486066.jpg',
+    image: IMAGE_MANIFEST["architectural-false-ceiling"].url,
     crop: 'top center'
   },
   {
@@ -51,7 +52,7 @@ const detailFoci = [
     label: 'BESPOKE HARDWARE & MOLDINGS',
     category: 'DECOR ACCENTS',
     desc: 'Architectural skirtings, concealed track lighting, and brushed brass fixture accents.',
-    image: 'https://d3k88l35vy59af.cloudfront.net/A001/802/1596453535477.jpg',
+    image: IMAGE_MANIFEST["architectural-lighting-pendant"].url,
     crop: 'center'
   }
 ];
@@ -154,7 +155,7 @@ export const RoomTransformation = () => {
               left: 0,
               width: '100%',
               height: '100%',
-              backgroundImage: 'url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85")',
+              backgroundImage: 'url("/images/hero/hero_main.jpg")',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               filter: 'brightness(0.42) contrast(1.15)',
@@ -333,7 +334,7 @@ export const RoomTransformation = () => {
           >
             {/* Layer 0: Complete Room Photography (Walls, ceiling, lighting, wood joinery, furniture) */}
             <img
-              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85"
+              src="/images/hero/hero_main.jpg"
               alt="Complete Architectural Living Environment"
               style={{
                 width: '100%',
@@ -831,7 +832,7 @@ export const RoomTransformation = () => {
             >
               {/* Finished Space Base */}
               <img
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85"
+                src="/images/hero/hero_main.jpg"
                 alt="Complete Spatial Finish"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
@@ -844,7 +845,7 @@ export const RoomTransformation = () => {
                   left: 0,
                   width: '100%',
                   height: '100%',
-                  backgroundImage: 'url("https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1800&q=80")',
+                  backgroundImage: 'url("/images/ceilings/false_ceiling.jpg")',
                   backgroundSize: 'cover',
                   opacity: Math.max(0, (6 - transProgress) * 0.18),
                   mixBlendMode: 'luminosity',

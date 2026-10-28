@@ -4,9 +4,11 @@ import { ArrowUpRight, Sparkles, Layers } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
 import { projectsData, projectFilters } from '../data/projects';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
+import { ProjectDepthWall } from '../components/interactive/ProjectDepthWall';
 
 export const Projects = () => {
   const [activeFilter, setActiveFilter] = useState('ALL');
+  const [viewMode, setViewMode] = useState('3D_DEPTH'); // '3D_DEPTH' or 'GRID'
 
   const filteredProjects = activeFilter === 'ALL'
     ? projectsData
@@ -16,7 +18,7 @@ export const Projects = () => {
     <>
       <SEOHead
         title="Projects — Complete Interior Transformations & Spaces"
-        description="Explore Colour Nest's complete interior transformations: double-height penthouses, villa suites, timber pavilions, and executive offices across Bangalore."
+        description="Explore Colour Nest's complete interior transformations: double-height penthouses, villa suites, timber pavilions, and executive offices across Bangalore in 3D depth."
       />
 
       <section
@@ -29,62 +31,86 @@ export const Projects = () => {
       >
         <div className="container-wide">
           {/* Header */}
-          <div style={{ maxWidth: '920px', marginBottom: 'clamp(2rem, 5vw, 4rem)' }}>
+          <div style={{ maxWidth: '920px', marginBottom: 'clamp(2rem, 5vw, 3.5rem)' }}>
             <span className="meta-tag" style={{ marginBottom: '1rem' }}>
-              COMPLETE SPATIAL PORTFOLIO
+              DESIGN CONCEPTS &amp; SPATIAL INSPIRATION
             </span>
             <h1 className="heading-monumental" style={{ marginBottom: '1rem' }}>
-              COMPLETE SPACES. <br />
-              <span className="heading-editorial-italic">TRANSFORMED.</span>
+              SPATIAL CONCEPTS. <br />
+              <span className="heading-editorial-italic">INSPIRATION.</span>
             </h1>
-            <ArchitecturalLine label="SPACE → MATERIAL → FINISH → ATMOSPHERE" coordinates="BANGALORE METRO REGION" />
+            <ArchitecturalLine label="SPACE → MATERIAL → FINISH → ATMOSPHERE" coordinates="ARCHITECTURAL INSPIRATION" />
             <p style={{ fontSize: 'clamp(1.05rem, 2vw, 1.35rem)', color: 'var(--ink-secondary)', lineHeight: 1.6 }}>
-              We transform entire environments rather than just walls. Explore our curated portfolio of residential double-height penthouses, contemporary villa master suites, grand teak dining pavilions, creative commercial offices, and protective exterior stone facades.
+              Curated architectural design concepts demonstrating our complete interior execution: double-height living pavilions, contemporary master suites, fluted teak joinery, and executive corporate spaces.
             </p>
           </div>
 
-          {/* Spatial Sequence Ribbon */}
-          <div style={{ backgroundColor: 'var(--surface-secondary)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-xs)', padding: '1rem 1.5rem', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem' }}>
-            <span style={{ color: 'var(--ink-muted)' }}>PORTFOLIO ARCHITECTURE:</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', color: 'var(--ink-secondary)' }}>
-              <span>01 / THE SPACE</span>
-              <span style={{ color: 'var(--accent)' }}>→</span>
-              <span>02 / THE DIRECTION</span>
-              <span style={{ color: 'var(--accent)' }}>→</span>
-              <span>03 / THE MATERIALS</span>
-              <span style={{ color: 'var(--accent)' }}>→</span>
-              <span>04 / THE FINISHES</span>
-              <span style={{ color: 'var(--accent)' }}>→</span>
-              <span>05 / THE LIGHT</span>
-              <span style={{ color: 'var(--accent)' }}>→</span>
-              <span>06 / THE DETAILS</span>
-              <span style={{ color: 'var(--accent)' }}>→</span>
-              <strong style={{ color: 'var(--ink-primary)' }}>07 / ATMOSPHERE</strong>
+          {/* View Mode & Filter Controls */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '2.5rem' }}>
+            {/* Filters Bar */}
+            <div className="filter-bar" style={{ margin: 0 }}>
+              {projectFilters.map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setActiveFilter(f)}
+                  className={`filter-pill ${activeFilter === f ? 'active' : ''}`}
+                  data-cursor="FILTER"
+                >
+                  {f} {f === 'ALL' ? `(${projectsData.length})` : ''}
+                </button>
+              ))}
+            </div>
+
+            {/* View Mode Switcher */}
+            <div style={{ display: 'flex', gap: '0.5rem', backgroundColor: 'var(--surface-secondary)', padding: '0.35rem', borderRadius: '999px', border: '1px solid var(--border-subtle)' }}>
+              <button
+                onClick={() => setViewMode('3D_DEPTH')}
+                style={{
+                  backgroundColor: viewMode === '3D_DEPTH' ? 'var(--accent)' : 'transparent',
+                  color: viewMode === '3D_DEPTH' ? '#FFFFFF' : 'var(--ink-secondary)',
+                  border: 'none',
+                  padding: '0.4rem 1rem',
+                  borderRadius: '999px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.68rem',
+                  letterSpacing: '0.12em',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                3D DEPTH WALL
+              </button>
+              <button
+                onClick={() => setViewMode('GRID')}
+                style={{
+                  backgroundColor: viewMode === 'GRID' ? 'var(--accent)' : 'transparent',
+                  color: viewMode === 'GRID' ? '#FFFFFF' : 'var(--ink-secondary)',
+                  border: 'none',
+                  padding: '0.4rem 1rem',
+                  borderRadius: '999px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.68rem',
+                  letterSpacing: '0.12em',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                EDITORIAL GRID
+              </button>
             </div>
           </div>
 
-          {/* Filters Bar */}
-          <div className="filter-bar" style={{ marginBottom: '3.5rem' }}>
-            {projectFilters.map((f) => (
-              <button
-                key={f}
-                onClick={() => setActiveFilter(f)}
-                className={`filter-pill ${activeFilter === f ? 'active' : ''}`}
-                data-cursor="FILTER"
-              >
-                {f} {f === 'ALL' ? `(${projectsData.length})` : ''}
-              </button>
-            ))}
-          </div>
-
-          {/* Editorial Masonry Grid (Wide, Tall, and Balanced formats prioritizing complete spaces) */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(12, 1fr)',
-              gap: 'clamp(1.5rem, 3.5vw, 3rem)'
-            }}
-          >
+          {/* Render 3D Depth Wall or Editorial Grid */}
+          {viewMode === '3D_DEPTH' ? (
+            <ProjectDepthWall projects={filteredProjects} />
+          ) : (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(12, 1fr)',
+                gap: 'clamp(1.5rem, 3.5vw, 3rem)'
+              }}
+            >
             {filteredProjects.map((project, idx) => {
               const isHeroSpan = idx === 0 || idx === 3;
 
@@ -199,6 +225,7 @@ export const Projects = () => {
               );
             })}
           </div>
+          )}
         </div>
       </section>
 

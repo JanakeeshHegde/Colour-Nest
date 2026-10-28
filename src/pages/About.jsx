@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, ShieldCheck, MapPin, Phone, Mail, Award, Clock, Layers, Sparkles, Compass } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ShieldCheck, MapPin, Phone, Mail, Layers, Sparkles, Compass } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
 import { siteData } from '../data/siteData';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
@@ -24,12 +24,11 @@ export const About = () => {
         <section className="container-wide" style={{ marginBottom: 'clamp(3rem, 7vw, 6rem)' }}>
           <div style={{ maxWidth: '980px' }}>
             <span className="meta-tag" style={{ marginBottom: '1.25rem' }}>
-              STUDIO PHILOSOPHY &amp; SPATIAL VISION
+              COLOUR NEST — NATURE OF BUSINESS: PAINTING &amp; INTERIORS
             </span>
-            <h1 className="heading-monumental" style={{ marginBottom: '1.5rem', lineHeight: 0.95 }}>
-              WE BRING <br />
-              THE WHOLE SPACE <br />
-              <span className="heading-editorial-italic">TOGETHER.</span>
+            <h1 className="heading-monumental" style={{ marginBottom: '1.5rem', lineHeight: 1.02 }}>
+              Thoughtful Finishes. <br />
+              <span className="heading-editorial-italic">Considered Interiors.</span>
             </h1>
             <ArchitecturalLine label="INTERIORS • PAINT • TEXTURES • LIGHT • WOOD • CEILINGS • DECOR" coordinates="JAYANAGAR 9TH BLOCK, BANGALORE" />
             <p style={{ fontSize: 'clamp(1.15rem, 2.2vw, 1.5rem)', color: 'var(--ink-secondary)', lineHeight: 1.6, maxWidth: '850px' }}>
@@ -43,7 +42,7 @@ export const About = () => {
         {/* Integrated Studio Disciplines Banner */}
         <section style={{ backgroundColor: 'var(--surface-secondary)', borderTop: '1px solid var(--border-subtle)', borderBottom: '1px solid var(--border-subtle)', padding: '2.5rem 0' }}>
           <div className="container-wide">
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '2rem' }}>
               <div>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--accent)', textTransform: 'uppercase', display: 'block', marginBottom: '0.4rem' }}>01 / ARCHITECTURE</span>
                 <strong style={{ fontSize: '1.1rem', fontFamily: 'var(--font-display)', display: 'block', marginBottom: '0.3rem' }}>Interiors &amp; Ceilings</strong>
@@ -71,12 +70,12 @@ export const About = () => {
         {/* Studio Leadership & Consultant Presentation */}
         <section className="section-scene">
           <div className="container-wide">
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '4rem', alignItems: 'center' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: '4rem', alignItems: 'center' }}>
               {/* Authentic Colour Nest Brand Image */}
               <div className="aspect-1-1" style={{ maxWidth: '500px', borderRadius: 'var(--radius-xs)', boxShadow: 'var(--shadow-dramatic)', overflow: 'hidden' }}>
                 <img
                   src={siteData.brandImages.profile}
-                  alt="Colour Nest Brand and Consultant Mr. Abhishek Rao"
+                  alt="Architectural Studio Consultation & Design Concept — Colour Nest"
                   className="aspect-fill"
                 />
               </div>
@@ -88,9 +87,14 @@ export const About = () => {
                 <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 4vw, 3.2rem)', marginBottom: '0.5rem' }}>
                   {siteData.owner.name}
                 </h2>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '1.75rem' }}>
-                  {siteData.owner.title} • {siteData.name}
-                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '1.75rem' }}>
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--accent)', textTransform: 'uppercase', margin: 0 }}>
+                    {siteData.owner.title} • {siteData.name}
+                  </p>
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: 'var(--ink-secondary)', textTransform: 'uppercase', margin: 0 }}>
+                    <strong>Nature of Business:</strong> Painting &amp; Interiors
+                  </p>
+                </div>
 
                 <p style={{ fontSize: '1rem', color: 'var(--ink-secondary)', lineHeight: 1.7, marginBottom: '1.5rem' }}>
                   Leading Colour Nest from our studio in 9th Block Jayanagar, Mr. Abhishek Rao approaches every project as a holistic spatial transformation.
@@ -132,7 +136,7 @@ export const About = () => {
               </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '2rem' }}>
               <div className="arch-card" style={{ padding: '2rem', borderTop: '3px solid var(--accent)' }}>
                 <span className="oversized-number" style={{ fontSize: '3rem' }}>45%</span>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', margin: '0.5rem 0' }}>
@@ -209,7 +213,7 @@ export const About = () => {
         {/* Studio Location & Verified Coordinates */}
         <section className="section-scene" style={{ backgroundColor: 'var(--surface-secondary)', borderTop: '1px solid var(--border-subtle)' }}>
           <div className="container-wide">
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', alignItems: 'center' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '3rem', alignItems: 'center' }}>
               <div>
                 <span className="meta-tag" style={{ marginBottom: '0.75rem' }}>
                   STUDIO HEADQUARTERS

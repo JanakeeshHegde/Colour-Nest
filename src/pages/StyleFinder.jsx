@@ -4,6 +4,7 @@ import { Sparkles, ArrowRight, ArrowLeft, RefreshCw, CheckCircle2 } from 'lucide
 import { SEOHead } from '../components/common/SEOHead';
 import { servicesData } from '../data/services';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
+import { IMAGE_MANIFEST } from '../data/imageManifest';
 
 const questions = [
   {
@@ -80,38 +81,38 @@ export const StyleFinder = () => {
     const style = answers[4];
 
     let suggestedServiceSlug = "royals-play-designs";
-    let visualUrl = "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg";
+    let visualUrl = IMAGE_MANIFEST["material-stucco-finish"].url;
     let directionTitle = "Venetian Mineral Warmth";
     let colorFamily = "Earthy Terracotta & Sandstone Cream";
     let description = "A tactile architectural sanctuary characterized by hand-burnished Stucco plaster, gentle warm perimeter LED grazing, and natural timber accents.";
 
-    if (focus === "WOOD" || mood === "WARM" && style === "CLASSIC") {
+    if (focus === "WOOD" || (mood === "WARM" && style === "CLASSIC")) {
       suggestedServiceSlug = "wood-polish-melamyne-pu";
-      visualUrl = "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453157525.jpg";
+      visualUrl = IMAGE_MANIFEST["material-wood-grain"].url;
       directionTitle = "Amber Teak & Heritage Plaster";
       colorFamily = "Deep Teak, Antique Bronze & Warm Sand";
       description = "Richly nourished wood grains with moisture-resistant PU and Melamyne finishes, complemented by classic cream and sandstone perimeter walls.";
     } else if (focus === "CEILING" || style === "MODERN") {
       suggestedServiceSlug = "false-ceilings";
-      visualUrl = "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453486066.jpg";
+      visualUrl = IMAGE_MANIFEST["architectural-false-ceiling"].url;
       directionTitle = "Sculptural Soffits & Ambient Coves";
       colorFamily = "Alabaster White, Basalt Slate & Warm Cove Amber";
       description = "Architectural gypsum false ceilings with concealed 3000K LED troughs that wash vertical walls with gentle, glare-free indirect illumination.";
     } else if (focus === "WHOLE SPACE") {
       suggestedServiceSlug = "one-stop-interior-solution";
-      visualUrl = "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453630232.jpg";
+      visualUrl = IMAGE_MANIFEST["hero-architectural-main"].url;
       directionTitle = "Harmonized Turnkey Synthesis";
       colorFamily = "Unified 5-Tone Architectural Scheme";
       description = "A holistic spatial transformation where false ceilings, woodwork, custom wall textures, and smart lighting dialogue seamlessly under Abhishek Rao's guidance.";
     } else if (space === "EXTERIOR") {
       suggestedServiceSlug = "exterior-painting-and-textures";
-      visualUrl = "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453192427.jpg";
+      visualUrl = IMAGE_MANIFEST["exterior-facade-contemporary"].url;
       directionTitle = "Weatherproof Monolithic Facade";
       colorFamily = "Granite Grey, Mineral White & Teak Soffits";
       description = "Monsoon-tested elastomeric coatings and dirt-shedding stone textures that maintain curb appeal and protect building masonry for years.";
     } else if (style === "ARTISTIC" || mood === "LUXE") {
       suggestedServiceSlug = "wallpaper-and-anticco-texture";
-      visualUrl = "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453115929.jpg";
+      visualUrl = IMAGE_MANIFEST["material-anticco-texture"].url;
       directionTitle = "Anticco Stone & Designer Texture";
       colorFamily = "Tuscan Ochre, Ancient Olive & Aged Brass";
       description = "Aged Italian lime plaster with multi-tonal patina that catches low-angle daylight, evoking the quiet permanence of historic European villas.";

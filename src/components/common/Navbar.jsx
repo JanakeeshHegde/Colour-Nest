@@ -1,47 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon, ArrowUpRight, Menu as MenuIcon, X } from 'lucide-react';
-import { useTheme } from '../../hooks/useTheme';
+import { ArrowUpRight, Menu as MenuIcon, X, Phone, Mail, MapPin } from 'lucide-react';
 import { siteData } from '../../data/siteData';
-
-const menuBackgrounds = {
-  "/": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80",
-  "/about": "https://d3k88l35vy59af.cloudfront.net/A001/colour-nest/1591620290444.jpeg",
-  "/services": "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg",
-  "/projects": "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453573110.jpg",
-  "/colour-studio": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80",
-  "/texture-lab": "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453115929.jpg",
-  "/style-finder": "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1600&q=80",
-  "/process": "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453486066.jpg",
-  "/gallery": "https://d3k88l35vy59af.cloudfront.net/A001/colour-nest/1591620955824.jpg",
-  "/contact": "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1600&q=80"
-};
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [hoveredRoute, setHoveredRoute] = useState(null);
   const location = useLocation();
-  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 40) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 30);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close menu on route change
+  // Close mobile drawer on route change
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location.pathname]);
+
+  // Lock body scroll and handle Escape key when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') setIsMenuOpen(false);
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [isMenuOpen]);
+
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
+    { name: 'Services', path: '/services' },
+    { name: 'Gallery', path: '/gallery' },
+    { name: 'Process', path: '/process' },
+    { name: 'Space Studio', path: '/space-studio', is3D: true },
+    { name: 'Contact', path: '/contact' }
+  ];
 
   return (
     <>
@@ -52,90 +58,52 @@ export const Navbar = () => {
           left: 0,
           width: '100%',
           zIndex: 900,
-          transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
           padding: isScrolled
-            ? '0.85rem 1.5rem'
-            : '1.75rem clamp(1.25rem, 4vw, 3rem)'
+            ? '0.45rem clamp(0.75rem, 2vw, 1.25rem)'
+            : '0.75rem clamp(0.85rem, 2.5vw, 2.5rem)'
         }}
       >
         <div
           style={{
-            maxWidth: isScrolled ? '1280px' : 'var(--container-wide)',
+            maxWidth: '1440px',
             margin: '0 auto',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: isScrolled ? '0.65rem 1.4rem' : '0',
-            backgroundColor: isScrolled
-              ? 'var(--surface-glass)'
-              : 'transparent',
-            backdropFilter: isScrolled ? 'blur(16px)' : 'none',
-            WebkitBackdropFilter: isScrolled ? 'blur(16px)' : 'none',
-            borderRadius: isScrolled ? 'var(--radius-full)' : '0',
-            border: isScrolled
-              ? '1px solid var(--border-subtle)'
-              : '1px solid transparent',
-            boxShadow: isScrolled ? 'var(--shadow-subtle)' : 'none',
-            transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)'
+            padding: '0.45rem clamp(0.85rem, 2vw, 1.4rem)',
+            backgroundColor: isScrolled ? 'rgba(250, 248, 242, 0.95)' : 'rgba(250, 248, 242, 0.9)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            borderRadius: '9999px',
+            border: '1px solid #E7E1D6',
+            boxShadow: isScrolled ? '0 8px 24px rgba(33, 29, 45, 0.08)' : '0 4px 16px rgba(33, 29, 45, 0.04)',
+            transition: 'all 0.35s ease'
           }}
         >
-          {/* Brand Logo */}
+          {/* Genuine COLOUR NEST Logo without redundant adjacent text */}
           <Link
             to="/"
             style={{
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.75rem',
-              textDecoration: 'none'
+              textDecoration: 'none',
+              flexShrink: 0,
+              padding: '2px 0'
             }}
-            data-cursor="HOME"
+            aria-label="COLOUR NEST Home"
           >
-            <div
+            <img
+              src="/colour-nest-logo.png"
+              alt="COLOUR NEST — Painting & Interior Decor"
               style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                backgroundColor: 'var(--accent)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#FFFFFF',
-                fontFamily: 'var(--font-display)',
-                fontSize: '1.1rem',
-                fontWeight: 600,
-                boxShadow: '0 2px 10px var(--accent-soft-hover)'
+                height: 'clamp(34px, 4.4vw, 44px)',
+                width: 'auto',
+                maxWidth: 'clamp(120px, 20vw, 180px)',
+                objectFit: 'contain',
+                display: 'block'
               }}
-            >
-              C
-            </div>
-            <div>
-              <span
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '1.25rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.08em',
-                  color: 'var(--ink-primary)',
-                  display: 'block',
-                  lineHeight: 1
-                }}
-              >
-                COLOUR NEST
-              </span>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.58rem',
-                  letterSpacing: '0.14em',
-                  color: 'var(--ink-muted)',
-                  textTransform: 'uppercase',
-                  display: 'block',
-                  marginTop: '2px'
-                }}
-              >
-                Jayanagar • Bangalore
-              </span>
-            </div>
+            />
           </Link>
 
           {/* Desktop Nav Links */}
@@ -143,30 +111,49 @@ export const Navbar = () => {
             style={{
               display: 'none',
               alignItems: 'center',
-              gap: '1.5rem'
+              gap: '1.6rem'
             }}
             className="desktop-nav-links"
+            aria-label="Main Navigation"
           >
-            {siteData.navigation.slice(0, 7).map((item) => {
+            {navLinks.map((item) => {
               const isActive = location.pathname === item.path;
               return (
                 <Link
                   key={item.path}
                   to={item.path}
-                  data-cursor="EXPLORE"
                   style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.72rem',
+                    fontFamily: 'var(--font-mono, monospace)',
+                    fontSize: '0.74rem',
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
-                    color: isActive ? 'var(--accent)' : 'var(--ink-secondary)',
+                    color: isActive ? '#3C2D8C' : '#211D2D',
                     fontWeight: isActive ? 700 : 500,
                     position: 'relative',
                     padding: '0.4rem 0',
-                    transition: 'color 0.3s ease'
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    transition: 'color 0.25s ease'
                   }}
                 >
-                  {item.name}
+                  <span>{item.name}</span>
+                  {item.is3D && (
+                    <span
+                      style={{
+                        fontSize: '0.55rem',
+                        backgroundColor: '#3C2D8C',
+                        color: '#E3D9A4',
+                        padding: '1px 5px',
+                        borderRadius: '3px',
+                        fontWeight: 700,
+                        letterSpacing: '0.08em'
+                      }}
+                    >
+                      3D
+                    </span>
+                  )}
                   {isActive && (
                     <motion.div
                       layoutId="activeNavIndicator"
@@ -176,7 +163,7 @@ export const Navbar = () => {
                         left: 0,
                         width: '100%',
                         height: '2px',
-                        backgroundColor: 'var(--accent)'
+                        backgroundColor: '#3C2D8C'
                       }}
                     />
                   )}
@@ -185,264 +172,231 @@ export const Navbar = () => {
             })}
           </nav>
 
-          {/* Right Controls: Theme Toggle, CTA, and Menu Trigger */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-            {/* Theme Switcher */}
-            <button
-              onClick={toggleTheme}
-              aria-label="Toggle architectural theme"
-              data-cursor="THEME"
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '50%',
-                border: '1px solid var(--border-subtle)',
-                backgroundColor: 'var(--surface-elevated)',
-                color: 'var(--ink-primary)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
-            </button>
-
-            {/* CTA: Start A Project */}
+          {/* Right Controls: CTA Button and Mobile Menu Trigger */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <Link
               to="/contact"
               className="btn-primary"
-              data-cursor="START"
               style={{
                 display: 'none',
-                padding: '0.65rem 1.4rem',
-                fontSize: '0.72rem'
+                backgroundColor: '#3C2D8C',
+                color: '#FAF8F2',
+                padding: '0.65rem 1.35rem',
+                borderRadius: '9999px',
+                fontFamily: 'var(--font-mono, monospace)',
+                fontSize: '0.72rem',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                fontWeight: 600,
+                alignItems: 'center',
+                gap: '6px',
+                border: '1px solid rgba(227, 217, 164, 0.35)',
+                boxShadow: '0 4px 14px rgba(60, 45, 140, 0.25)',
+                transition: 'all 0.25s ease'
               }}
               id="desktop-cta-btn"
             >
               <span>Start A Project</span>
-              <ArrowUpRight size={14} />
+              <ArrowUpRight size={14} color="#E3D9A4" />
             </Link>
 
-            {/* Immersive Menu Button */}
+            {/* Mobile Hamburger Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Open immersive menu"
-              data-cursor="MENU"
+              aria-label={isMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.65rem 1.1rem',
-                borderRadius: 'var(--radius-full, 9999px)',
-                backgroundColor: isMenuOpen ? 'var(--accent)' : 'var(--surface-card)',
-                color: isMenuOpen ? '#FFFFFF' : 'var(--ink-primary)',
-                border: '1px solid var(--border-subtle)',
-                fontFamily: 'var(--font-mono)',
+                gap: '0.45rem',
+                padding: '0.55rem 0.95rem',
+                borderRadius: '9999px',
+                backgroundColor: isMenuOpen ? '#3C2D8C' : '#FFFFFF',
+                color: isMenuOpen ? '#FAF8F2' : '#211D2D',
+                border: '1px solid #E7E1D6',
+                fontFamily: 'var(--font-mono, monospace)',
                 fontSize: '0.72rem',
-                letterSpacing: '0.14em',
+                letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                transition: 'all 0.3s ease'
+                cursor: 'pointer',
+                transition: 'all 0.25s ease'
               }}
+              className="mobile-menu-trigger"
             >
-              {isMenuOpen ? <X size={16} /> : <MenuIcon size={16} />}
+              {isMenuOpen ? <X size={15} /> : <MenuIcon size={15} />}
               <span>{isMenuOpen ? 'Close' : 'Menu'}</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Media query helper style for desktop nav visibility */}
+      {/* Responsive media rules */}
       <style>{`
-        @media (min-width: 1120px) {
+        @media (min-width: 1024px) {
           .desktop-nav-links {
             display: flex !important;
           }
           #desktop-cta-btn {
             display: inline-flex !important;
           }
+          .mobile-menu-trigger {
+            display: none !important;
+          }
         }
       `}</style>
 
-      {/* Immersive Fullscreen Menu */}
+      {/* Refined Mobile Menu Drawer & Dimming Backdrop */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' }}
-            animate={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' }}
-            exit={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              width: '100vw',
-              height: '100vh',
-              zIndex: 890,
-              backgroundColor: 'var(--surface-primary)',
-              overflowY: 'auto',
-              display: 'flex'
-            }}
-          >
-            {/* Dynamic Background Image Preview when hovering menu item */}
-            <div
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               style={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                width: '50vw',
-                height: '100%',
-                opacity: hoveredRoute ? 0.35 : 0.08,
-                transition: 'opacity 0.6s ease, transform 0.6s ease',
-                pointerEvents: 'none',
-                overflow: 'hidden',
-                zIndex: 0
+                position: 'fixed',
+                inset: 0,
+                backgroundColor: 'rgba(33, 29, 45, 0.45)',
+                backdropFilter: 'blur(4px)',
+                WebkitBackdropFilter: 'blur(4px)',
+                zIndex: 890
               }}
-              className="menu-preview-layer"
-            >
-              <img
-                src={menuBackgrounds[hoveredRoute || location.pathname] || menuBackgrounds["/"]}
-                alt="Room Atmosphere"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  filter: 'grayscale(30%)'
-                }}
-              />
-            </div>
-
-            <div
-              className="container-wide"
+              onClick={() => setIsMenuOpen(false)}
+              aria-hidden="true"
+            />
+            <motion.div
+              initial={{ opacity: 0, y: -12, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -12, scale: 0.98 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
               style={{
-                position: 'relative',
-                zIndex: 1,
-                paddingTop: '7.5rem',
-                paddingBottom: '4rem',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                width: '100%',
-                minHeight: '100%'
+                position: 'fixed',
+                top: isScrolled ? '62px' : '72px',
+                left: 'clamp(0.75rem, 2.5vw, 1.25rem)',
+                right: 'clamp(0.75rem, 2.5vw, 1.25rem)',
+                zIndex: 895,
+                backgroundColor: '#FAF8F2',
+                borderRadius: '16px',
+                border: '1px solid #E7E1D6',
+                boxShadow: '0 20px 48px rgba(33, 29, 45, 0.16)',
+                padding: 'clamp(1.25rem, 3.5vw, 1.75rem) clamp(1rem, 3vw, 1.5rem)',
+                maxHeight: 'calc(100svh - 90px)',
+                overflowY: 'auto'
               }}
             >
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem' }}>
-                {/* Primary Huge Navigation Links */}
-                <div>
-                  <span className="meta-tag" style={{ marginBottom: '1.5rem', display: 'inline-block' }}>
-                    01 • SPATIAL NAVIGATION
-                  </span>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                    {siteData.navigation.map((item, idx) => (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        onMouseEnter={() => setHoveredRoute(item.path)}
-                        onMouseLeave={() => setHoveredRoute(null)}
-                        data-cursor="ENTER"
-                        style={{
-                          display: 'flex',
-                          alignItems: 'baseline',
-                          gap: '1.25rem',
-                          textDecoration: 'none',
-                          color: location.pathname === item.path ? 'var(--accent)' : 'var(--ink-primary)',
-                          transition: 'transform 0.3s ease, color 0.3s ease'
-                        }}
-                        className="menu-link-item"
-                      >
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.8rem',
-                            color: 'var(--ink-muted)'
-                          }}
-                        >
-                          0{idx + 1}
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-display)',
-                            fontSize: 'clamp(2rem, 4.5vw, 3.8rem)',
-                            fontWeight: 300,
-                            lineHeight: 1.1,
-                            textTransform: 'uppercase',
-                            letterSpacing: '-0.02em'
-                          }}
-                        >
-                          {item.name}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Studio Details & Contact Coordinates */}
-                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderLeft: '1px solid var(--border-subtle)', paddingLeft: 'clamp(1rem, 3vw, 3rem)' }}>
-                  <div>
-                    <span className="meta-tag" style={{ marginBottom: '1.5rem', display: 'inline-block' }}>
-                      02 • CONSULTATION &amp; STUDIO
-                    </span>
-                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.8rem', marginBottom: '0.5rem' }}>
-                      COLOUR NEST
-                    </h3>
-                    <p style={{ color: 'var(--ink-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-                      {siteData.owner.name} • {siteData.owner.title}
-                    </p>
-                    <p style={{ fontSize: '0.95rem', color: 'var(--ink-secondary)', lineHeight: 1.6, marginBottom: '2rem' }}>
-                      {siteData.contact.address.formatted}
-                    </p>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2.5rem' }}>
-                      <a
-                        href={`tel:${siteData.contact.phone}`}
-                        style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--accent)' }}
-                      >
-                        {siteData.contact.phone}
-                      </a>
-                      <a
-                        href={`mailto:${siteData.contact.email}`}
-                        style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--ink-secondary)' }}
-                      >
-                        {siteData.contact.email}
-                      </a>
-                    </div>
-                  </div>
-
-                  <div>
-                    <Link
-                      to="/contact"
-                      className="btn-primary"
-                      style={{ width: '100%', textAlign: 'center' }}
-                      data-cursor="START"
-                    >
-                      <span>Begin Spatial Consultation</span>
-                      <ArrowUpRight size={16} />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Metadata */}
-              <div
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+              <span
                 style={{
-                  marginTop: '4rem',
-                  paddingTop: '1.5rem',
-                  borderTop: '1px solid var(--border-subtle)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  flexWrap: 'wrap',
-                  gap: '1rem',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.7rem',
-                  color: 'var(--ink-muted)'
+                  fontFamily: 'var(--font-mono, monospace)',
+                  fontSize: '0.65rem',
+                  letterSpacing: '0.16em',
+                  color: '#6D6877',
+                  textTransform: 'uppercase',
+                  marginBottom: '0.5rem'
                 }}
               >
-                <span>COLOUR NEST © {new Date().getFullYear()}</span>
-                <span>PAINTING • TEXTURES • INTERIORS</span>
-                <span>JAYANAGAR 9TH BLOCK, BANGALORE</span>
+                Navigation
+              </span>
+
+              {navLinks.map((item) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setIsMenuOpen(false)}
+                    style={{
+                      fontFamily: 'var(--font-display, serif)',
+                      fontSize: '1.45rem',
+                      color: isActive ? '#3C2D8C' : '#211D2D',
+                      textDecoration: 'none',
+                      padding: '0.45rem 0',
+                      borderBottom: '1px solid rgba(231, 225, 214, 0.6)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <span>{item.name}</span>
+                    {item.is3D && (
+                      <span
+                        style={{
+                          fontSize: '0.65rem',
+                          fontFamily: 'var(--font-mono, monospace)',
+                          backgroundColor: '#3C2D8C',
+                          color: '#E3D9A4',
+                          padding: '2px 7px',
+                          borderRadius: '4px'
+                        }}
+                      >
+                        3D Room
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+
+              <Link
+                to="/contact"
+                onClick={() => setIsMenuOpen(false)}
+                style={{
+                  marginTop: '1.25rem',
+                  backgroundColor: '#3C2D8C',
+                  color: '#FAF8F2',
+                  padding: '0.85rem 1.25rem',
+                  borderRadius: '8px',
+                  fontFamily: 'var(--font-mono, monospace)',
+                  fontSize: '0.8rem',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                  textAlign: 'center',
+                  fontWeight: 600,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  boxShadow: '0 6px 18px rgba(60, 45, 140, 0.25)'
+                }}
+              >
+                <span>Start A Project</span>
+                <ArrowUpRight size={16} color="#E3D9A4" />
+              </Link>
+
+              {/* Quick Contact Info */}
+              <div
+                style={{
+                  marginTop: '1.25rem',
+                  paddingTop: '1rem',
+                  borderTop: '1px solid #E7E1D6',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.5rem',
+                  fontSize: '0.82rem',
+                  color: '#6D6877'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Phone size={14} color="#3C2D8C" />
+                  <a href={`tel:${siteData.contact.phone}`} style={{ color: '#211D2D', textDecoration: 'none' }}>
+                    {siteData.contact.phone}
+                  </a>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Mail size={14} color="#3C2D8C" />
+                  <a href={`mailto:${siteData.contact.email}`} style={{ color: '#211D2D', textDecoration: 'none' }}>
+                    {siteData.contact.email}
+                  </a>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <MapPin size={14} color="#3C2D8C" />
+                  <span>29th Main, 9th Block, Jayanagar, Bangalore</span>
+                </div>
               </div>
             </div>
           </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

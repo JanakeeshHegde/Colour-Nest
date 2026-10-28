@@ -91,61 +91,8 @@
   }
 }
 
-/* Custom Cursor Paint Droplet */
-.custom-cursor-dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background-color: var(--accent);
-  pointer-events: none;
-  z-index: 99999;
-  transform: translate(-50%, -50%);
-  transition: width 0.25s ease, height 0.25s ease, background-color 0.3s ease, border-radius 0.3s ease;
-  mix-blend-mode: difference;
-}
-
+/* Custom Cursor disabled */
+.custom-cursor-dot,
 .custom-cursor-follower {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid var(--accent);
-  pointer-events: none;
-  z-index: 99998;
-  transform: translate(-50%, -50%);
-  transition: transform 0.15s cubic-bezier(0.2, 0.9, 0.4, 1.1), width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cursor-label {
-  font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #FFFFFF;
-  opacity: 0;
-  transform: scale(0.7);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  pointer-events: none;
-}
-
-.custom-cursor-follower.hovering {
-  width: 72px;
-  height: 72px;
-  background-color: var(--accent);
-  border-color: var(--accent);
-  mix-blend-mode: normal;
-}
-
-.custom-cursor-follower.hovering .cursor-label {
-  opacity: 1;
-  transform: scale(1);
+  display: none !important;
 }

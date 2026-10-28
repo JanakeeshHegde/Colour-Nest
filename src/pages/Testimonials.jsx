@@ -62,45 +62,73 @@ export const Testimonials = () => {
             </h1>
             <ArchitecturalLine label="VERIFIED SOURCE INTEGRITY NOTICE" coordinates="JAYANAGAR SHOWROOM" />
             <p style={{ fontSize: 'clamp(1.05rem, 2vw, 1.35rem)', color: 'var(--ink-secondary)', lineHeight: 1.6 }}>
-              In accordance with our strict data integrity policy, all pre-populated reviews below are clearly
-              labelled as placeholders awaiting genuine client verification. You may also submit live feedback directly.
+              In strict accordance with our verified facts policy, client reviews are published only when directly
+              authorized by Mr. Abhishek Rao. No fictional names, ratings, or simulated reviews are displayed.
             </p>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: 'clamp(2rem, 4vw, 3.5rem)', alignItems: 'start' }}>
             {/* Reviews List (7 Cols) */}
             <div style={{ gridColumn: 'span 12' }} className="testimonials-list-col">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
-                {reviews.map((rev) => (
-                  <div key={rev.id} className="arch-card" style={{ padding: '2rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
-                      <div>
-                        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem' }}>
-                          {rev.name}
-                        </h3>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--accent)' }}>
-                          {rev.service} • {rev.date}
-                        </span>
+              {reviews.length === 0 ? (
+                <div className="arch-card" style={{ padding: '2.5rem', backgroundColor: 'var(--surface-primary)', borderLeft: '4px solid var(--accent)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                    <ShieldAlert size={20} color="var(--accent)" />
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>
+                      STATUS: PENDING OWNER AUTHORIZATION
+                    </span>
+                  </div>
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', marginBottom: '1rem' }}>
+                    Client Testimonials Awaiting Official Publication
+                  </h3>
+                  <p style={{ fontSize: '0.96rem', color: 'var(--ink-secondary)', lineHeight: 1.7, marginBottom: '1.5rem' }}>
+                    The primary business reference (<a href="https://card.linkconnect.in/colour-nest" target="_blank" rel="noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>LinkConnect Card</a>) currently has an open feedback section with no pre-published public reviews.
+                  </p>
+                  <p style={{ fontSize: '0.96rem', color: 'var(--ink-secondary)', lineHeight: 1.7, marginBottom: '1.75rem' }}>
+                    Have you recently engaged Colour Nest for painting, Italian stucco, woodwork, or turnkey interior decor in Bangalore? We invite you to submit your verified testimonial using the form here, or send feedback directly to Mr. Abhishek Rao on WhatsApp.
+                  </p>
+                  <a
+                    href="https://wa.me/918494950088?text=Hello%20Mr.%20Abhishek%20Rao,%20I%20would%20like%20to%20share%20feedback%20on%20my%20recent%20project%20with%20Colour%20Nest."
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-secondary"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                  >
+                    <MessageSquare size={14} color="var(--accent)" />
+                    <span>Send Verified Review on WhatsApp</span>
+                  </a>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+                  {reviews.map((rev) => (
+                    <div key={rev.id} className="arch-card" style={{ padding: '2rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
+                        <div>
+                          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem' }}>
+                            {rev.name}
+                          </h3>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--accent)' }}>
+                            {rev.service} • {rev.date}
+                          </span>
+                        </div>
+
+                        {/* Star Rating */}
+                        <div style={{ display: 'flex', gap: '3px' }}>
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              size={16}
+                              fill={i < rev.rating ? 'var(--accent)' : 'none'}
+                              color={i < rev.rating ? 'var(--accent)' : 'var(--border-strong)'}
+                            />
+                          ))}
+                        </div>
                       </div>
 
-                      {/* Star Rating */}
-                      <div style={{ display: 'flex', gap: '3px' }}>
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            size={16}
-                            fill={i < rev.rating ? 'var(--accent)' : 'none'}
-                            color={i < rev.rating ? 'var(--accent)' : 'var(--border-strong)'}
-                          />
-                        ))}
-                      </div>
-                    </div>
+                      <p style={{ fontSize: '1rem', color: 'var(--ink-secondary)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
+                        "{rev.feedback}"
+                      </p>
 
-                    <p style={{ fontSize: '1rem', color: 'var(--ink-secondary)', lineHeight: 1.6, fontStyle: rev.placeholderNotice ? 'italic' : 'normal', marginBottom: '1.25rem' }}>
-                      "{rev.feedback}"
-                    </p>
-
-                    {rev.placeholderNotice && (
                       <div
                         style={{
                           display: 'inline-flex',
@@ -114,13 +142,13 @@ export const Testimonials = () => {
                           borderRadius: 'var(--radius-xs)'
                         }}
                       >
-                        <ShieldAlert size={13} color="var(--accent)" />
-                        <span>{rev.placeholderNotice}</span>
+                        <Check size={13} color="var(--accent)" />
+                        <span>Submitted in this browsing session</span>
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Leave Feedback Form (5 Cols) */}

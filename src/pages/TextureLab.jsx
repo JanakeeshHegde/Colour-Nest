@@ -4,38 +4,39 @@ import { Sparkles, Sun, Eye, Layers, ArrowUpRight, Compass, Maximize2, ZoomOut }
 import { SEOHead } from '../components/common/SEOHead';
 import { texturesData } from '../data/textures';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
+import { IMAGE_MANIFEST } from '../data/imageManifest';
 
 // Complete room context images for each texture
 const textureRoomContexts = {
   "stucco": {
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85",
+    image: IMAGE_MANIFEST["material-stucco-finish"].url,
     caption: "Venetian Stucco featured across living hall focal wall, harmonizing with teak paneling and cove illumination."
   },
   "anticco": {
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453115929.jpg",
+    image: IMAGE_MANIFEST["material-anticco-texture"].url,
     caption: "Anticco aged Italian plaster framing master bed chamber, softly diffusing natural garden daylight."
   },
   "royals-play": {
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453044604.jpg",
+    image: IMAGE_MANIFEST["service-royals-play"].url,
     caption: "Royals Play metallic stipple glaze framing double-height atrium staircase with shimmer under evening chandeliers."
   },
   "wood-polish": {
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453157525.jpg",
+    image: IMAGE_MANIFEST["material-wood-grain"].url,
     caption: "Melamyne and PU satin finish across custom fluted credenza and entrance timber portal."
   },
   "polycoat": {
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453573110.jpg",
+    image: IMAGE_MANIFEST["material-wood-polycoat"].url,
     caption: "Two-pack Polycoat liquid crystal gloss preserving solid teak dining credenza with diamond scratch resistance."
   },
   "textured-wall": {
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453192427.jpg",
+    image: IMAGE_MANIFEST["exterior-facade-contemporary"].url,
     caption: "Rough-cast architectural exterior stone plaster repelling monsoon downpours along building facade."
   }
 };
 
 export const TextureLab = () => {
   const [selectedTexture, setSelectedTexture] = useState(texturesData[0]); // STUCCO
-  const [viewMode, setViewMode] = useState('SURFACE'); // 'SURFACE' or 'ROOM'
+  const [viewMode, setViewMode] = useState('3D_SURFACE'); // '3D_SURFACE', 'SURFACE' or 'ROOM'
   const [selectedColorIdx, setSelectedColorIdx] = useState(0);
   const [lightPos, setLightPos] = useState({ x: 50, y: 50 });
   const surfaceRef = useRef(null);
@@ -100,11 +101,23 @@ export const TextureLab = () => {
             ))}
           </div>
 
-          {/* Dual Scale View Mode Switcher: SURFACE CLOSE-UP vs COMPLETE ROOM CONTEXT */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+          {/* Dual Scale View Mode Switcher: 3D REAL-TIME SURFACE vs CLOSE-UP vs COMPLETE ROOM CONTEXT */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--ink-muted)', textTransform: 'uppercase' }}>
               Perspective:
             </span>
+            <button
+              onClick={() => setViewMode('3D_SURFACE')}
+              className="filter-pill"
+              style={{
+                backgroundColor: viewMode === '3D_SURFACE' ? 'var(--accent)' : 'var(--surface-card)',
+                color: viewMode === '3D_SURFACE' ? '#FFFFFF' : 'var(--ink-primary)',
+                borderColor: viewMode === '3D_SURFACE' ? 'var(--accent)' : 'var(--border-subtle)'
+              }}
+              data-cursor="GRAZE"
+            >
+              3D Real-Time Tactile Plate
+            </button>
             <button
               onClick={() => setViewMode('SURFACE')}
               className="filter-pill"
@@ -115,7 +128,7 @@ export const TextureLab = () => {
               }}
               data-cursor="ZOOM"
             >
-              Surface Close-Up (Light Grazing)
+              Macro Specimen Photo
             </button>
             <button
               onClick={() => setViewMode('ROOM')}
@@ -131,8 +144,36 @@ export const TextureLab = () => {
             </button>
           </div>
 
-          {/* Interactive Stage (Switches between Surface Light Grazing and Room Context) */}
-          {viewMode === 'SURFACE' ? (
+          {/* Interactive Stage (Switches between 3D Real-Time Surface, Macro Specimen, and Room Context) */}
+          {viewMode === '3D_SURFACE' ? (
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: '520px',
+                borderRadius: 'var(--radius-xs)',
+                overflow: 'hidden',
+                boxShadow: 'var(--shadow-dramatic)',
+                border: '1px solid var(--border-medium)',
+                marginBottom: '3rem',
+                backgroundColor: '#121213'
+              }}
+            >
+              <TextureShowcaseCanvas
+                presetKey={
+                  selectedTexture.id === 'stucco'
+                    ? 'stucco'
+                    : selectedTexture.id === 'anticco'
+                    ? 'anticco'
+                    : selectedTexture.id === 'royals-play'
+                    ? 'royals-play'
+                    : selectedTexture.id === 'polycoat'
+                    ? 'polycoat'
+                    : 'wood'
+                }
+              />
+            </div>
+          ) : viewMode === 'SURFACE' ? (
             <div
               ref={surfaceRef}
               onMouseMove={handleMouseMove}
@@ -145,7 +186,7 @@ export const TextureLab = () => {
                 overflow: 'hidden',
                 boxShadow: 'var(--shadow-dramatic)',
                 border: '1px solid var(--border-medium)',
-                cursor: 'crosshair',
+                cursor: 'default',
                 marginBottom: '3rem'
               }}
               data-cursor="GRAZE"

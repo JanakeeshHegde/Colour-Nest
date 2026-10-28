@@ -14,6 +14,8 @@ html {
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
@@ -22,9 +24,16 @@ body {
   color: var(--ink-primary);
   line-height: 1.6;
   overflow-x: hidden;
+  width: 100%;
   position: relative;
   min-height: 100vh;
+  min-height: 100svh;
   transition: var(--transition-color);
+  -webkit-tap-highlight-color: transparent;
+}
+
+p, span, a, h1, h2, h3, h4, h5, h6, button, label, input, textarea {
+  overflow-wrap: break-word;
 }
 
 /* Subtle Architectural Plaster Grain Overlay */
@@ -36,9 +45,19 @@ body::before {
   width: 100vw;
   height: 100vh;
   pointer-events: none;
-  z-index: 999;
+  z-index: 0;
   opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Reduced Motion Safety */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Headings & Editorial Display Typography */
@@ -51,10 +70,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .heading-monumental {
-  font-size: clamp(3.2rem, 9vw, 8.5rem);
-  font-weight: 300;
-  line-height: 0.92;
-  letter-spacing: -0.04em;
+  font-size: clamp(2.4rem, 5.5vw, 4.8rem);
+  font-weight: 350;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
   text-transform: uppercase;
 }
 

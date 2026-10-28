@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { MessageCircle } from 'lucide-react';
 import { siteData } from '../../data/siteData';
 
 export const WhatsAppFab = () => {
   const [isHovered, setIsHovered] = useState(false);
+  const location = useLocation();
+  const isSpaceStudio = location.pathname === '/space-studio';
+
+  if (isSpaceStudio) return null;
 
   return (
     <aside aria-label="Quick WhatsApp Consultation">

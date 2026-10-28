@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 
 export const GalleryLightbox = ({
@@ -9,6 +9,8 @@ export const GalleryLightbox = ({
   onNext,
   onPrev
 }) => {
+  const touchStartX = useRef(null);
+
   const handleKeyDown = useCallback((e) => {
     if (!isOpen) return;
     if (e.key === 'Escape') onClose();
@@ -21,6 +23,31 @@ export const GalleryLightbox = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleKeyDown]);
 
+  // Lock background scroll when lightbox is open
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) onNext();
+      else onPrev();
+    }
+    touchStartX.current = null;
+  };
+
   if (!isOpen || !items || items.length === 0) return null;
 
   const currentItem = items[currentIndex];
@@ -32,17 +59,20 @@ export const GalleryLightbox = ({
         top: 0,
         left: 0,
         width: '100vw',
-        height: '100vh',
+        height: '100svh',
         zIndex: 99999,
-        backgroundColor: 'rgba(10, 10, 11, 0.95)',
+        backgroundColor: 'rgba(10, 10, 11, 0.96)',
         backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        padding: 'clamp(1rem, 3vw, 2.5rem)',
+        padding: 'clamp(0.75rem, 2.5vw, 2rem)',
         userSelect: 'none'
       }}
       onClick={onClose}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {/* Top Header: Counter & Close */}
       <div
@@ -96,29 +126,32 @@ export const GalleryLightbox = ({
           style={{
             position: 'absolute',
             left: 0,
-            width: '50px',
-            height: '50px',
+            width: 'clamp(40px, 9vw, 50px)',
+            height: 'clamp(40px, 9vw, 50px)',
             borderRadius: '50%',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            backgroundColor: 'rgba(255, 255, 255, 0.15)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             color: '#FFFFFF',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 10
+            zIndex: 10,
+            cursor: 'pointer'
           }}
           aria-label="Previous Image"
           data-cursor="PREV"
         >
-          <ChevronLeft size={24} />
+          <ChevronLeft size={22} />
         </button>
 
-        <div style={{ maxWidth: '85vw', maxHeight: '72vh', position: 'relative' }}>
+        <div style={{ maxWidth: 'min(92vw, 1200px)', maxHeight: '68svh', position: 'relative' }}>
           <img
             src={currentItem.src}
             alt={currentItem.title}
             style={{
               maxWidth: '100%',
-              maxHeight: '72vh',
+              maxHeight: '68svh',
               objectFit: 'contain',
               boxShadow: '0 20px 60px rgba(0, 0, 0, 0.8)',
               borderRadius: 'var(--radius-xs)'
@@ -134,20 +167,23 @@ export const GalleryLightbox = ({
           style={{
             position: 'absolute',
             right: 0,
-            width: '50px',
-            height: '50px',
+            width: 'clamp(40px, 9vw, 50px)',
+            height: 'clamp(40px, 9vw, 50px)',
             borderRadius: '50%',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            backgroundColor: 'rgba(255, 255, 255, 0.15)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             color: '#FFFFFF',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 10
+            zIndex: 10,
+            cursor: 'pointer'
           }}
           aria-label="Next Image"
           data-cursor="NEXT"
         >
-          <ChevronRight size={24} />
+          <ChevronRight size={22} />
         </button>
       </div>
 

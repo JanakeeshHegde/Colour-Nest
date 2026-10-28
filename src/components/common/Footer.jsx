@@ -1,318 +1,288 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, MapPin, Phone, Mail, Facebook, ExternalLink } from 'lucide-react';
+import { Phone, Mail, MapPin, Facebook } from 'lucide-react';
 import { siteData } from '../../data/siteData';
 
 export const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
+    { name: 'Services', path: '/services' },
+    { name: 'Gallery', path: '/gallery' },
+    { name: 'Process', path: '/process' },
+    { name: 'Contact', path: '/contact' }
+  ];
+
   return (
     <footer
       style={{
-        position: 'relative',
-        backgroundColor: '#111112',
-        color: '#FAF7F2',
-        overflow: 'hidden',
-        paddingTop: 'clamp(5rem, 12vw, 9rem)',
-        paddingBottom: 'clamp(2.5rem, 6vw, 4rem)',
-        borderTop: '1px solid rgba(255, 255, 255, 0.08)'
+        backgroundColor: '#211D2D',
+        color: '#FAF8F2',
+        borderTop: '1px solid #373344',
+        padding: '3rem 0 1.5rem 0'
       }}
     >
-      {/* Subtle Architectural Grid & Ambient Texture Behind */}
       <div
+        className="container-wide"
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          opacity: 0.12,
-          backgroundImage: 'radial-gradient(#FAF7F2 1px, transparent 1px)',
-          backgroundSize: '36px 36px',
-          pointerEvents: 'none'
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: '0 clamp(1.2rem, 3.5vw, 2.5rem)'
         }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: '-15%',
-          right: '-10%',
-          width: '55vw',
-          height: '55vw',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, var(--accent, #B85C38) 0%, transparent 70%)',
-          opacity: 0.15,
-          filter: 'blur(80px)',
-          pointerEvents: 'none'
-        }}
-      />
-
-      <div className="container-wide" style={{ position: 'relative', zIndex: 1 }}>
-        {/* Monumental Call to Action Headline */}
-        <div style={{ marginBottom: 'clamp(3rem, 7vw, 6rem)' }}>
-          <span
-            className="meta-tag"
-            style={{
-              color: 'rgba(255, 255, 255, 0.6)',
-              marginBottom: '1.25rem',
-              display: 'inline-flex'
-            }}
-          >
-            THE TRANSFORMATION BEGINS HERE
-          </span>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <h2
-              className="heading-monumental"
-              style={{
-                color: '#FFFFFF',
-                letterSpacing: '-0.04em',
-                lineHeight: 0.92
-              }}
-            >
-              LET'S TRANSFORM
-            </h2>
-            <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', gap: 'clamp(1rem, 3vw, 2rem)' }}>
-              <h2
-                className="heading-monumental"
-                style={{
-                  color: 'var(--accent, #B85C38)',
-                  letterSpacing: '-0.04em',
-                  lineHeight: 0.92,
-                  fontStyle: 'italic'
-                }}
-              >
-                YOUR SPACE.
-              </h2>
-              <Link
-                to="/contact"
-                className="btn-primary"
-                data-cursor="START"
-                style={{
-                  padding: '1.1rem 2.6rem',
-                  fontSize: '0.85rem'
-                }}
-              >
-                <span>Start A Project</span>
-                <ArrowUpRight size={18} />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Studio Matrix Layout */}
+      >
+        {/* Balanced 3-Column Layout: LEFT, MIDDLE, RIGHT */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: 'clamp(2rem, 5vw, 4rem)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.12)',
-            paddingTop: '3.5rem',
-            marginBottom: '4.5rem'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+            gap: 'clamp(2rem, 4vw, 3.5rem)',
+            alignItems: 'start',
+            paddingBottom: '2.5rem'
           }}
         >
-          {/* Identity & Consultant */}
+          {/* LEFT: COLOUR NEST Logo and Short Description */}
           <div>
-            <h3
+            <div
               style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '2rem',
-                color: '#FFFFFF',
-                letterSpacing: '0.04em',
+                display: 'inline-flex',
+                alignItems: 'center',
+                backgroundColor: '#FAF8F2',
+                padding: '6px 14px',
+                borderRadius: '8px',
+                border: '1px solid rgba(227, 217, 164, 0.45)',
+                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.25)'
+              }}
+            >
+              <img
+                src="/colour-nest-logo.png"
+                alt="COLOUR NEST — Painting & Interior Decor"
+                style={{
+                  height: 'clamp(36px, 5vw, 44px)',
+                  width: 'auto',
+                  maxWidth: 'clamp(140px, 40vw, 180px)',
+                  objectFit: 'contain',
+                  display: 'block'
+                }}
+              />
+            </div>
+
+            <p
+              style={{
+                fontFamily: 'var(--font-mono, monospace)',
+                fontSize: '0.82rem',
+                letterSpacing: '0.12em',
+                color: '#E3D9A4',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                marginTop: '1rem',
                 marginBottom: '0.5rem'
               }}
             >
-              COLOUR NEST
-            </h3>
+              Painting &amp; Interior Decor.
+            </p>
+
             <p
               style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                letterSpacing: '0.14em',
-                color: 'var(--accent, #B85C38)',
+                fontSize: '0.85rem',
+                color: '#B5B1BE',
+                lineHeight: 1.6,
+                maxWidth: '320px',
+                margin: 0
+              }}
+            >
+              Bespoke interior finishes, textured surfaces and turnkey residential solutions by Mr. Abhishek Rao in Bangalore.
+            </p>
+          </div>
+
+          {/* MIDDLE: Compact Navigation Links */}
+          <div>
+            <span
+              style={{
+                fontFamily: 'var(--font-mono, monospace)',
+                fontSize: '0.7rem',
+                letterSpacing: '0.16em',
+                color: '#E3D9A4',
                 textTransform: 'uppercase',
+                fontWeight: 700,
+                display: 'block',
                 marginBottom: '1rem'
               }}
             >
-              Painting &amp; Interior Decor
-            </p>
-            <p
-              style={{
-                fontSize: '0.92rem',
-                color: 'rgba(255, 255, 255, 0.7)',
-                lineHeight: 1.6,
-                marginBottom: '1.5rem'
-              }}
-            >
-              Consultant: <strong>{siteData.owner.name}</strong>
-              <br />
-              {siteData.owner.title}
-            </p>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <a
-                href={siteData.urls.facebook}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#FFFFFF',
-                  transition: 'border-color 0.3s ease, background-color 0.3s ease'
-                }}
-                aria-label="Colour Nest on Facebook"
-                data-cursor="FACEBOOK"
-              >
-                <Facebook size={16} />
-              </a>
-              <a
-                href={siteData.urls.googleMaps}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#FFFFFF',
-                  transition: 'border-color 0.3s ease, background-color 0.3s ease'
-                }}
-                aria-label="Google Maps Location"
-                data-cursor="DIRECTIONS"
-              >
-                <MapPin size={16} />
-              </a>
-            </div>
-          </div>
-
-          {/* Direct Contact Coordinates */}
-          <div>
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.7rem',
-                letterSpacing: '0.15em',
-                color: 'rgba(255, 255, 255, 0.45)',
-                textTransform: 'uppercase',
-                display: 'block',
-                marginBottom: '1.25rem'
-              }}
-            >
-              Studio Coordinates
+              Navigation
             </span>
-            <p
-              style={{
-                fontSize: '0.92rem',
-                color: 'rgba(255, 255, 255, 0.8)',
-                lineHeight: 1.6,
-                marginBottom: '1.5rem'
-              }}
-            >
-              {siteData.contact.address.line1}
-              <br />
-              {siteData.contact.address.line2}
-              <br />
-              {siteData.contact.address.city} - {siteData.contact.address.postalCode}
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <a
-                href={`tel:${siteData.contact.phone}`}
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.85rem',
-                  color: 'var(--accent, #B85C38)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
-                }}
-                data-cursor="CALL"
-              >
-                <Phone size={14} />
-                <span>{siteData.contact.phone}</span>
-              </a>
-              <a
-                href={`mailto:${siteData.contact.email}`}
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.85rem',
-                  color: 'rgba(255, 255, 255, 0.75)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
-                }}
-                data-cursor="EMAIL"
-              >
-                <Mail size={14} />
-                <span>{siteData.contact.email}</span>
-              </a>
-            </div>
-          </div>
 
-          {/* Spatial Architecture Links */}
-          <div>
-            <span
+            <nav
               style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.7rem',
-                letterSpacing: '0.15em',
-                color: 'rgba(255, 255, 255, 0.45)',
-                textTransform: 'uppercase',
-                display: 'block',
-                marginBottom: '1.25rem'
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '0.65rem 1.5rem',
+                maxWidth: '280px'
               }}
+              aria-label="Footer Navigation"
             >
-              Spatial Architecture
-            </span>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.65rem' }}>
-              {siteData.navigation.map((nav) => (
+              {navLinks.map((link) => (
                 <Link
-                  key={nav.path}
-                  to={nav.path}
+                  key={link.path}
+                  to={link.path}
                   style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.75rem',
-                    color: 'rgba(255, 255, 255, 0.65)',
-                    textTransform: 'uppercase',
+                    fontFamily: 'var(--font-mono, monospace)',
+                    fontSize: '0.78rem',
                     letterSpacing: '0.08em',
-                    transition: 'color 0.2s ease'
+                    textTransform: 'uppercase',
+                    color: '#FAF8F2',
+                    opacity: 0.82,
+                    textDecoration: 'none',
+                    transition: 'opacity 0.2s ease, color 0.2s ease'
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.65)')}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1';
+                    e.currentTarget.style.color = '#E3D9A4';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.82';
+                    e.currentTarget.style.color = '#FAF8F2';
+                  }}
                 >
-                  {nav.name}
+                  {link.name}
                 </Link>
               ))}
+            </nav>
+          </div>
+
+          {/* RIGHT: Contact Information */}
+          <div>
+            <span
+              style={{
+                fontFamily: 'var(--font-mono, monospace)',
+                fontSize: '0.7rem',
+                letterSpacing: '0.16em',
+                color: '#E3D9A4',
+                textTransform: 'uppercase',
+                fontWeight: 700,
+                display: 'block',
+                marginBottom: '1rem'
+              }}
+            >
+              Contact
+            </span>
+
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem',
+                fontFamily: 'var(--font-mono, monospace)',
+                fontSize: '0.82rem',
+                color: '#FAF8F2'
+              }}
+            >
+              <a
+                href="tel:+918494950088"
+                style={{
+                  color: '#FAF8F2',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '9px',
+                  transition: 'color 0.2s ease'
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#E3D9A4')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#FAF8F2')}
+              >
+                <Phone size={14} color="#E3D9A4" />
+                <span>+91 84949 50088</span>
+              </a>
+
+              <a
+                href="mailto:info.colournest@gmail.com"
+                style={{
+                  color: '#FAF8F2',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '9px',
+                  overflowWrap: 'break-word',
+                  wordBreak: 'break-word',
+                  transition: 'color 0.2s ease'
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#E3D9A4')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#FAF8F2')}
+              >
+                <Mail size={14} color="#E3D9A4" />
+                <span>info.colournest@gmail.com</span>
+              </a>
+
+              <div
+                style={{
+                  color: '#B5B1BE',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '9px'
+                }}
+              >
+                <MapPin size={14} color="#E3D9A4" />
+                <span>Jayanagar, Bangalore</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Credits & Verification */}
+        {/* BOTTOM: Slim Copyright Row & Social Links */}
         <div
           style={{
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            paddingTop: '2rem',
             display: 'flex',
+            flexWrap: 'wrap',
             alignItems: 'center',
             justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '1.25rem',
-            fontFamily: 'var(--font-mono)',
+            gap: '1rem',
+            paddingTop: '1.25rem',
+            borderTop: '1px solid rgba(231, 225, 214, 0.1)',
+            fontFamily: 'var(--font-mono, monospace)',
             fontSize: '0.7rem',
-            color: 'rgba(255, 255, 255, 0.45)'
+            color: '#8A8594'
           }}
         >
           <div>
-            © {new Date().getFullYear()} COLOUR NEST • ALL RIGHTS RESERVED
+            &copy; {currentYear} COLOUR NEST. All rights reserved. Directed by Mr. Abhishek Rao.
           </div>
-          <div>
-            JAYANAGAR 9TH BLOCK, BANGALORE - 560069
-          </div>
-          <div>
-            DIGITAL INTERIOR EXPERIENCE
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+            <a
+              href={siteData.urls.facebook}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                color: '#FAF8F2',
+                opacity: 0.75,
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.75')}
+              aria-label="COLOUR NEST on Facebook"
+            >
+              <Facebook size={13} color="#E3D9A4" />
+              <span>Facebook</span>
+            </a>
+
+            <a
+              href={siteData.urls.googleMaps}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                color: '#FAF8F2',
+                opacity: 0.75,
+                textDecoration: 'none'
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.75')}
+            >
+              Google Maps
+            </a>
           </div>
         </div>
       </div>

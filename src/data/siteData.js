@@ -36,8 +36,9 @@ export const siteData = {
   },
 
   brandImages: {
-    profile: "https://d3k88l35vy59af.cloudfront.net/A001/colour-nest/1591620290444.jpeg",
-    logoIcon: "https://d3k88l35vy59af.cloudfront.net/A001/colour-nest/1591620290444.jpeg",
+    profile: "/images/process/consultation.jpg",
+    logoIcon: "/colour-nest-logo.png",
+    logoFull: "/colour-nest-logo.png",
   },
 
   specialities: [
@@ -89,12 +90,9 @@ export const siteData = {
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Services", path: "/services" },
-    { name: "Projects", path: "/projects" },
-    { name: "Colour Studio", path: "/colour-studio" },
-    { name: "Texture Lab", path: "/texture-lab" },
-    { name: "Style Finder", path: "/style-finder" },
-    { name: "Process", path: "/process" },
     { name: "Gallery", path: "/gallery" },
+    { name: "Process", path: "/process" },
+    { name: "Space Studio", path: "/space-studio", badge: "3D" },
     { name: "Contact", path: "/contact" }
   ]
 };

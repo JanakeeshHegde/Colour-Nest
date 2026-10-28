@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Sparkles, SlidersHorizontal } from 'lucide-react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { IMAGE_MANIFEST } from '../../data/imageManifest';
 
 const roomModes = {
   WARM: {
@@ -41,8 +42,8 @@ const roomModes = {
 };
 
 export const BeforeAfter = ({
-  beforeImage = "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1600&q=80",
-  afterImage = "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg",
+  beforeImage = IMAGE_MANIFEST["about-interior-workspace"].url,
+  afterImage = IMAGE_MANIFEST["hero-architectural-main"].url,
   title = "THE TRANSFORMATION DIVIDER",
   subtitle = "Drag to experience raw unfinished plaster transforming into burnished luxury."
 }) => {

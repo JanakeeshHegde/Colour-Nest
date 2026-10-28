@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Box } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
+import { ProcessWireframeCanvas } from '../components/canvas/ProcessWireframeCanvas';
+import { IMAGE_MANIFEST } from '../data/imageManifest';
 
 const processSteps = [
   {
@@ -16,7 +18,7 @@ const processSteps = [
       "Discussion of complete interior components: ceilings, woodwork, lighting, finishes",
       "Clear timeline and budget alignment without ambiguous extras"
     ],
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80"
+    image: IMAGE_MANIFEST["about-interior-workspace"].url
   },
   {
     number: "02",
@@ -29,7 +31,7 @@ const processSteps = [
       "Inspection of existing walls, beams, electrical conduits, and floor transitions",
       "Laser-measured dimensional survey for precise surface and joinery calculations"
     ],
-    image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1400&q=80"
+    image: IMAGE_MANIFEST["process-spatial-blueprint"].url
   },
   {
     number: "03",
@@ -42,7 +44,7 @@ const processSteps = [
       "Hierarchical surface mapping: focal walls, quiet zones, and architectural joinery",
       "3D spatial mood boards and interior lighting zone schematics"
     ],
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg"
+    image: IMAGE_MANIFEST["material-stucco-finish"].url
   },
   {
     number: "04",
@@ -55,7 +57,7 @@ const processSteps = [
       "Polycoat and PU wood stain testing on target teak and oak timber samples",
       "Final client sign-off on physical tactile samples before material procurement"
     ],
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453044604.jpg"
+    image: IMAGE_MANIFEST["material-anticco-texture"].url
   },
   {
     number: "05",
@@ -66,9 +68,9 @@ const processSteps = [
       "Transparent line-item breakdown of walls, false ceilings, timber, and finishes",
       "Explicit specification of premium coatings, primers, and Italian plaster formulations",
       "Phase-linked milestone payment schedule tied to verified inspection stages",
-      "Firm execution timeline with guaranteed commencement and handover dates"
+      "Structured execution timeline with defined commencement and milestone handover phases"
     ],
-    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1400&q=80"
+    image: IMAGE_MANIFEST["process-spatial-blueprint"].url
   },
   {
     number: "06",
@@ -81,7 +83,7 @@ const processSteps = [
       "Laser-aligned false ceiling grid erection and cove lighting installation",
       "Layer-by-layer hand troweling of Italian Stucco and airless spray applications"
     ],
-    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1400&q=80"
+    image: IMAGE_MANIFEST["process-craftsmanship"].url
   },
   {
     number: "07",
@@ -94,7 +96,7 @@ const processSteps = [
       "Dimmer module and 3000K warm LED cove lumen calibration for seamless ambience",
       "Final protective finishing coats applied to architectural wood and plaster accents"
     ],
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453573110.jpg"
+    image: IMAGE_MANIFEST["architectural-false-ceiling"].url
   },
   {
     number: "08",
@@ -107,7 +109,7 @@ const processSteps = [
       "Handover of touch-up kit and exact tint formula records for future reference",
       "Comprehensive interior care dossier for lasting finish longevity"
     ],
-    image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80"
+    image: IMAGE_MANIFEST["hero-architectural-main"].url
   }
 ];
 
@@ -152,7 +154,7 @@ export const Process = () => {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))',
               gap: '0.65rem',
               marginBottom: '3.5rem'
             }}
@@ -191,7 +193,7 @@ export const Process = () => {
               marginBottom: '4.5rem'
             }}
           >
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3.5rem', alignItems: 'center' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: '3.5rem', alignItems: 'center' }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
                   <span className="oversized-number" style={{ fontSize: '4rem' }}>{activeStep.number}</span>
@@ -238,9 +240,48 @@ export const Process = () => {
                 </div>
               </div>
 
-              {/* Visual Phase Documentation Photo */}
-              <div className="aspect-4-3" style={{ borderRadius: 'var(--radius-xs)', boxShadow: 'var(--shadow-dramatic)', overflow: 'hidden' }}>
-                <img src={activeStep.image} alt={activeStep.title} className="aspect-fill" />
+              {/* Physical Documentation & Editorial Visual Stage */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div
+                  style={{
+                    height: 'clamp(240px, 35vw, 420px)',
+                    borderRadius: '8px',
+                    boxShadow: 'var(--shadow-dramatic)',
+                    overflow: 'hidden',
+                    backgroundColor: '#FAF8F2',
+                    border: '1px solid #E7E1D6',
+                    position: 'relative'
+                  }}
+                >
+                  <img
+                    src={activeStep.image}
+                    alt={activeStep.title}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block'
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '0.85rem',
+                      left: '0.85rem',
+                      backgroundColor: 'rgba(33, 29, 45, 0.88)',
+                      backdropFilter: 'blur(8px)',
+                      padding: '0.35rem 0.75rem',
+                      borderRadius: '4px',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.65rem',
+                      color: '#E3D9A4',
+                      pointerEvents: 'none'
+                    }}
+                  >
+                    STAGE 0{activeStepIdx + 1} • {activeStep.title}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

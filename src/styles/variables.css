@@ -1,41 +1,56 @@
 /**
- * COLOUR NEST - Architectural Design Tokens & Dynamic Theme Variables
+ * COLOUR NEST - Architectural Design Tokens & Fixed Brand Palette
+ * Primary indigo: #3C2D8C
+ * Pale gold: #E3D9A4
+ * Warm ivory: #FAF8F2
+ * Deep ink: #211D2D
  */
 
 :root {
-  /* Dynamic Accent System (default: Terracotta Clay) */
-  --accent: #B85C38;
-  --accent-soft: rgba(184, 92, 56, 0.12);
-  --accent-soft-hover: rgba(184, 92, 56, 0.2);
-  --accent-dark: #7B341E;
-  --accent-glow: rgba(184, 92, 56, 0.35);
+  /* Fixed Brand Palette - Statically Enforced */
+  --brand-indigo: #3C2D8C;
+  --brand-gold: #E3D9A4;
+  --brand-ivory: #FAF8F2;
+  --brand-ink: #211D2D;
+  --brand-muted: #6D6877;
+  --brand-border: #E7E1D6;
+  --brand-white: #FFFFFF;
 
-  /* Light Theme — Warm Plaster & Travertine */
-  --surface-primary: #FAF7F2;
+  /* Standard Brand Accents - FIXED, never modified by 3D room selections */
+  --accent: #3C2D8C;
+  --accent-gold: #E3D9A4;
+  --accent-soft: rgba(60, 45, 140, 0.08);
+  --accent-soft-hover: rgba(60, 45, 140, 0.16);
+  --accent-dark: #241A5C;
+  --accent-glow: rgba(60, 45, 140, 0.32);
+
+  /* Warm Ivory Architectural Surfaces */
+  --surface-primary: #FAF8F2;
   --surface-secondary: #F3EFE7;
   --surface-elevated: #FFFFFF;
   --surface-card: #FFFFFF;
-  --surface-glass: rgba(250, 247, 242, 0.85);
-  --surface-overlay: rgba(26, 24, 22, 0.65);
+  --surface-glass: rgba(250, 248, 242, 0.94);
+  --surface-overlay: rgba(33, 29, 45, 0.72);
   
-  --ink-primary: #1C1A18;
-  --ink-secondary: #57524C;
-  --ink-muted: #8A847C;
-  --ink-faint: #C4BFB7;
-  --ink-inverse: #FAF7F2;
+  /* Deep Ink & Refined Typographic Tones */
+  --ink-primary: #211D2D;
+  --ink-secondary: #4A4657;
+  --ink-muted: #6D6877;
+  --ink-faint: #B5B1BE;
+  --ink-inverse: #FAF8F2;
 
-  --border-subtle: rgba(28, 26, 24, 0.08);
-  --border-medium: rgba(28, 26, 24, 0.15);
-  --border-strong: rgba(28, 26, 24, 0.28);
+  --border-subtle: #E7E1D6;
+  --border-medium: rgba(60, 45, 140, 0.15);
+  --border-strong: rgba(33, 29, 45, 0.3);
 
-  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.04);
-  --shadow-elevated: 0 16px 40px rgba(0, 0, 0, 0.08);
-  --shadow-dramatic: 0 30px 60px rgba(0, 0, 0, 0.14);
+  --shadow-subtle: 0 4px 20px rgba(33, 29, 45, 0.05);
+  --shadow-elevated: 0 16px 40px rgba(33, 29, 45, 0.08);
+  --shadow-dramatic: 0 30px 60px rgba(33, 29, 45, 0.14);
 
   /* Architectural Blueprint Line Colors */
-  --arch-line: rgba(184, 92, 56, 0.22);
-  --arch-tick: rgba(28, 26, 24, 0.25);
-  --arch-grid: rgba(28, 26, 24, 0.04);
+  --arch-line: rgba(60, 45, 140, 0.22);
+  --arch-tick: rgba(33, 29, 45, 0.25);
+  --arch-grid: rgba(33, 29, 45, 0.04);
 
   /* Fonts */
   --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
@@ -57,7 +72,7 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
   --ease-smooth: cubic-bezier(0.25, 1, 0.5, 1);
-  --transition-color: background-color 0.8s var(--ease-out-expo), border-color 0.8s var(--ease-out-expo), color 0.8s var(--ease-out-expo);
+  --transition-color: background-color 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo), color 0.4s var(--ease-out-expo);
 
   /* Layout */
   --container-max: 1360px;
@@ -69,69 +84,14 @@
   --radius-md: 8px;
   --radius-lg: 16px;
   --radius-full: 9999px;
+
+  /* Responsive Breakpoints Reference System */
+  --bp-sm-mobile: 320px;
+  --bp-mobile: 375px;
+  --bp-lg-mobile: 480px;
+  --bp-tablet: 768px;
+  --bp-laptop: 1024px;
+  --bp-desktop: 1280px;
+  --bp-wide: 1600px;
 }
 
-/* Dark Mode: Charcoal Architectural Studio with Warm Bronze Accent */
-[data-theme="dark"] {
-  --surface-primary: #121213;
-  --surface-secondary: #18191B;
-  --surface-elevated: #202224;
-  --surface-card: #1A1C1D;
-  --surface-glass: rgba(18, 18, 19, 0.85);
-  --surface-overlay: rgba(0, 0, 0, 0.8);
-
-  --ink-primary: #EDEBE6;
-  --ink-secondary: #AFAAA1;
-  --ink-muted: #7E7971;
-  --ink-faint: #44423E;
-  --ink-inverse: #121213;
-
-  --border-subtle: rgba(237, 235, 230, 0.08);
-  --border-medium: rgba(237, 235, 230, 0.15);
-  --border-strong: rgba(237, 235, 230, 0.28);
-
-  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.4);
-  --shadow-elevated: 0 16px 40px rgba(0, 0, 0, 0.6);
-  --shadow-dramatic: 0 30px 60px rgba(0, 0, 0, 0.8);
-
-  --arch-line: rgba(184, 92, 56, 0.35);
-  --arch-tick: rgba(237, 235, 230, 0.25);
-  --arch-grid: rgba(237, 235, 230, 0.03);
-}
-
-/* Accent Variations (Applied dynamically via data-accent or inline CSS vars) */
-[data-accent="clay"] {
-  --accent: #B85C38;
-  --accent-soft: rgba(184, 92, 56, 0.12);
-  --accent-dark: #7B341E;
-}
-[data-accent="sand"] {
-  --accent: #A88D56;
-  --accent-soft: rgba(168, 141, 86, 0.14);
-  --accent-dark: #6E5728;
-}
-[data-accent="sage"] {
-  --accent: #5C725E;
-  --accent-soft: rgba(92, 114, 94, 0.14);
-  --accent-dark: #374738;
-}
-[data-accent="charcoal"] {
-  --accent: #45494C;
-  --accent-soft: rgba(69, 73, 76, 0.14);
-  --accent-dark: #222425;
-}
-[data-accent="indigo"] {
-  --accent: #2B4663;
-  --accent-soft: rgba(43, 70, 99, 0.15);
-  --accent-dark: #162638;
-}
-[data-accent="bronze"] {
-  --accent: #8C6D46;
-  --accent-soft: rgba(140, 109, 70, 0.15);
-  --accent-dark: #574023;
-}
-[data-accent="rose-clay"] {
-  --accent: #A86C5B;
-  --accent-soft: rgba(168, 108, 91, 0.14);
-  --accent-dark: #6B3F32;
-}

@@ -1,7 +1,9 @@
 /**
  * COLOUR NEST - Architectural Textures & Tactile Material Explorer
  * Features tactile physical simulation parameters, lighting responses and related services
+ * All imagery sourced from curated IMAGE_MANIFEST
  */
+import { IMAGE_MANIFEST } from "./imageManifest";
 
 export const texturesData = [
   {
@@ -18,8 +20,8 @@ export const texturesData = [
     description: "Hand-applied with flexible spatulas in micro-thin layers. Natural marble dust creates a surface that feels cool to the touch and reflects ambient light like polished Carrara limestone.",
     serviceId: "stucco-texture",
     serviceSlug: "premium-stucco-textures",
-    realImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg",
-    highResImage: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1600&q=85",
+    realImage: IMAGE_MANIFEST["material-stucco-finish"].url,
+    highResImage: IMAGE_MANIFEST["material-stucco-finish"].url,
     colorVariations: [
       { name: "Carrara Mist", hex: "#ECE9E2", gradient: "radial-gradient(circle at %X% %Y%, #FFFFFF 0%, #D8D2C4 60%, #B8B09F 100%)" },
       { name: "Basalt Velvet", hex: "#323538", gradient: "radial-gradient(circle at %X% %Y%, #5A6065 0%, #2A2C2E 50%, #151617 100%)" },
@@ -46,8 +48,8 @@ export const texturesData = [
     description: "Evokes the weathered, romantic textures of ancient European villas. Coarser mineral aggregates cast soft micro-shadows under directional lighting, giving flat walls sculptural permanence.",
     serviceId: "wallpaper-anticco",
     serviceSlug: "wallpaper-and-anticco-texture",
-    realImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453115929.jpg",
-    highResImage: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=85",
+    realImage: IMAGE_MANIFEST["material-anticco-texture"].url,
+    highResImage: IMAGE_MANIFEST["material-anticco-texture"].url,
     colorVariations: [
       { name: "Tuscan Ochre", hex: "#D4B483", gradient: "radial-gradient(circle at %X% %Y%, #F2D9B3 0%, #C4A26E 60%, #8E6D3C 100%)" },
       { name: "Weathered Sand", hex: "#C7BCA8", gradient: "radial-gradient(circle at %X% %Y%, #E5DDD0 0%, #B8AC98 55%, #887B67 100%)" },
@@ -74,8 +76,8 @@ export const texturesData = [
     description: "Specialized designer glazes manipulated by master applicators using combs, sponges, and spatulas. Shifts dynamically as the sun moves across your living space.",
     serviceId: "royals-play",
     serviceSlug: "royals-play-designs",
-    realImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453044604.jpg",
-    highResImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85",
+    realImage: IMAGE_MANIFEST["service-royals-play"].url,
+    highResImage: IMAGE_MANIFEST["service-royals-play"].url,
     colorVariations: [
       { name: "Molten Bronze", hex: "#9E784E", gradient: "radial-gradient(circle at %X% %Y%, #D6B287 0%, #9E784E 50%, #5E4325 100%)" },
       { name: "Champagne Dune", hex: "#D6C7AA", gradient: "radial-gradient(circle at %X% %Y%, #F7EEDB 0%, #C4B393 50%, #877454 100%)" },
@@ -102,8 +104,8 @@ export const texturesData = [
     description: "Preserves the deep soul of natural Burma teak, walnut, and oak. Melamyne and Polyurethane seal the grain against water rings while allowing timber's warmth to breathe through.",
     serviceId: "wood-polish-melamyne-pu",
     serviceSlug: "wood-polish-melamyne-pu",
-    realImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453157525.jpg",
-    highResImage: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1600&q=85",
+    realImage: IMAGE_MANIFEST["material-wood-grain"].url,
+    highResImage: IMAGE_MANIFEST["material-wood-grain"].url,
     colorVariations: [
       { name: "Natural Honey Teak", hex: "#A86835", gradient: "radial-gradient(circle at %X% %Y%, #CCA16C 0%, #9E5F2E 55%, #593112 100%)" },
       { name: "Smoked American Walnut", hex: "#4C3322", gradient: "radial-gradient(circle at %X% %Y%, #73533C 0%, #462E1D 60%, #211309 100%)" },
@@ -130,8 +132,8 @@ export const texturesData = [
     description: "Two-pack crosslinking formulation that envelops wood in liquid crystal clarity. Exceptional scratch resistance, zero yellowing, and an unforgettable wet-look reflection.",
     serviceId: "wood-polish-polycoat",
     serviceSlug: "premium-wood-polish-polycoat",
-    realImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453573110.jpg",
-    highResImage: "https://images.unsplash.com/photo-1540518614846-7ede433c4570?auto=format&fit=crop&w=1600&q=85",
+    realImage: IMAGE_MANIFEST["material-wood-polycoat"].url,
+    highResImage: IMAGE_MANIFEST["material-wood-polycoat"].url,
     colorVariations: [
       { name: "Crystal Teak Mirror", hex: "#8A4D22", gradient: "radial-gradient(circle at %X% %Y%, #BF7741 0%, #85481E 50%, #452109 100%)" },
       { name: "Deep Rosewood Luster", hex: "#3E1E19", gradient: "radial-gradient(circle at %X% %Y%, #6B3A32 0%, #381A15 50%, #1A0907 100%)" },
@@ -158,8 +160,8 @@ export const texturesData = [
     description: "Bold mineral aggregate applied continuously over expansive interior and exterior spans. Under low-angle cove lighting, it creates an unforgettable interplay of cast shadows.",
     serviceId: "exterior-painting",
     serviceSlug: "exterior-painting-and-textures",
-    realImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453192427.jpg",
-    highResImage: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1600&q=85",
+    realImage: IMAGE_MANIFEST["exterior-facade-contemporary"].url,
+    highResImage: IMAGE_MANIFEST["exterior-facade-contemporary"].url,
     colorVariations: [
       { name: "Granite Plaster", hex: "#8E8B84", gradient: "radial-gradient(circle at %X% %Y%, #B2AEA5 0%, #827E77 60%, #4F4C47 100%)" },
       { name: "Clay Adobe", hex: "#9F634A", gradient: "radial-gradient(circle at %X% %Y%, #C78265 0%, #955A42 60%, #5C3221 100%)" },

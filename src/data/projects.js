@@ -2,7 +2,9 @@
  * COLOUR NEST - Curated Project Portfolios
  * Focus on COMPLETE SPACES, spatial transformations, materials, finishes, lighting, and atmosphere.
  * Based on authentic Colour Nest services, Bangalore contexts, and verified craftsmanship.
+ * Curated from IMAGE_MANIFEST.
  */
+import { IMAGE_MANIFEST } from "./imageManifest";
 
 export const projectsData = [
   {
@@ -16,10 +18,10 @@ export const projectsData = [
     year: "2024",
     clientType: "Private Penthouse Residence",
     aspectRatio: "wide",
-    heroImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg",
-    fallbackHero: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85",
-    beforeImage: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1400&q=80",
-    afterImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg",
+    heroImage: IMAGE_MANIFEST["hero-architectural-main"].url,
+    fallbackHero: IMAGE_MANIFEST["hero-architectural-main"].url,
+    beforeImage: IMAGE_MANIFEST["about-interior-workspace"].url,
+    afterImage: IMAGE_MANIFEST["hero-architectural-main"].url,
     summary: "A complete double-height spatial transformation uniting tiered gypsum false ceilings, warm Burma teak joinery, and hand-burnished Venetian Stucco with indirect cove lighting.",
     story: {
       theSpace: "A double-height living pavilion and dining hall in 9th Block Jayanagar. The voluminous 18-foot walls and bare concrete shell suffered from midday south-facing glare and harsh acoustic flutter echo.",
@@ -38,10 +40,10 @@ export const projectsData = [
     ],
     servicesUsed: ["stucco-texture", "false-ceilings", "interior-lighting-fans", "wood-polish-melamyne-pu"],
     gallery: [
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg",
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453181746.jpg",
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453486066.jpg",
-      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80"
+      IMAGE_MANIFEST["hero-architectural-main"].url,
+      IMAGE_MANIFEST["material-stucco-finish"].url,
+      IMAGE_MANIFEST["architectural-false-ceiling"].url,
+      IMAGE_MANIFEST["service-custom-interiors"].url
     ]
   },
   {
@@ -55,10 +57,10 @@ export const projectsData = [
     year: "2024",
     clientType: "Contemporary Villa",
     aspectRatio: "tall",
-    heroImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453115929.jpg",
-    fallbackHero: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=85",
-    beforeImage: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1400&q=80",
-    afterImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453115929.jpg",
+    heroImage: IMAGE_MANIFEST["space-bedroom-refined"].url,
+    fallbackHero: IMAGE_MANIFEST["space-bedroom-refined"].url,
+    beforeImage: IMAGE_MANIFEST["material-stone-marble"].url,
+    afterImage: IMAGE_MANIFEST["space-bedroom-refined"].url,
     summary: "Artisan Anticco Italian texture creating romantic weathered stone depth, paired with textured botanical wallpapers, bleached ash joinery, and warm diffused lighting.",
     story: {
       theSpace: "Master bedroom suite and private reading lounge in an Indiranagar contemporary villa, overlooking a lush private garden courtyard.",
@@ -77,9 +79,9 @@ export const projectsData = [
     ],
     servicesUsed: ["wallpaper-anticco", "interiors-decors", "royals-play", "interior-lighting-fans"],
     gallery: [
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453115929.jpg",
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453044604.jpg",
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453535477.jpg"
+      IMAGE_MANIFEST["space-bedroom-refined"].url,
+      IMAGE_MANIFEST["material-anticco-texture"].url,
+      IMAGE_MANIFEST["material-wallpaper-pattern"].url
     ]
   },
   {
@@ -93,10 +95,10 @@ export const projectsData = [
     year: "2023",
     clientType: "Private Villa",
     aspectRatio: "large",
-    heroImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453573110.jpg",
-    fallbackHero: "https://images.unsplash.com/photo-1540518614846-7ede433c4570?auto=format&fit=crop&w=1600&q=85",
-    beforeImage: "https://images.unsplash.com/photo-1534349762230-e0cadf78f5da?auto=format&fit=crop&w=1400&q=80",
-    afterImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453573110.jpg",
+    heroImage: IMAGE_MANIFEST["material-wood-grain"].url,
+    fallbackHero: IMAGE_MANIFEST["material-wood-grain"].url,
+    beforeImage: IMAGE_MANIFEST["about-interior-workspace"].url,
+    afterImage: IMAGE_MANIFEST["material-wood-polycoat"].url,
     summary: "Exquisite two-pack Polycoat wood finish bringing diamond clarity and liquid-glass protection to reclaimed Burma teak, integrated with alabaster walls and coved ceilings.",
     story: {
       theSpace: "Grand entrance gallery, formal dining credenza, and custom wall paneling in an expansive Koramangala private residence.",
@@ -115,9 +117,9 @@ export const projectsData = [
     ],
     servicesUsed: ["wood-polish-polycoat", "wood-polish-melamyne-pu", "customised-interiors", "false-ceilings"],
     gallery: [
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453573110.jpg",
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453157525.jpg",
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453280537.jpg"
+      IMAGE_MANIFEST["material-wood-polycoat"].url,
+      IMAGE_MANIFEST["material-wood-grain"].url,
+      IMAGE_MANIFEST["service-custom-interiors"].url
     ]
   },
   {
@@ -131,10 +133,10 @@ export const projectsData = [
     year: "2024",
     clientType: "Duplex Residence",
     aspectRatio: "wide",
-    heroImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453044604.jpg",
-    fallbackHero: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85",
-    beforeImage: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1400&q=80",
-    afterImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453044604.jpg",
+    heroImage: IMAGE_MANIFEST["space-living-contemporary"].url,
+    fallbackHero: IMAGE_MANIFEST["space-living-contemporary"].url,
+    beforeImage: IMAGE_MANIFEST["architectural-false-ceiling"].url,
+    afterImage: IMAGE_MANIFEST["space-living-contemporary"].url,
     summary: "Artisan Royals Play dimensional pattern with champagne mica glazes, framing a double-height staircase and creating an ethereal light-responsive canvas.",
     story: {
       theSpace: "A multi-level formal drawing room and open staircase atrium in JP Nagar 7th Phase, designed for entertaining and art appreciation.",
@@ -153,9 +155,9 @@ export const projectsData = [
     ],
     servicesUsed: ["royals-play", "false-ceilings", "interior-lighting-fans", "interiors-decors"],
     gallery: [
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453044604.jpg",
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453486066.jpg",
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453181746.jpg"
+      IMAGE_MANIFEST["space-living-contemporary"].url,
+      IMAGE_MANIFEST["service-royals-play"].url,
+      IMAGE_MANIFEST["architectural-lighting-pendant"].url
     ]
   },
   {
@@ -169,10 +171,10 @@ export const projectsData = [
     year: "2023",
     clientType: "Commercial Studio",
     aspectRatio: "wide",
-    heroImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453394782.jpg",
-    fallbackHero: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=85",
-    beforeImage: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1400&q=80",
-    afterImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453394782.jpg",
+    heroImage: IMAGE_MANIFEST["space-commercial-workspace"].url,
+    fallbackHero: IMAGE_MANIFEST["space-commercial-workspace"].url,
+    beforeImage: IMAGE_MANIFEST["gallery-commercial-boardroom"].url,
+    afterImage: IMAGE_MANIFEST["space-commercial-workspace"].url,
     summary: "Complete commercial interior transformation: high-traffic scrub-resistant wall coatings, acoustic gypsum ceiling drops, and tunable magnetic track illumination.",
     story: {
       theSpace: "A 4,000 sq ft creative executive suite and glass boardroom in Whitefield, requiring brand-aligned aesthetics and high-performance durability.",
@@ -191,9 +193,9 @@ export const projectsData = [
     ],
     servicesUsed: ["commercial-interiors", "false-ceilings", "interior-lighting-fans", "one-stop-solution"],
     gallery: [
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453394782.jpg",
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453486066.jpg",
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453181746.jpg"
+      IMAGE_MANIFEST["space-commercial-workspace"].url,
+      IMAGE_MANIFEST["gallery-commercial-boardroom"].url,
+      IMAGE_MANIFEST["architectural-lighting-pendant"].url
     ]
   },
   {
@@ -207,10 +209,10 @@ export const projectsData = [
     year: "2024",
     clientType: "Private Villa",
     aspectRatio: "tall",
-    heroImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453192427.jpg",
-    fallbackHero: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1600&q=85",
-    beforeImage: "https://images.unsplash.com/photo-1541123437800-1bb1317badc2?auto=format&fit=crop&w=1400&q=80",
-    afterImage: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453192427.jpg",
+    heroImage: IMAGE_MANIFEST["exterior-facade-contemporary"].url,
+    fallbackHero: IMAGE_MANIFEST["exterior-facade-contemporary"].url,
+    beforeImage: IMAGE_MANIFEST["gallery-exterior-residence"].url,
+    afterImage: IMAGE_MANIFEST["exterior-facade-contemporary"].url,
     summary: "Heavy-duty silicone exterior stone texture providing 100% monsoon waterproofing, anti-fungal shield, and striking architectural presence.",
     story: {
       theSpace: "Full exterior facade, cantilevered courtyard canopy, boundary walls, and balcony ceiling soffits for a private villa on Bannerghatta Road.",
@@ -229,8 +231,8 @@ export const projectsData = [
     ],
     servicesUsed: ["exterior-painting", "one-stop-solution", "wood-polish-melamyne-pu"],
     gallery: [
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453192427.jpg",
-      "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453630232.jpg"
+      IMAGE_MANIFEST["exterior-facade-contemporary"].url,
+      IMAGE_MANIFEST["gallery-exterior-residence"].url
     ]
   }
 ];

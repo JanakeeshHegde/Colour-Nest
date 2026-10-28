@@ -1,38 +1,40 @@
+import { IMAGE_MANIFEST } from "./imageManifest";
+
 export const serviceFamilies = [
   {
     id: "SPACE_INTERIORS",
     title: "Space & Interiors",
     tagline: "Turnkey spatial engineering, bespoke carpentry & holistic environments",
     description: "Complete spatial overhauls unifying partition architecture, custom modular joinery, and tailored residential or commercial layouts.",
-    visual: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+    visual: IMAGE_MANIFEST["space-living-contemporary"].url
   },
   {
     id: "SURFACES_FINISHES",
     title: "Surfaces & Finishes",
     tagline: "Venetian Stucco, Italian Anticco, luxury glazes & seamless wallcoverings",
     description: "Tactile mineral plasters and decorative wall art that capture daylight and define room character.",
-    visual: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg"
+    visual: IMAGE_MANIFEST["material-stucco-finish"].url
   },
   {
     id: "WOOD_MATERIAL",
     title: "Wood & Materials",
     tagline: "Grain-nourishing Melamyne, PU coats & liquid crystal Polycoat sealers",
     description: "Preservation and mirror-buffing of Burma teak, natural veneers, dining slabs, and main entrance doors.",
-    visual: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453157525.jpg"
+    visual: IMAGE_MANIFEST["material-wood-grain"].url
   },
   {
     id: "ARCHITECTURAL_ELEMENTS",
     title: "Architectural Elements",
     tagline: "Laser-leveled false ceilings, floating rafts & concealed cove LED profiles",
     description: "Sculpting the ceiling plane with indirect light troughs and integrated whisper-quiet designer fans.",
-    visual: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453486066.jpg"
+    visual: IMAGE_MANIFEST["architectural-false-ceiling"].url
   },
   {
     id: "EXTERIOR",
     title: "Exterior Facades",
     tagline: "Monsoon-tested elastomeric membranes & weather-resistant stone textures",
     description: "Enduring architectural skins engineered to protect building masonry and elevate curb presence.",
-    visual: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453192427.jpg"
+    visual: IMAGE_MANIFEST["exterior-facade-contemporary"].url
   }
 ];
 
@@ -47,8 +49,8 @@ export const servicesData = [
     tagline: "Artisan Wall Treatments & Dimensional Designer Finishes",
     shortDescription: "Specialized designer finishes including metallic glazes, spatula patterns, and textured wall effects crafted by trained master applicators.",
     fullDescription: "Royals Play transforms flat vertical surfaces into tactile, light-reflective canvases. Using specialized multi-coat acrylic glazes, metallic sheens, and artisan trowel techniques, we achieve sophisticated textural depths such as linen, crinkle, safari, and metallic weave patterns tailored to the daylight dynamics of each room.",
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453044604.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80",
+    image: IMAGE_MANIFEST["service-royals-play"].url,
+    fallbackImage: IMAGE_MANIFEST["service-royals-play"].url,
     features: [
       "Custom metallic and non-metallic glaze formulations",
       "Specialty patterns: Spatula, Dune, Linen, Torrent, Fizz",
@@ -76,8 +78,8 @@ export const servicesData = [
     tagline: "Venetian Antique Depth & Designer Seamless Wallcoverings",
     shortDescription: "Italian-style Anticco plaster treatments evoking aged European stone walls alongside precision seamless wallpaper installations.",
     fullDescription: "Anticco is an exquisite lime-and-marble aggregate texture designed to evoke the weathered, time-honed grandeur of classical European palazzos. Paired with high-grade European vinyl, botanical, and textured grasscloth wallpapers, we ensure plumb-line edge matching and zero visible seam bubbles.",
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453115929.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=80",
+    image: IMAGE_MANIFEST["material-anticco-texture"].url,
+    fallbackImage: IMAGE_MANIFEST["material-wallpaper-pattern"].url,
     features: [
       "Aged stone patina with high and low tonal contrast",
       "Natural mineral breathability preventing subsurface damp traps",
@@ -105,8 +107,8 @@ export const servicesData = [
     tagline: "Mirror-Smooth Venetian Marble Plaster & Velvet Reliefs",
     shortDescription: "Hand-burnished Italian Stucco providing marble-like depth, glass-smooth sheen, and architectural tactile presence.",
     fullDescription: "Venetian Stucco represents the pinnacle of surface artisan craft. Applied in whisper-thin translucent coats with flexible stainless steel spatulas, each pass compresses micro-marble particles to create a luminous, cool-to-touch surface that catches architectural grazing light like polished limestone or Carrera marble.",
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453135933.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1400&q=80",
+    image: IMAGE_MANIFEST["material-stucco-finish"].url,
+    fallbackImage: IMAGE_MANIFEST["material-stucco-finish"].url,
     features: [
       "High natural luster achieved through physical compression, not plastic film",
       "Dramatic optical depth with light refracting through translucent micro-layers",
@@ -135,8 +137,8 @@ export const servicesData = [
     tagline: "Grain-Enhanced Protective Finishes & Polyurethane Coatings",
     shortDescription: "Expert wood preservation and beautification using Melamyne and Polyurethane for natural teak, oak, walnut, and veneered surfaces.",
     fullDescription: "Fine architectural joinery deserves finishes that protect without choking natural grain vibrancy. Our Melamyne and Polyurethane (PU) wood treatments provide hardwearing resistance to moisture, heat rings, and household spills while honoring the deep tones of natural timber, architectural veneers, and solid teak doors.",
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453157525.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=80",
+    image: IMAGE_MANIFEST["material-wood-grain"].url,
+    fallbackImage: IMAGE_MANIFEST["material-wood-grain"].url,
     features: [
       "Grain-fill pore sanding for silky glass or open-pore natural wood feel",
       "PU formulations with high yellowing-resistance and UV stabilizers",
@@ -164,8 +166,8 @@ export const servicesData = [
     tagline: "Architectural Cove Illumination, Tunable Lights & Automation",
     shortDescription: "Integrated ambient lighting design, recessed architectural profiles, cove LED installations, and smart BLDC ceiling fan integration.",
     fullDescription: "Color is invisible without light. We integrate lighting directly into the architecture: concealed cove LED profiles that graze textured plaster, low-glare magnetic track systems for living spaces, warm temperature-tunable lighting, and silent designer BLDC fans that harmonize with ceiling aesthetics.",
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453181746.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1400&q=80",
+    image: IMAGE_MANIFEST["architectural-lighting-pendant"].url,
+    fallbackImage: IMAGE_MANIFEST["architectural-lighting-pendant"].url,
     features: [
       "Concealed architectural cove lighting with diffuse zero-hotspot channels",
       "Tunable white temperatures (2700K warm incandescent to 4000K neutral daylight)",
@@ -193,8 +195,8 @@ export const servicesData = [
     tagline: "High-Performance Weatherproof Coatings & Architectural Plasters",
     shortDescription: "Monsoon-tested exterior coatings, elastomeric crack-bridging paints, anti-fungal treatments, and durable rough-cast facade textures.",
     fullDescription: "Bangalore's climate demands exterior solutions that withstand heavy monsoons, intense ultraviolet exposure, and urban dust. We engineer exterior facades with high-build elastomeric waterproof membranes, anti-carbonation coatings, and tactile grit textures that repel rain and maintain radiant curb appeal for years.",
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453192427.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1400&q=80",
+    image: IMAGE_MANIFEST["exterior-facade-contemporary"].url,
+    fallbackImage: IMAGE_MANIFEST["gallery-exterior-residence"].url,
     features: [
       "Elastomeric flexibility to bridge hairline structural plaster fractures",
       "Nanotech hydrophobic barrier actively shedding rainwater and dirt",
@@ -222,8 +224,8 @@ export const servicesData = [
     tagline: "Tailored Living Environments & Personalized Spatial Design",
     shortDescription: "Bespoke carpentry, space-maximizing storage, personalized room palettes, and architectural detailing curated to your lifestyle.",
     fullDescription: "No two families live identically. Our customized interior service designs spaces around your daily rituals: ergonomic wardrobe configurations, tailored TV media walls with concealed cabling, fluted wall accents, study nooks, and harmonized color palettes that feel effortless and deeply personal.",
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453280537.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1400&q=80",
+    image: IMAGE_MANIFEST["service-custom-interiors"].url,
+    fallbackImage: IMAGE_MANIFEST["service-custom-interiors"].url,
     features: [
       "Space-maximizing modular joinery using calibrated BWP/BWR ply",
       "Concealed soft-close hardware and sleek handleless profiles",
@@ -237,7 +239,7 @@ export const servicesData = [
       "Precision site joinery fabrication and laser alignment",
       "Final surface finish, hardware fitting, and thorough site cleanup"
     ],
-    materials: "Calibrated marine ply, natural architectural veneers, Blum/Hettich hardware",
+    materials: "Calibrated marine/BWP plywood, natural architectural veneers, precision soft-close hardware",
     dryingTime: "Phase-structured project delivery",
     maintenance: "Modular panels allow easy future updates"
   },
@@ -251,8 +253,8 @@ export const servicesData = [
     tagline: "High-Traffic Aesthetic Durability & Brand-Aligned Workspaces",
     shortDescription: "Office interiors, corporate reception areas, retail boutiques, and studio spaces designed for heavy traffic and professional brand presence.",
     fullDescription: "Commercial spaces require balancing rigorous durability with instant visual impact. We construct office interiors, consulting clinics, and retail storefronts with scuff-resistant paint coatings, acoustic false ceiling baffles, durable wood laminates, and brand-coordinated accent color schemes built to perform daily.",
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453394782.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1400&q=80",
+    image: IMAGE_MANIFEST["space-commercial-workspace"].url,
+    fallbackImage: IMAGE_MANIFEST["gallery-commercial-boardroom"].url,
     features: [
       "High-scrub scuff-resistant wall coatings engineered for corridors and meeting rooms",
       "Acoustic attenuation via micro-perforated ceiling panels and sound baffles",
@@ -279,9 +281,9 @@ export const servicesData = [
     category: "CEILING",
     tagline: "Architectural Gypsum Volumes, Floating Rafts & Recessed Coves",
     shortDescription: "Precision gypsum and POP false ceiling systems with recessed light troughs, floating perimeter details, and thermal acoustic insulation.",
-    fullDescription: "The ceiling is the 'fifth wall' of any interior. Rather than treating it as an afterthought, we sculpt ceiling planes with lightweight Saint-Gobain gypsum boards, laser-squared galvanized steel framing, seamless tape-and-joint finishing, and elegant stepped coves that house indirect perimeter lighting.",
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453486066.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80",
+    fullDescription: "The ceiling is the 'fifth wall' of any interior. Rather than treating it as an afterthought, we sculpt ceiling planes with lightweight architectural-grade gypsum boards, laser-squared galvanized steel framing, seamless tape-and-joint finishing, and elegant stepped coves that house indirect perimeter lighting.",
+    image: IMAGE_MANIFEST["architectural-false-ceiling"].url,
+    fallbackImage: IMAGE_MANIFEST["architectural-false-ceiling"].url,
     features: [
       "Precision laser leveling ensuring zero sagging or line waviness",
       "Anti-crack jointing compound reinforced with fiberglass scrim tape",
@@ -295,7 +297,7 @@ export const servicesData = [
       "Moisture-resistant gypsum board fastening with countersunk screws",
       "3-pass joint compound skimming and uniform ultra-smooth sanding"
     ],
-    materials: "Saint-Gobain Gyproc 12.5mm boards, galvanized steel grid sections, joint filler",
+    materials: "High-density 12.5mm gypsum plasterboards, galvanized steel grid sections, joint filler",
     dryingTime: "Jointing dry in 24 hours prior to ceiling primer",
     maintenance: "Inspection traps provided for concealed wiring and drivers"
   },
@@ -309,8 +311,8 @@ export const servicesData = [
     tagline: "Harmonized Material Palettes, Architectural Trim & Finishes",
     shortDescription: "Curated interior accents including architectural moldings, wall paneling, textured partitions, and complementary spatial styling.",
     fullDescription: "True interior sophistication lies in how surfaces meet: the subtle shadow line of an architectural skirting, the rhythm of vertical wall paneling, or the dialogue between a stone texture wall and a warm oak credenza. We curate decorative layers that elevate rooms into unified, cohesive sanctuaries.",
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453535477.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&w=1400&q=80",
+    image: IMAGE_MANIFEST["space-living-contemporary"].url,
+    fallbackImage: IMAGE_MANIFEST["gallery-lounge-sanctuary"].url,
     features: [
       "Architectural baseboards, wainscoting, and classical wall framing trims",
       "Warm ambient accent lighting highlighting art and spatial niches",
@@ -338,8 +340,8 @@ export const servicesData = [
     tagline: "Crystal-Clear Deep Glass Sealants & Luxury Mirror Sheens",
     shortDescription: "Specialist two-pack polyurethane Polycoat sealers delivering high-depth glass reflection, UV resistance, and lifelong timber protection.",
     fullDescription: "Polycoat is an ultra-premium surface formulation that acts like liquid crystal over wood. It deeply penetrates the grain before curing into an exceptionally hard, scratch-resistant barrier. Perfect for prized solid Burma teak and exotic burls, it creates a wet-look mirror or subtle silk sheen with unmatched clarity.",
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453573110.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1540518614846-7ede433c4570?auto=format&fit=crop&w=1400&q=80",
+    image: IMAGE_MANIFEST["material-wood-polycoat"].url,
+    fallbackImage: IMAGE_MANIFEST["material-wood-polycoat"].url,
     features: [
       "Optically pure formulation with zero muddying of natural timber figure",
       "Extreme resistance to hot liquid vessels, alcohols, and household cleaning chemicals",
@@ -367,13 +369,13 @@ export const servicesData = [
     tagline: "End-to-End Space Transformation from Civil Prep to Handover",
     shortDescription: "Seamless turnkey interior execution uniting wall finishing, texture art, ceiling architecture, lighting, wood polishing, and final styling.",
     fullDescription: "Managing separate painters, carpenters, ceiling contractors, and electricians usually leads to finger-pointing and delayed timelines. Colour Nest provides an orchestrated single-point interior solution. Under Mr. Abhishek Rao's personal consultancy, every phase is supervised, coordinated, and executed with exacting craftsmanship.",
-    image: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453630232.jpg",
-    fallbackImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80",
+    image: IMAGE_MANIFEST["hero-architectural-main"].url,
+    fallbackImage: IMAGE_MANIFEST["about-interior-workspace"].url,
     features: [
       "Single-point accountability with Abhishek Rao as lead consultant",
       "Strict sequence scheduling preventing damage to freshly completed finishes",
       "Holistic material harmony where woodwork, ceilings, and wall colors dialogue",
-      "Fixed scope of work, clear milestone delivery, and zero hidden escalations"
+      "Fixed scope of work, clear milestone delivery, and transparent itemized milestones"
     ],
     idealFor: "Homeowners seeking complete peace of mind during new home setup or full renovations.",
     process: [

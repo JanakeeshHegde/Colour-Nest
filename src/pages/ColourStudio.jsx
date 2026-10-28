@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Copy, Check, Bookmark, ArrowRight, Sparkles, SlidersHorizontal, Sun, Layers, Eye } from 'lucide-react';
+import { Copy, Check, Bookmark, ArrowRight, Sparkles, SlidersHorizontal, Sun, Layers, Eye, Compass } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
 import { roomTypes } from '../data/colours';
 import { texturesData } from '../data/textures';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
+import { SpaceStudioCanvas } from '../components/canvas/SpaceStudioCanvas';
+import { IMAGE_MANIFEST } from '../data/imageManifest';
 
 // 6 Room Mood Modes modulating wall colour, lighting atmosphere, accent, and texture overlay
 const roomMoodModes = {
@@ -119,16 +121,18 @@ const roomMoodModes = {
 };
 
 const roomVisuals = {
-  LIVING: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85",
-  BEDROOM: "https://d3k88l35vy59af.cloudfront.net/A001/colour-nest/1591620955826.jpg",
-  KITCHEN: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1600&q=80",
-  EXTERIOR: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453192427.jpg"
+  LIVING: IMAGE_MANIFEST["space-living-contemporary"].url,
+  BEDROOM: IMAGE_MANIFEST["space-bedroom-refined"].url,
+  KITCHEN: IMAGE_MANIFEST["space-kitchen-architectural"].url,
+  COMMERCIAL: IMAGE_MANIFEST["space-commercial-workspace"].url,
+  EXTERIOR: IMAGE_MANIFEST["exterior-facade-contemporary"].url
 };
 
 export const ColourStudio = () => {
   const navigate = useNavigate();
   const [selectedRoom, setSelectedRoom] = useState("LIVING");
   const [selectedModeKey, setSelectedModeKey] = useState("WARM");
+  const [visualMode, setVisualMode] = useState("3D"); // '3D' or 'RENDER'
   const [copiedHex, setCopiedHex] = useState(null);
   const [savedMoods, setSavedMoods] = useState(() => {
     try {
@@ -138,6 +142,16 @@ export const ColourStudio = () => {
       return [];
     }
   });
+
+  const mood3DConfigs = {
+    WARM: { wall: 'clay', light: 'evening', wood: 'warm', floor: 'stone' },
+    CALM: { wall: 'sage', light: 'morning', wood: 'natural', floor: 'wood' },
+    MODERN: { wall: 'charcoal', light: 'day', wood: 'dark', floor: 'concrete' },
+    LUXE: { wall: 'sand', light: 'evening', wood: 'polished', floor: 'stone' },
+    EARTH: { wall: 'clay', light: 'day', wood: 'warm', floor: 'walnut' },
+    NOCTURNE: { wall: 'indigo', light: 'night', wood: 'dark', floor: 'concrete' }
+  };
+  const current3D = mood3DConfigs[selectedModeKey] || mood3DConfigs.WARM;
 
   const activeMood = roomMoodModes[selectedModeKey] || roomMoodModes["WARM"];
   const moodStorageKey = `${selectedRoom}_${selectedModeKey}`;
@@ -280,88 +294,183 @@ export const ColourStudio = () => {
 
             {/* CENTER: COMPLETE ROOM VISUALIZER */}
             <div style={{ gridColumn: 'span 12' }} className="mood-studio-center">
-              <div
-                style={{
-                  position: 'relative',
-                  width: '100%',
-                  aspectRatio: '16/10',
-                  minHeight: '380px',
-                  borderRadius: 'var(--radius-xs)',
-                  overflow: 'hidden',
-                  boxShadow: 'var(--shadow-dramatic)',
-                  border: '1px solid var(--border-medium)',
-                  backgroundColor: '#161514',
-                  marginBottom: '1.25rem'
-                }}
-              >
-                {/* Complete Room Photography Base */}
-                <img
-                  src={roomVisuals[selectedRoom]}
-                  alt={`${selectedRoom} Complete Interior`}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    filter: activeMood.filter,
-                    transition: 'filter 0.6s ease'
-                  }}
-                />
-
-                {/* Vertical Focal Wall Tint Layer */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '8%',
-                    left: '4%',
-                    width: '44%',
-                    height: '76%',
-                    backgroundColor: activeMood.wallHex,
-                    opacity: 0.42,
-                    mixBlendMode: 'multiply',
-                    clipPath: 'polygon(0 0, 100% 5%, 92% 100%, 0 95%)',
-                    transition: 'background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
-                  }}
-                />
-
-                {/* Atmospheric Ambient Lighting Wash */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: activeMood.lightTint,
-                    mixBlendMode: 'screen',
-                    pointerEvents: 'none',
-                    transition: 'background-color 0.6s ease'
-                  }}
-                />
-
-                {/* In-Room Live HUD */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: '1.25rem',
-                    left: '1.25rem',
-                    backgroundColor: 'rgba(18, 18, 19, 0.85)',
-                    backdropFilter: 'blur(8px)',
-                    padding: '0.65rem 1.15rem',
-                    borderRadius: 'var(--radius-xs)',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.72rem',
-                    color: '#FAF7F2',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.85rem'
-                  }}
-                >
-                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: activeMood.wallHex }} />
-                  <span>MOOD: {activeMood.label}</span>
-                  <span style={{ color: 'rgba(255, 255, 255, 0.4)' }}>|</span>
-                  <span>SURFACE: {activeMood.textureName}</span>
+              {/* Perspective Mode Switcher */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--ink-muted)' }}>
+                  VISUAL ENGINE:
+                </span>
+                <div style={{ display: 'flex', gap: '0.5rem', backgroundColor: 'var(--surface-secondary)', padding: '0.25rem', borderRadius: '999px', border: '1px solid var(--border-subtle)' }}>
+                  <button
+                    onClick={() => setVisualMode('3D')}
+                    style={{
+                      backgroundColor: visualMode === '3D' ? 'var(--accent)' : 'transparent',
+                      color: visualMode === '3D' ? '#FFFFFF' : 'var(--ink-secondary)',
+                      border: 'none',
+                      padding: '0.35rem 0.9rem',
+                      borderRadius: '999px',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.68rem',
+                      letterSpacing: '0.12em',
+                      fontWeight: 600,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    3D SPATIAL ROOM
+                  </button>
+                  <button
+                    onClick={() => setVisualMode('RENDER')}
+                    style={{
+                      backgroundColor: visualMode === 'RENDER' ? 'var(--accent)' : 'transparent',
+                      color: visualMode === 'RENDER' ? '#FFFFFF' : 'var(--ink-secondary)',
+                      border: 'none',
+                      padding: '0.35rem 0.9rem',
+                      borderRadius: '999px',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.68rem',
+                      letterSpacing: '0.12em',
+                      fontWeight: 600,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    COMPOSITE RENDER
+                  </button>
                 </div>
               </div>
+
+              {visualMode === '3D' ? (
+                <div
+                  style={{
+                    position: 'relative',
+                    width: '100%',
+                    height: '460px',
+                    borderRadius: 'var(--radius-xs)',
+                    overflow: 'hidden',
+                    boxShadow: 'var(--shadow-dramatic)',
+                    border: '1px solid var(--border-medium)',
+                    backgroundColor: '#121213',
+                    marginBottom: '1.25rem'
+                  }}
+                >
+                  <SpaceStudioCanvas
+                    wallColorKey={current3D.wall}
+                    floorKey={current3D.floor}
+                    woodKey={current3D.wood}
+                    ceilingPreset="LAYERED"
+                    lightMode={current3D.light}
+                    isExploreMode={false}
+                    showHotspots={false}
+                  />
+
+                  {/* Live 3D Atmosphere HUD */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '1rem',
+                      left: '1rem',
+                      backgroundColor: 'rgba(18, 18, 19, 0.88)',
+                      backdropFilter: 'blur(10px)',
+                      padding: '0.5rem 1rem',
+                      borderRadius: '6px',
+                      border: '1px solid rgba(255, 255, 255, 0.12)',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.68rem',
+                      color: '#FFFFFF',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      pointerEvents: 'none'
+                    }}
+                  >
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: activeMood.wallHex }} />
+                    <span>3D MOOD: {activeMood.label}</span>
+                    <span style={{ opacity: 0.4 }}>•</span>
+                    <span>LIGHT: {current3D.light.toUpperCase()}</span>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    position: 'relative',
+                    width: '100%',
+                    aspectRatio: '16/10',
+                    minHeight: '380px',
+                    borderRadius: 'var(--radius-xs)',
+                    overflow: 'hidden',
+                    boxShadow: 'var(--shadow-dramatic)',
+                    border: '1px solid var(--border-medium)',
+                    backgroundColor: '#161514',
+                    marginBottom: '1.25rem'
+                  }}
+                >
+                  {/* Complete Room Photography Base */}
+                  <img
+                    src={roomVisuals[selectedRoom]}
+                    alt={`${selectedRoom} Complete Interior`}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      filter: activeMood.filter,
+                      transition: 'filter 0.6s ease'
+                    }}
+                  />
+
+                  {/* Vertical Focal Wall Tint Layer */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '8%',
+                      left: '4%',
+                      width: '44%',
+                      height: '76%',
+                      backgroundColor: activeMood.wallHex,
+                      opacity: 0.42,
+                      mixBlendMode: 'multiply',
+                      clipPath: 'polygon(0 0, 100% 5%, 92% 100%, 0 95%)',
+                      transition: 'background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
+                    }}
+                  />
+
+                  {/* Atmospheric Ambient Lighting Wash */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      backgroundColor: activeMood.lightTint,
+                      mixBlendMode: 'screen',
+                      pointerEvents: 'none',
+                      transition: 'background-color 0.6s ease'
+                    }}
+                  />
+
+                  {/* In-Room Live HUD */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '1.25rem',
+                      left: '1.25rem',
+                      backgroundColor: 'rgba(18, 18, 19, 0.85)',
+                      backdropFilter: 'blur(8px)',
+                      padding: '0.65rem 1.15rem',
+                      borderRadius: 'var(--radius-xs)',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.72rem',
+                      color: '#FAF7F2',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.85rem'
+                    }}
+                  >
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: activeMood.wallHex }} />
+                    <span>MOOD: {activeMood.label}</span>
+                    <span style={{ color: 'rgba(255, 255, 255, 0.4)' }}>|</span>
+                    <span>SURFACE: {activeMood.textureName}</span>
+                  </div>
+                </div>
+              )}
 
               {/* Integrated Atmosphere Blueprint Details */}
               <div

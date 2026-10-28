@@ -1,117 +1,228 @@
 /**
- * COLOUR NEST - Architectural Gallery Dataset
- * Genuine CloudFront images from reference card + curated architectural photography
+ * COLOUR NEST — Architectural Gallery Dataset
+ * High-resolution interior inspiration and finish concepts.
+ * All imagery linked to local, content-matched project assets.
+ * 
+ * Categories:
+ * - ALL
+ * - LIVING SPACES
+ * - BEDROOMS
+ * - KITCHENS
+ * - COMMERCIAL
+ * - WOOD & FINISHES
+ * - TEXTURES & WALLPAPER
+ * - CEILINGS & LIGHTING
+ * - EXTERIORS
  */
 
+export const GALLERY_CATEGORIES = [
+  "ALL",
+  "LIVING SPACES",
+  "BEDROOMS",
+  "KITCHENS",
+  "COMMERCIAL",
+  "WOOD & FINISHES",
+  "TEXTURES & WALLPAPER",
+  "CEILINGS & LIGHTING",
+  "EXTERIORS"
+];
+
 export const galleryItems = [
+  // 1. LIVING SPACES
   {
-    id: "gal-01",
-    title: "Artisan Living Room Plaster & Cove Light",
-    category: "LIVING",
+    id: "gal-liv-01",
+    title: "Double-Height Travertine Pavilion",
+    category: "LIVING SPACES",
     aspect: "landscape",
-    src: "https://d3k88l35vy59af.cloudfront.net/A001/colour-nest/1591620955824.jpg",
-    fallback: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=80",
-    tags: ["Living", "Plaster", "Ambient Light"],
-    caption: "Subtle continuous wall finishing with integrated architectural ceiling coves."
+    src: "/images/hero/hero_main.jpg",
+    fallback: "/images/hero/hero_main.jpg",
+    caption: "Volumetric double-height living environment with travertine stone cladding and natural ambient illumination."
   },
   {
-    id: "gal-02",
-    title: "Master Suite Feature Wall & Texture",
-    category: "LIVING",
+    id: "gal-liv-02",
+    title: "Contemporary Sculpted Lounge",
+    category: "LIVING SPACES",
     aspect: "portrait",
-    src: "https://d3k88l35vy59af.cloudfront.net/A001/colour-nest/1591620955826.jpg",
-    fallback: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=80",
-    tags: ["Bedroom", "Royals Play", "Texture"],
-    caption: "Deep earthen wall treatment with warm bedside accent illumination."
+    src: "/images/interiors/living_room.jpg",
+    fallback: "/images/interiors/living_room.jpg",
+    caption: "Warm limewashed wall backdrop paired with bespoke low-slung joinery and textured linen upholstery."
   },
   {
-    id: "gal-03",
-    title: "Royals Play Spatula Texture Accent",
-    category: "TEXTURE",
+    id: "gal-liv-03",
+    title: "Minimalist Lounge Sanctuary",
+    category: "LIVING SPACES",
     aspect: "square",
-    src: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453763731.jpg",
-    fallback: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1400&q=80",
-    tags: ["Texture", "Artisan", "Detail"],
-    caption: "Trowel-manipulated mineral texture reflecting directional daylight."
+    src: "/images/interiors/lounge_sanctuary.jpg",
+    fallback: "/images/interiors/lounge_sanctuary.jpg",
+    caption: "Earthy clay plaster finish with curved bouclé accent chairs and organic jute floor textures."
+  },
+
+  // 2. BEDROOMS
+  {
+    id: "gal-bed-01",
+    title: "Serene Japandi Master Suite",
+    category: "BEDROOMS",
+    aspect: "landscape",
+    src: "/images/interiors/master_bedroom.jpg",
+    fallback: "/images/interiors/master_bedroom.jpg",
+    caption: "Integrated acoustic timber slat headboard with concealed 2700K perimeter LED lighting."
   },
   {
-    id: "gal-04",
-    title: "Anticco Venetian Stone Wall Finishing",
-    category: "TEXTURE",
+    id: "gal-bed-02",
+    title: "Minimalist Greige Guest Chamber",
+    category: "BEDROOMS",
     aspect: "portrait",
-    src: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453775400.jpg",
-    fallback: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=80",
-    tags: ["Anticco", "Lime Plaster", "Italian Finish"],
-    caption: "Aged stone texture reminiscent of ancient Tuscan architecture."
+    src: "/images/gallery/gallery_04.jpg",
+    fallback: "/images/gallery/gallery_04.jpg",
+    caption: "Warm greige wall coats with integrated timber display niche and tailored natural drapery."
   },
+
+  // 3. KITCHENS
   {
-    id: "gal-05",
-    title: "Custom Gypsum False Ceiling & Concealed LEDs",
-    category: "CEILING",
+    id: "gal-kit-01",
+    title: "Monolithic Honed Marble Culinary Studio",
+    category: "KITCHENS",
     aspect: "landscape",
-    src: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453795766.jpg",
-    fallback: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80",
-    tags: ["False Ceiling", "Gypsum", "Cove LED"],
-    caption: "Laser-leveled stepped false ceiling providing indirect glare-free illumination."
+    src: "/images/interiors/culinary_kitchen.jpg",
+    fallback: "/images/interiors/culinary_kitchen.jpg",
+    caption: "Continuous marble waterfall island complemented by matte graphite millwork and brass accents."
   },
   {
-    id: "gal-06",
-    title: "Wood Polish Polycoat Joinery Finish",
-    category: "WOOD",
-    aspect: "landscape",
-    src: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453808636.jpg",
-    fallback: "https://images.unsplash.com/photo-1540518614846-7ede433c4570?auto=format&fit=crop&w=1400&q=80",
-    tags: ["Wood Polish", "Polycoat", "Teak"],
-    caption: "Deep grain enhancement and high-durability clear seal over natural timber."
+    id: "gal-kit-02",
+    title: "Charcoal Cabinetry & Under-Cabinet Glow",
+    category: "KITCHENS",
+    aspect: "square",
+    src: "/images/gallery/gallery_02.jpg",
+    fallback: "/images/gallery/gallery_02.jpg",
+    caption: "Precision joinery in deep charcoal with warm diffuse LED task illumination."
   },
+
+  // 4. COMMERCIAL
   {
-    id: "gal-07",
-    title: "Smart Lighting Integration & Designer BLDC Fan",
-    category: "LIVING",
-    aspect: "portrait",
-    src: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453819563.jpg",
-    fallback: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1400&q=80",
-    tags: ["Smart Lighting", "BLDC Fans", "Interiors"],
-    caption: "Concealed ambient cove illumination paired with silent designer ceiling fan."
-  },
-  {
-    id: "gal-08",
-    title: "All-Weather Exterior Texture Coating",
-    category: "EXTERIOR",
-    aspect: "landscape",
-    src: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453831977.jpg",
-    fallback: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1400&q=80",
-    tags: ["Exterior", "Weatherproof", "Facade"],
-    caption: "Monsoon-proof exterior elastomer coating with dirt-shedding stone aggregate."
-  },
-  {
-    id: "gal-09",
-    title: "Commercial Workspace Surface Treatment",
+    id: "gal-com-01",
+    title: "Executive Collaborative Workspace",
     category: "COMMERCIAL",
-    aspect: "square",
-    src: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453838977.jpg",
-    fallback: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1400&q=80",
-    tags: ["Commercial", "Acoustics", "Durable Finish"],
-    caption: "Scuff-resistant coatings and acoustic ceiling panels for high-traffic office zones."
+    aspect: "landscape",
+    src: "/images/commercial/commercial_office.jpg",
+    fallback: "/images/commercial/commercial_office.jpg",
+    caption: "Acoustic slatted timber ceiling with glass partitions and scuff-resistant architectural wall coatings."
   },
   {
-    id: "gal-10",
-    title: "Full Turnkey Interior Handover",
-    category: "LIVING",
+    id: "gal-com-02",
+    title: "Creative Agency Boardroom Suite",
+    category: "COMMERCIAL",
+    aspect: "portrait",
+    src: "/images/commercial/commercial_reception.jpg",
+    fallback: "/images/commercial/commercial_reception.jpg",
+    caption: "Linear suspended luminaires illuminating solid timber conference joinery and acoustic wall panels."
+  },
+
+  // 5. WOOD & FINISHES
+  {
+    id: "gal-wood-01",
+    title: "White Oak Timber Joinery & Silky PU Sheen",
+    category: "WOOD & FINISHES",
+    aspect: "square",
+    src: "/images/wood/teak_wood_polish.jpg",
+    fallback: "/images/wood/teak_wood_polish.jpg",
+    caption: "Deep pore filling and non-yellowing polyurethane finish highlighting natural wood grain figure."
+  },
+  {
+    id: "gal-wood-02",
+    title: "High-Lustre Polycoat Walnut Wall Paneling",
+    category: "WOOD & FINISHES",
     aspect: "landscape",
-    src: "https://d3k88l35vy59af.cloudfront.net/A001/802/1596453855356.jpg",
-    fallback: "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=1400&q=80",
-    tags: ["Turnkey", "Harmonized", "One Stop"],
-    caption: "Complete spatial synergy between wall textures, wood finishes, and lighting."
+    src: "/images/wood/polycoat_mirror_polish.jpg",
+    fallback: "/images/wood/polycoat_mirror_polish.jpg",
+    caption: "Two-pack Polycoat liquid-crystal finish providing reflective depth on architectural timber panels."
+  },
+  {
+    id: "gal-wood-03",
+    title: "Custom Architectural Millwork & Media Wall",
+    category: "WOOD & FINISHES",
+    aspect: "landscape",
+    src: "/images/gallery/gallery_04.jpg",
+    fallback: "/images/gallery/gallery_04.jpg",
+    caption: "Bespoke fluted wall paneling and integrated entertainment storage with brushed brass shadow lines."
+  },
+
+  // 6. TEXTURES & WALLPAPER
+  {
+    id: "gal-tex-01",
+    title: "Hand-Burnished Italian Venetian Stucco",
+    category: "TEXTURES & WALLPAPER",
+    aspect: "portrait",
+    src: "/images/textures/venetian_stucco.jpg",
+    fallback: "/images/textures/venetian_stucco.jpg",
+    caption: "Authentic slaked lime plaster burnished to a cool-to-touch marble sheen with organic tonal depth."
+  },
+  {
+    id: "gal-tex-02",
+    title: "Anticco Mineral Aggregate Texture",
+    category: "TEXTURES & WALLPAPER",
+    aspect: "square",
+    src: "/images/textures/anticco_texture.jpg",
+    fallback: "/images/textures/anticco_texture.jpg",
+    caption: "European Tuscan-style dragged mineral wash capturing shifting natural daylight."
+  },
+  {
+    id: "gal-tex-03",
+    title: "Designer Seamless Wallcovering Installation",
+    category: "TEXTURES & WALLPAPER",
+    aspect: "landscape",
+    src: "/images/wallpaper/designer_wallpaper.jpg",
+    fallback: "/images/wallpaper/designer_wallpaper.jpg",
+    caption: "Plumb-line edge matching with non-woven acoustic wallcovering in subtle geometric embossing."
+  },
+  {
+    id: "gal-tex-04",
+    title: "Royals Play Dimensional Metallic Glaze",
+    category: "TEXTURES & WALLPAPER",
+    aspect: "square",
+    src: "/images/painting/royals_play.jpg",
+    fallback: "/images/painting/royals_play.jpg",
+    caption: "Specialist artisan trowel manipulation creating shifting iridescent reflections under ambient lighting."
+  },
+
+  // 7. CEILINGS & LIGHTING
+  {
+    id: "gal-ceil-01",
+    title: "Stepped Gypsum Cove Ceiling with 3000K LED",
+    category: "CEILINGS & LIGHTING",
+    aspect: "landscape",
+    src: "/images/ceilings/false_ceiling.jpg",
+    fallback: "/images/ceilings/false_ceiling.jpg",
+    caption: "Laser-leveled false ceiling drop with indirect perimeter illumination creating floating plane aesthetics."
+  },
+  {
+    id: "gal-ceil-02",
+    title: "Sculptural Luminaire & Wall Wash Dynamics",
+    category: "CEILINGS & LIGHTING",
+    aspect: "portrait",
+    src: "/images/lighting/cove_lighting.jpg",
+    fallback: "/images/lighting/cove_lighting.jpg",
+    caption: "Warm 2700K suspended halo fixture casting soft stratified light across textured architectural finishes."
+  },
+
+  // 8. EXTERIORS
+  {
+    id: "gal-ext-01",
+    title: "Contemporary Weatherproof Villa Facade",
+    category: "EXTERIORS",
+    aspect: "landscape",
+    src: "/images/exterior/exterior_facade.jpg",
+    fallback: "/images/exterior/exterior_facade.jpg",
+    caption: "Monsoon-tested elastomeric exterior coating and stone texture plaster engineered for longevity."
+  },
+  {
+    id: "gal-ext-02",
+    title: "Geometric Cantilever Elevation & Texture",
+    category: "EXTERIORS",
+    aspect: "portrait",
+    src: "/images/exterior/facade_textures.jpg",
+    fallback: "/images/exterior/facade_textures.jpg",
+    caption: "UV-resistant mineral exterior textures with clean architectural shadow reveals."
   }
 ];
 
-export const galleryFilters = [
-  "ALL",
-  "LIVING",
-  "TEXTURE",
-  "WOOD",
-  "CEILING",
-  "EXTERIOR",
-  "COMMERCIAL"
-];
+export const galleryFilters = GALLERY_CATEGORIES;

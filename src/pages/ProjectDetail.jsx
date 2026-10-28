@@ -11,7 +11,7 @@ export const ProjectDetail = () => {
   const project = projectsData.find((p) => p.slug === slug);
 
   if (!project) {
-    return <Navigate to="/projects" replace />;
+    return <Navigate to="/gallery" replace />;
   }
 
   const storySteps = [
@@ -40,9 +40,9 @@ export const ProjectDetail = () => {
       >
         {/* Navigation Return */}
         <div className="container-wide" style={{ marginBottom: '1.5rem' }}>
-          <Link to="/projects" className="btn-ghost">
+          <Link to="/gallery" className="btn-ghost">
             <ArrowLeft size={14} />
-            <span>Return to Portfolio</span>
+            <span>Return to Gallery</span>
           </Link>
         </div>
 
@@ -68,16 +68,22 @@ export const ProjectDetail = () => {
           </div>
         </header>
 
-        {/* Fullscreen Hero Image showing complete space */}
+        {/* Fullscreen Hero Image showing complete space with cinematic camera expansion */}
         <div className="container-wide" style={{ marginBottom: 'clamp(3rem, 6vw, 5rem)' }}>
-          <div className="aspect-16-9" style={{ borderRadius: 'var(--radius-xs)', boxShadow: 'var(--shadow-dramatic)', overflow: 'hidden' }}>
+          <motion.div
+            initial={{ scale: 0.94, opacity: 0, y: 30 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+            className="aspect-16-9"
+            style={{ borderRadius: 'var(--radius-xs)', boxShadow: 'var(--shadow-dramatic)', overflow: 'hidden' }}
+          >
             <img
               src={project.heroImage}
               alt={project.title}
               className="aspect-fill"
               onError={(e) => (e.currentTarget.src = project.fallbackHero)}
             />
-          </div>
+          </motion.div>
         </div>
 
         {/* Architectural Metadata Grid */}
@@ -262,8 +268,8 @@ export const ProjectDetail = () => {
                 <span>Start A Spatial Consultation</span>
                 <ArrowRight size={16} />
               </Link>
-              <Link to="/projects" className="btn-secondary">
-                <span>Explore Other Case Studies</span>
+              <Link to="/gallery" className="btn-secondary">
+                <span>Explore Inspiration Gallery</span>
               </Link>
             </div>
           </div>

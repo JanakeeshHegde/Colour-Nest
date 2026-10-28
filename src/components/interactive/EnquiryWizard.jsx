@@ -4,9 +4,16 @@ import { Send, Check, MessageSquare, Mail, Phone, UserCheck, ArrowRight, ArrowLe
 import { siteData } from '../../data/siteData';
 import { servicesData } from '../../data/services';
 
-export const EnquiryWizard = ({ initialService = '', initialPalette = null }) => {
+export const EnquiryWizard = ({ initialService = '', initialPalette = null, initialSpaceConfig = null }) => {
   const [step, setStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  const defaultMsg = initialSpaceConfig
+    ? `Configured in 3D Space Studio:\n• Space: ${initialSpaceConfig.spaceName || 'Living Room'}\n• Wall: ${initialSpaceConfig.wall?.name || 'Clay'}\n• Floor: ${initialSpaceConfig.floor?.name || 'Stone'}\n• Wood: ${initialSpaceConfig.wood?.name || 'Warm Teak'}\n• Ceiling: ${initialSpaceConfig.ceiling || 'Layered Cove'}\n• Lighting: ${(initialSpaceConfig.light || 'evening').toUpperCase()}`
+    : initialPalette
+    ? `Interested in ${initialPalette.name} palette (${initialPalette.colors.map(c => c.name).join(', ')}).`
+    : '';
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -14,9 +21,9 @@ export const EnquiryWizard = ({ initialService = '', initialPalette = null }) =>
     location: 'Bangalore',
     projectType: 'Residential',
     approximateArea: '1500 sq ft',
-    service: initialService || 'Royals Play Designs',
-    stylePreference: 'Warm & Serene',
-    message: initialPalette ? `Interested in ${initialPalette.name} palette (${initialPalette.colors.map(c => c.name).join(', ')}).` : ''
+    service: initialService || 'Space & Turnkey Interiors',
+    stylePreference: initialSpaceConfig ? 'Bespoke Architectural' : 'Warm & Serene',
+    message: defaultMsg
   });
 
   const handleChange = (e) => {

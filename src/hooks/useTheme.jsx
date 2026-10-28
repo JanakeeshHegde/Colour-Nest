@@ -3,40 +3,30 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  // Theme: 'light' (warm plaster) or 'dark' (charcoal architectural studio)
-  const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem('colournest_theme');
-    if (saved) return saved;
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
-  });
-
-  // Accent: 'clay', 'sand', 'sage', 'charcoal', 'indigo', 'bronze', 'rose-clay'
-  const [accent, setAccent] = useState(() => {
-    return localStorage.getItem('colournest_accent') || 'clay';
-  });
+  // Theme is locked to 'light' (Warm Ivory / Deep Ink / Indigo / Pale Gold)
+  // to maintain the static brand identity required by the creative director.
+  const [theme] = useState('light');
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('colournest_theme', theme);
-  }, [theme]);
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-accent', accent);
-    localStorage.setItem('colournest_accent', accent);
-  }, [accent]);
+    document.documentElement.setAttribute('data-theme', 'light');
+    try {
+      localStorage.removeItem('colournest_theme');
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const toggleTheme = () => {
-    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+    // Intentionally no-op to maintain fixed brand identity
   };
 
-  const changeAccent = (newAccent) => {
-    setAccent(newAccent);
+  // Fixed Brand Identity: We do NOT mutate document accent on room material changes
+  const changeAccent = () => {
+    // Intentionally no-op to protect fixed brand identity
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, accent, changeAccent }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, accent: 'indigo', changeAccent }}>
       {children}
     </ThemeContext.Provider>
   );
