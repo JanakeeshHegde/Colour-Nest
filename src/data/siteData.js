@@ -92,7 +92,7 @@ export const siteData = {
     { name: "Services", path: "/services" },
     { name: "Gallery", path: "/gallery" },
     { name: "Process", path: "/process" },
-    { name: "Space Studio", path: "/space-studio", badge: "3D" },
+    { name: "Space Studio", path: "/space-studio", badge: "3D", is3D: true },
     { name: "Contact", path: "/contact" }
   ]
 };

@@ -78,19 +78,26 @@ function useAnimatedSurfaceMaterial({
   isSelected = false,
   isHovered = false
 }) {
+  const safeColor = color || '#FAF8F2';
   const materialRef = useRef();
-  const targetColor = useMemo(() => new THREE.Color(color), [color]);
-  const currentColor = useRef(new THREE.Color(color));
+  const targetColor = useMemo(() => {
+    try {
+      return new THREE.Color(safeColor);
+    } catch {
+      return new THREE.Color('#FAF8F2');
+    }
+  }, [safeColor]);
+  const currentColor = useRef(new THREE.Color(safeColor));
   const sheenProgress = useRef(0);
-  const prevColorHex = useRef(color);
+  const prevColorHex = useRef(safeColor);
 
   // Trigger material application sheen sweep on color change
   useEffect(() => {
-    if (prevColorHex.current !== color) {
+    if (prevColorHex.current !== safeColor) {
       sheenProgress.current = 1.0; // Trigger sheen pulse
-      prevColorHex.current = color;
+      prevColorHex.current = safeColor;
     }
-  }, [color]);
+  }, [safeColor]);
 
   useFrame((_, delta) => {
     if (!materialRef.current) return;
@@ -826,6 +833,7 @@ export function ArchitecturalRoom({
   surfaces = null,
   selectedSurfaceId = null,
   onSelectSurface = null,
+  cameraPreset = 'FRONT',
   // Legacy props support for backward compatibility with HeroRoom / ScrollStory
   wallColorKey = 'ivory',
   floorKey = 'stone',
@@ -1180,14 +1188,16 @@ export function ArchitecturalRoom({
       {/* ------------------------------------------------------------- */}
       {/* 5. CEILING SYSTEM (ceiling-main)                              */}
       {/* ------------------------------------------------------------- */}
-      <CeilingSystem
-        ceilingColor={resolvedSurfaces['ceiling-main']?.color || '#FAF8F5'}
-        preset={resolvedSurfaces['ceiling-main']?.stylePreset || ceilingPreset}
-        coveIntensity={lightConfig.coveIntensity || 1.0}
-        isSelected={selectedSurfaceId === 'ceiling-main'}
-        isHovered={hoveredSurface === 'ceiling-main'}
-        onSelect={onSelectSurface}
-      />
+      {cameraPreset !== 'TOP' && (
+        <CeilingSystem
+          ceilingColor={resolvedSurfaces['ceiling-main']?.color || '#FAF8F5'}
+          preset={resolvedSurfaces['ceiling-main']?.stylePreset || ceilingPreset}
+          coveIntensity={lightConfig.coveIntensity || 1.0}
+          isSelected={selectedSurfaceId === 'ceiling-main'}
+          isHovered={hoveredSurface === 'ceiling-main'}
+          onSelect={onSelectSurface}
+        />
+      )}
 
       {/* ------------------------------------------------------------- */}
       {/* 6. ROOM FURNITURE & CONTEMPORARY SCENE OBJECTS                */}

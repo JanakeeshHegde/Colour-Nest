@@ -1,24 +1,41 @@
 import React, { Component } from 'react';
+import { RefreshCw, Image } from 'lucide-react';
 
-/**
- * Checks whether WebGL is actually supported and functional
- */
+// Cache WebGL availability check once to prevent browser WebGL context exhaustion
+let cachedWebGLAvailable = null;
+
 export function isWebGLAvailable() {
+  if (cachedWebGLAvailable !== null) {
+    return cachedWebGLAvailable;
+  }
+  if (typeof window === 'undefined') {
+    return false;
+  }
   try {
     const canvas = document.createElement('canvas');
-    return !!(
-      window.WebGLRenderingContext &&
-      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
-    );
+    const gl =
+      canvas.getContext('webgl', { powerPreference: 'high-performance' }) ||
+      canvas.getContext('experimental-webgl');
+    const available = !!(window.WebGLRenderingContext && gl);
+    if (gl) {
+      // Immediately release probe context to avoid counting towards browser's context limit
+      const loseExt = gl.getExtension('WEBGL_lose_context');
+      if (loseExt) {
+        loseExt.loseContext();
+      }
+    }
+    cachedWebGLAvailable = available;
+    return available;
   } catch (e) {
+    cachedWebGLAvailable = false;
     return false;
   }
 }
 
 /**
  * React Error Boundary specifically for Three.js / Canvas scenes.
- * If WebGL crashes or context is lost, cleanly renders the provided fallback
- * without taking down the rest of the application.
+ * If WebGL crashes, context is lost, or a shader compilation fails,
+ * cleanly renders an architectural fallback with recovery options.
  */
 export class WebGLErrorBoundary extends Component {
   constructor(props) {
@@ -31,14 +48,21 @@ export class WebGLErrorBoundary extends Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.warn('Colour Nest 3D Canvas Error Boundary caught:', error, errorInfo);
+    console.warn('Colour Nest 3D Space Studio Error Boundary caught:', error, errorInfo);
   }
+
+  handleRetry = () => {
+    // Reset cached check and state
+    cachedWebGLAvailable = null;
+    this.setState({ hasError: false, error: null });
+  };
 
   render() {
     if (this.state.hasError || !isWebGLAvailable()) {
       if (this.props.fallback) {
         return this.props.fallback;
       }
+
       return (
         <div
           style={{
@@ -46,41 +70,107 @@ export class WebGLErrorBoundary extends Component {
             height: '100%',
             position: 'relative',
             overflow: 'hidden',
-            backgroundColor: '#161718',
-            backgroundImage:
-              'radial-gradient(circle at 60% 40%, rgba(184, 92, 56, 0.15) 0%, rgba(20, 21, 22, 0.95) 70%), url("/images/hero/hero_main.jpg")',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            backgroundColor: '#17151D',
             display: 'flex',
-            alignItems: 'flex-end',
+            alignItems: 'center',
+            justifyContent: 'center',
             padding: '2rem'
           }}
         >
           <div
             style={{
-              backgroundColor: 'rgba(18, 18, 19, 0.85)',
-              backdropFilter: 'blur(12px)',
-              padding: '1rem 1.5rem',
-              borderRadius: 'var(--radius-sm)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              maxWidth: '380px'
+              backgroundColor: 'rgba(33, 29, 45, 0.95)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              padding: 'clamp(1.5rem, 4vw, 2.5rem)',
+              borderRadius: '16px',
+              border: '1px solid rgba(227, 217, 164, 0.3)',
+              maxWidth: '460px',
+              textAlign: 'center',
+              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.7)'
             }}
           >
             <span
               style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.65rem',
-                letterSpacing: '0.15em',
-                color: 'var(--accent)',
+                fontFamily: 'var(--font-mono, monospace)',
+                fontSize: '0.68rem',
+                letterSpacing: '0.16em',
+                color: '#E3D9A4',
                 display: 'block',
-                marginBottom: '0.25rem'
+                marginBottom: '0.75rem',
+                fontWeight: 700
               }}
             >
-              2.5D ARCHITECTURAL FALLBACK
+              3D HARDWARE ACCELERATION NOTICE
             </span>
-            <p style={{ fontSize: '0.82rem', color: '#FFFFFF', margin: 0 }}>
-              Hardware acceleration limited. Viewing high-fidelity architectural gallery.
+            <h3
+              style={{
+                fontFamily: 'var(--font-display, serif)',
+                fontSize: '1.6rem',
+                color: '#FAF8F2',
+                marginBottom: '0.75rem',
+                lineHeight: 1.2
+              }}
+            >
+              Interactive 3D Engine Paused
+            </h3>
+            <p
+              style={{
+                fontSize: '0.88rem',
+                color: '#B9B4C5',
+                lineHeight: 1.6,
+                marginBottom: '1.75rem'
+              }}
+            >
+              Hardware graphics acceleration is currently limited on this device or browser session.
+              You can retry launching the 3D room, or explore our high-resolution spatial gallery.
             </p>
+
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button
+                onClick={this.handleRetry}
+                style={{
+                  backgroundColor: 'var(--brand-indigo, #3C2D8C)',
+                  color: '#FAF8F2',
+                  border: '1px solid #E3D9A4',
+                  borderRadius: '999px',
+                  padding: '0.65rem 1.4rem',
+                  fontFamily: 'var(--font-mono, monospace)',
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.1em',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <RefreshCw size={13} />
+                <span>RETRY 3D STUDIO</span>
+              </button>
+
+              <a
+                href="/gallery"
+                style={{
+                  backgroundColor: 'transparent',
+                  color: '#FAF8F2',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '999px',
+                  padding: '0.65rem 1.25rem',
+                  fontFamily: 'var(--font-mono, monospace)',
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <Image size={13} />
+                <span>VIEW GALLERY</span>
+              </a>
+            </div>
           </div>
         </div>
       );
@@ -89,3 +179,5 @@ export class WebGLErrorBoundary extends Component {
     return this.props.children;
   }
 }
+
+export default WebGLErrorBoundary;

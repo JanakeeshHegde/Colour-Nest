@@ -3,8 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Maximize2, Sparkles, ArrowRight, Layers, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SEOHead } from '../components/common/SEOHead';
-import { galleryItems, GALLERY_CATEGORIES } from '../data/gallery';
-import { GalleryLightbox } from '../components/interactive/GalleryLightbox';
+import { GalleryLightbox, galleryItems, GALLERY_CATEGORIES } from '../features/gallery';
 
 export const Gallery = () => {
   const [activeCategory, setActiveCategory] = useState('ALL');

@@ -20,7 +20,7 @@
  *   materials/
  */
 
-export const IMAGE_MANIFEST = {
+export const RAW_IMAGE_MANIFEST = {
   // 1. HERO & KEYNOTE SPACES
   "hero-architectural-main": {
     id: "hero-architectural-main",
@@ -381,6 +381,29 @@ export const IMAGE_MANIFEST = {
   }
 };
 
+// Resilient alias mappings
+RAW_IMAGE_MANIFEST['material-polycoat-finish'] = RAW_IMAGE_MANIFEST['material-wood-polycoat'];
+RAW_IMAGE_MANIFEST['space-commercial-reception'] = RAW_IMAGE_MANIFEST['space-commercial-workspace'];
+
+// Resilient Proxy ensures that accessing any unknown image key safely falls back to a valid hero image instead of throwing undefined
+export const IMAGE_MANIFEST = new Proxy(RAW_IMAGE_MANIFEST, {
+  get(target, prop) {
+    if (prop in target) {
+      return target[prop];
+    }
+    if (typeof prop === 'string' && prop !== 'then' && prop !== 'toJSON') {
+      return {
+        id: prop,
+        url: '/images/hero/hero_main.jpg',
+        localAssetPath: '/images/hero/hero_main.jpg',
+        name: 'COLOUR NEST Architectural Asset',
+        description: 'COLOUR NEST Architectural Interior'
+      };
+    }
+    return target[prop];
+  }
+});
+
 /**
  * Convenience helper to get verified image URL with fallback
  */
@@ -395,15 +418,15 @@ export function getImageUrl(id, fallbackKey = "hero-architectural-main") {
  * Returns all image entries as an array
  */
 export function getAllImages() {
-  return Object.values(IMAGE_MANIFEST);
+  return Object.values(RAW_IMAGE_MANIFEST);
 }
 
 /**
  * Filter images by category
  */
 export function getImagesByCategory(cat) {
-  return Object.values(IMAGE_MANIFEST).filter(img => 
-    img.category.toLowerCase().includes(cat.toLowerCase())
+  return Object.values(RAW_IMAGE_MANIFEST).filter(img => 
+    img.category?.toLowerCase().includes(cat.toLowerCase())
   );
 }
 

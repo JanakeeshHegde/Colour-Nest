@@ -3,7 +3,7 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, ArrowUpRight, CheckCircle2, Clock, ShieldCheck, Layers } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
 import { servicesData } from '../data/services';
-import { EnquiryWizard } from '../components/interactive/EnquiryWizard';
+import { EnquiryWizard } from '../features/services';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
 
 export const ServiceDetail = () => {

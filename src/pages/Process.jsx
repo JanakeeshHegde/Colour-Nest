@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, Box } from 'lucide-react';
+import { ArrowRight, ArrowDown, ArrowUp, CheckCircle2 } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
-import { ProcessWireframeCanvas } from '../components/canvas/ProcessWireframeCanvas';
 import { IMAGE_MANIFEST } from '../data/imageManifest';
 
 const processSteps = [
@@ -114,9 +113,70 @@ const processSteps = [
 ];
 
 export const Process = () => {
-  const [activeStepIdx, setActiveStepIdx] = useState(0);
+  const [activeStageIdx, setActiveStageIdx] = useState(0);
+  const stageRefs = useRef([]);
+  const navContainerRef = useRef(null);
 
-  const activeStep = processSteps[activeStepIdx];
+  // Smooth scroll to a target stage by index
+  const scrollToStage = (index) => {
+    setActiveStageIdx(index);
+    const targetEl = stageRefs.current[index];
+    if (targetEl) {
+      const isReduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const navOffset = 140; // Combined height of fixed navbar + sticky stage bar + buffer
+      const elementTop = targetEl.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({
+        top: Math.max(0, elementTop - navOffset),
+        behavior: isReduced ? 'auto' : 'smooth'
+      });
+    }
+  };
+
+  // Scroll spy: Update active stage indicator as user scrolls naturally through all 8 stages
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 200;
+      let currentIdx = 0;
+
+      for (let i = 0; i < stageRefs.current.length; i++) {
+        const el = stageRefs.current[i];
+        if (el) {
+          const top = el.offsetTop;
+          if (scrollPosition >= top) {
+            currentIdx = i;
+          }
+        }
+      }
+
+      setActiveStageIdx(currentIdx);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Ensure active pill in horizontal scrollbar remains visible on mobile
+  useEffect(() => {
+    if (navContainerRef.current) {
+      const activeBtn = navContainerRef.current.children[activeStageIdx];
+      if (activeBtn) {
+        const container = navContainerRef.current;
+        const btnLeft = activeBtn.offsetLeft;
+        const btnWidth = activeBtn.offsetWidth;
+        const containerWidth = container.offsetWidth;
+        const currentScroll = container.scrollLeft;
+
+        if (btnLeft < currentScroll || btnLeft + btnWidth > currentScroll + containerWidth) {
+          container.scrollTo({
+            left: btnLeft - containerWidth / 2 + btnWidth / 2,
+            behavior: 'smooth'
+          });
+        }
+      }
+    }
+  }, [activeStageIdx]);
 
   return (
     <>
@@ -127,15 +187,16 @@ export const Process = () => {
 
       <section
         style={{
-          paddingTop: 'calc(var(--nav-height) + 2.5rem)',
+          paddingTop: 'calc(var(--nav-height, 84px) + 2rem)',
           paddingBottom: 'clamp(4rem, 8vw, 7rem)',
-          backgroundColor: 'var(--surface-primary)',
-          minHeight: '100vh'
+          backgroundColor: 'var(--surface-primary, #FAF8F2)',
+          minHeight: '100vh',
+          color: 'var(--ink-primary, #211D2D)'
         }}
       >
         <div className="container-wide">
-          {/* Header */}
-          <div style={{ maxWidth: '920px', marginBottom: 'clamp(2rem, 5vw, 4rem)' }}>
+          {/* Monumental Header */}
+          <div style={{ maxWidth: '920px', marginBottom: 'clamp(2rem, 4vw, 3.5rem)' }}>
             <span className="meta-tag" style={{ marginBottom: '1rem' }}>
               INTERIOR PROJECT WORKFLOW
             </span>
@@ -144,156 +205,315 @@ export const Process = () => {
               <span className="heading-editorial-italic">COMES TOGETHER.</span>
             </h1>
             <ArchitecturalLine label="8-STAGE INTERIOR EXECUTION PROTOCOL" coordinates="STRICT CRAFTSMANSHIP STANDARDS" />
-            <p style={{ fontSize: 'clamp(1.05rem, 2vw, 1.35rem)', color: 'var(--ink-secondary)', lineHeight: 1.6 }}>
+            <p
+              style={{
+                fontSize: 'clamp(1.05rem, 2vw, 1.3rem)',
+                color: 'var(--ink-secondary, #4A4657)',
+                lineHeight: 1.65,
+                marginTop: '1.25rem'
+              }}
+            >
               A disciplined sequence transforms architectural intent into a living, breathing environment.
               From spatial discovery to fine detailing, our 8-stage roadmap ensures effortless execution, clean site conditions, and enduring elegance.
             </p>
           </div>
 
-          {/* Interactive 8-Step Navigator */}
+          {/* Sticky 8-Step Navigator Bar */}
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))',
-              gap: '0.65rem',
-              marginBottom: '3.5rem'
+              position: 'sticky',
+              top: 'calc(var(--nav-height, 84px) + 0.5rem)',
+              zIndex: 80,
+              backgroundColor: 'rgba(250, 248, 242, 0.96)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              padding: '0.75rem 0',
+              marginBottom: '3rem',
+              borderTop: '1px solid var(--border-subtle, #E7E1D6)',
+              borderBottom: '1px solid var(--border-subtle, #E7E1D6)',
+              transition: 'all 0.3s ease'
             }}
           >
-            {processSteps.map((step, idx) => (
-              <button
-                key={step.number}
-                onClick={() => setActiveStepIdx(idx)}
-                className="filter-pill"
-                style={{
-                  padding: '0.85rem 0.75rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.2rem',
-                  textAlign: 'left',
-                  borderRadius: 'var(--radius-xs)',
-                  border: activeStepIdx === idx ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
-                  backgroundColor: activeStepIdx === idx ? 'var(--accent)' : 'var(--surface-elevated)',
-                  color: activeStepIdx === idx ? '#FFFFFF' : 'var(--ink-primary)',
-                  transition: 'all 0.25s ease'
-                }}
-                data-cursor="PHASE"
-              >
-                <span style={{ fontSize: '0.65rem', opacity: 0.8, fontFamily: 'var(--font-mono)' }}>STAGE {step.number}</span>
-                <strong style={{ fontSize: '0.78rem', lineHeight: 1.25 }}>{step.title}</strong>
-              </button>
-            ))}
-          </div>
-
-          {/* Active Phase Display Card */}
-          <div
-            className="arch-card"
-            style={{
-              padding: 'clamp(2rem, 5vw, 4rem)',
-              backgroundColor: 'var(--surface-elevated)',
-              marginBottom: '4.5rem'
-            }}
-          >
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', gap: '3.5rem', alignItems: 'center' }}>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                  <span className="oversized-number" style={{ fontSize: '4rem' }}>{activeStep.number}</span>
-                  <span className="meta-tag">{activeStep.subtitle}</span>
-                </div>
-
-                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', marginBottom: '1.25rem' }}>
-                  {activeStep.title}
-                </h2>
-                <p style={{ fontSize: '1.05rem', color: 'var(--ink-secondary)', lineHeight: 1.7, marginBottom: '2rem' }}>
-                  {activeStep.description}
-                </p>
-
-                <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '1rem' }}>
-                  Stage Milestones &amp; Actions:
-                </h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '2.5rem' }}>
-                  {activeStep.details.map((d, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
-                      <CheckCircle2 size={16} color="var(--accent)" style={{ flexShrink: 0, marginTop: '3px' }} />
-                      <span style={{ fontSize: '0.92rem', color: 'var(--ink-primary)' }}>{d}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                  {activeStepIdx < processSteps.length - 1 ? (
-                    <button
-                      onClick={() => setActiveStepIdx(p => p + 1)}
-                      className="btn-primary"
-                    >
-                      <span>Advance to Stage 0{activeStepIdx + 2}</span>
-                      <ArrowRight size={15} />
-                    </button>
-                  ) : (
-                    <Link to="/contact" className="btn-primary" data-cursor="START">
-                      <span>Begin Stage 01 Consultation</span>
-                      <ArrowRight size={15} />
-                    </Link>
-                  )}
-                  <Link to="/contact" className="btn-secondary">
-                    <span>Consult on Your Space</span>
-                  </Link>
-                </div>
-              </div>
-
-              {/* Physical Documentation & Editorial Visual Stage */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <div
+            <div
+              ref={navContainerRef}
+              style={{
+                display: 'flex',
+                gap: '0.5rem',
+                overflowX: 'auto',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                paddingBottom: '0.2rem',
+                WebkitOverflowScrolling: 'touch'
+              }}
+              className="process-nav-scroller"
+            >
+              {processSteps.map((step, idx) => (
+                <button
+                  key={step.number}
+                  onClick={() => scrollToStage(idx)}
+                  className={`filter-pill ${activeStageIdx === idx ? 'active' : ''}`}
                   style={{
-                    height: 'clamp(240px, 35vw, 420px)',
+                    padding: '0.65rem 1rem',
+                    display: 'inline-flex',
+                    flexDirection: 'column',
+                    gap: '0.15rem',
+                    textAlign: 'left',
                     borderRadius: '8px',
-                    boxShadow: 'var(--shadow-dramatic)',
-                    overflow: 'hidden',
-                    backgroundColor: '#FAF8F2',
-                    border: '1px solid #E7E1D6',
-                    position: 'relative'
+                    flexShrink: 0,
+                    border: activeStageIdx === idx ? '1px solid var(--accent, #3C2D8C)' : '1px solid var(--border-subtle, #E7E1D6)',
+                    backgroundColor: activeStageIdx === idx ? 'var(--accent, #3C2D8C)' : 'var(--surface-elevated, #FFFFFF)',
+                    color: activeStageIdx === idx ? '#FAF8F2' : 'var(--ink-primary, #211D2D)',
+                    transition: 'all 0.25s ease',
+                    cursor: 'pointer'
                   }}
+                  data-cursor="STAGE"
                 >
-                  <img
-                    src={activeStep.image}
-                    alt={activeStep.title}
+                  <span
                     style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block'
-                    }}
-                  />
-
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '0.85rem',
-                      left: '0.85rem',
-                      backgroundColor: 'rgba(33, 29, 45, 0.88)',
-                      backdropFilter: 'blur(8px)',
-                      padding: '0.35rem 0.75rem',
-                      borderRadius: '4px',
-                      fontFamily: 'var(--font-mono)',
                       fontSize: '0.65rem',
-                      color: '#E3D9A4',
-                      pointerEvents: 'none'
+                      opacity: activeStageIdx === idx ? 0.9 : 0.65,
+                      fontFamily: 'var(--font-mono, monospace)',
+                      fontWeight: 700,
+                      letterSpacing: '0.08em'
                     }}
                   >
-                    STAGE 0{activeStepIdx + 1} • {activeStep.title}
-                  </div>
-                </div>
-              </div>
+                    STAGE {step.number}
+                  </span>
+                  <strong style={{ fontSize: '0.75rem', lineHeight: 1.2, whiteSpace: 'nowrap' }}>
+                    {step.title}
+                  </strong>
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Architectural Drawing to Finished Room Climax */}
+          {/* Sequential 8 Stages Container: Content-driven height, natural wrapping, zero clipping */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(2.5rem, 5vw, 4rem)', marginBottom: '5rem' }}>
+            {processSteps.map((step, idx) => (
+              <article
+                key={step.number}
+                id={`stage-${step.number}`}
+                ref={(el) => (stageRefs.current[idx] = el)}
+                className="arch-card process-stage-card"
+                style={{
+                  padding: 'clamp(1.75rem, 4.5vw, 3.5rem)',
+                  backgroundColor: 'var(--surface-elevated, #FFFFFF)',
+                  border: activeStageIdx === idx ? '1px solid rgba(60, 45, 140, 0.45)' : '1px solid var(--border-subtle, #E7E1D6)',
+                  borderRadius: '12px',
+                  boxShadow: activeStageIdx === idx ? '0 16px 40px rgba(60, 45, 140, 0.08)' : 'var(--shadow-subtle)',
+                  scrollMarginTop: '160px',
+                  transition: 'border-color 0.3s ease, box-shadow 0.3s ease'
+                }}
+              >
+                <div className="process-stage-grid">
+                  {/* Text & Content Column */}
+                  <div className="process-stage-content" style={{ minWidth: 0, width: '100%' }}>
+                    {/* Header Tag & Stage Number */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+                      <span
+                        className="oversized-number"
+                        style={{
+                          fontSize: 'clamp(2.8rem, 6vw, 4.2rem)',
+                          lineHeight: 0.9,
+                          color: 'var(--accent, #3C2D8C)',
+                          opacity: 0.85
+                        }}
+                      >
+                        {step.number}
+                      </span>
+                      <span
+                        className="meta-tag"
+                        style={{
+                          backgroundColor: 'var(--surface-secondary, #F3EFE7)',
+                          padding: '0.35rem 0.75rem',
+                          borderRadius: '4px',
+                          fontSize: '0.72rem',
+                          letterSpacing: '0.12em',
+                          fontWeight: 600
+                        }}
+                      >
+                        {step.subtitle}
+                      </span>
+                    </div>
+
+                    {/* Stage Title */}
+                    <h2
+                      style={{
+                        fontFamily: 'var(--font-display, serif)',
+                        fontSize: 'clamp(1.75rem, 3.2vw, 2.5rem)',
+                        marginBottom: '1.25rem',
+                        lineHeight: 1.15,
+                        color: 'var(--ink-primary, #211D2D)'
+                      }}
+                    >
+                      {step.title}
+                    </h2>
+
+                    {/* Complete Unclipped Description */}
+                    <p
+                      className="process-stage-desc"
+                      style={{
+                        fontSize: 'clamp(0.98rem, 1.2vw, 1.1rem)',
+                        color: 'var(--ink-secondary, #4A4657)',
+                        lineHeight: 1.75,
+                        marginBottom: '2rem',
+                        wordBreak: 'normal',
+                        overflowWrap: 'break-word',
+                        whiteSpace: 'normal',
+                        maxWidth: '100%'
+                      }}
+                    >
+                      {step.description}
+                    </p>
+
+                    {/* Milestones & Actions Checklist */}
+                    <div style={{ marginBottom: '2.5rem' }}>
+                      <h4
+                        style={{
+                          fontFamily: 'var(--font-mono, monospace)',
+                          fontSize: '0.72rem',
+                          letterSpacing: '0.14em',
+                          textTransform: 'uppercase',
+                          color: 'var(--accent, #3C2D8C)',
+                          fontWeight: 700,
+                          marginBottom: '1rem'
+                        }}
+                      >
+                        Stage Milestones &amp; Actions:
+                      </h4>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        {step.details.map((detail, dIdx) => (
+                          <div
+                            key={dIdx}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'flex-start',
+                              gap: '0.75rem',
+                              lineHeight: 1.55
+                            }}
+                          >
+                            <CheckCircle2
+                              size={17}
+                              color="var(--accent, #3C2D8C)"
+                              style={{ flexShrink: 0, marginTop: '2px' }}
+                            />
+                            <span style={{ fontSize: '0.92rem', color: 'var(--ink-primary, #211D2D)' }}>
+                              {detail}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Interactive Stage Actions */}
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                      {idx < processSteps.length - 1 ? (
+                        <button
+                          type="button"
+                          onClick={() => scrollToStage(idx + 1)}
+                          className="btn-primary"
+                          style={{ padding: '0.85rem 1.6rem', fontSize: '0.75rem' }}
+                        >
+                          <span>Advance to Stage 0{idx + 2}</span>
+                          <ArrowDown size={14} />
+                        </button>
+                      ) : (
+                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                          <Link
+                            to="/contact"
+                            className="btn-primary"
+                            data-cursor="START"
+                            style={{ padding: '0.85rem 1.8rem', fontSize: '0.75rem' }}
+                          >
+                            <span>Begin Stage 01 Consultation</span>
+                            <ArrowRight size={14} />
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => scrollToStage(0)}
+                            className="btn-secondary"
+                            style={{ padding: '0.85rem 1.4rem', fontSize: '0.75rem' }}
+                          >
+                            <ArrowUp size={14} />
+                            <span>Return to Stage 01</span>
+                          </button>
+                        </div>
+                      )}
+
+                      <Link
+                        to="/contact"
+                        className="btn-secondary"
+                        style={{ padding: '0.85rem 1.4rem', fontSize: '0.75rem' }}
+                      >
+                        <span>Consult on Your Space</span>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Visual Stage Photo Column */}
+                  <div className="process-stage-visual" style={{ minWidth: 0, width: '100%' }}>
+                    <div
+                      style={{
+                        width: '100%',
+                        borderRadius: '10px',
+                        overflow: 'hidden',
+                        boxShadow: 'var(--shadow-elevated)',
+                        backgroundColor: '#FAF8F2',
+                        border: '1px solid #E7E1D6',
+                        position: 'relative'
+                      }}
+                    >
+                      <img
+                        src={step.image}
+                        alt={`${step.title} - Colour Nest`}
+                        loading="lazy"
+                        style={{
+                          width: '100%',
+                          height: 'auto',
+                          minHeight: '260px',
+                          maxHeight: '460px',
+                          objectFit: 'cover',
+                          display: 'block'
+                        }}
+                      />
+
+                      {/* Stage Identifier Badge */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '1rem',
+                          left: '1rem',
+                          backgroundColor: 'rgba(33, 29, 45, 0.9)',
+                          backdropFilter: 'blur(8px)',
+                          WebkitBackdropFilter: 'blur(8px)',
+                          padding: '0.4rem 0.85rem',
+                          borderRadius: '4px',
+                          fontFamily: 'var(--font-mono, monospace)',
+                          fontSize: '0.68rem',
+                          color: '#E3D9A4',
+                          letterSpacing: '0.12em',
+                          fontWeight: 700,
+                          pointerEvents: 'none'
+                        }}
+                      >
+                        STAGE {step.number} • {step.title}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          {/* Architectural Drawing to Finished Room Climax Banner */}
           <div
             className="arch-card"
             style={{
               padding: 'clamp(2.5rem, 6vw, 4.5rem)',
-              backgroundColor: 'var(--surface-secondary)',
-              border: '1px solid var(--border-medium)',
-              textAlign: 'center'
+              backgroundColor: 'var(--surface-secondary, #F3EFE7)',
+              border: '1px solid var(--border-medium, rgba(60, 45, 140, 0.15))',
+              textAlign: 'center',
+              borderRadius: '12px'
             }}
           >
             <span className="meta-tag" style={{ marginBottom: '1rem', display: 'inline-flex' }}>
@@ -302,9 +522,17 @@ export const Process = () => {
             <h2 className="heading-display" style={{ marginBottom: '1rem' }}>
               FROM BLUEPRINT TO LIVING HARMONY.
             </h2>
-            <p style={{ color: 'var(--ink-secondary)', fontSize: '1rem', maxWidth: '640px', margin: '0 auto 2.5rem auto', lineHeight: 1.6 }}>
+            <p
+              style={{
+                color: 'var(--ink-secondary, #4A4657)',
+                fontSize: '1.05rem',
+                maxWidth: '680px',
+                margin: '0 auto 2.5rem auto',
+                lineHeight: 1.65
+              }}
+            >
               A disciplined sequence transforms architectural intent into tactile physical reality.
-              Zero surprises, zero dust damage, total client satisfaction.
+              Zero surprises, zero dust damage, total client satisfaction across Bangalore homes.
             </p>
             <Link to="/contact" className="btn-primary" data-cursor="START">
               <span>Schedule Stage 01 Consultation</span>
@@ -313,7 +541,53 @@ export const Process = () => {
           </div>
         </div>
       </section>
+
+      {/* Scoped CSS for responsive grid layout & unclipped descriptions */}
+      <style>{`
+        .process-stage-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.95fr);
+          gap: clamp(2rem, 4.5vw, 4rem);
+          align-items: center;
+          width: 100%;
+        }
+
+        .process-nav-scroller::-webkit-scrollbar {
+          display: none;
+        }
+
+        @media (max-width: 991px) {
+          .process-stage-grid {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+          }
+          .process-stage-visual {
+            order: 2;
+          }
+          .process-stage-content {
+            order: 1;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .process-stage-desc {
+            font-size: 0.95rem !important;
+            line-height: 1.65 !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .process-stage-card {
+            padding: 1.5rem 1.2rem !important;
+          }
+          .process-stage-desc {
+            font-size: 0.9rem !important;
+            line-height: 1.6 !important;
+          }
+        }
+      `}</style>
     </>
   );
 };
 
+export default Process;
