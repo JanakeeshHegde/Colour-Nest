@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { Send, Check, Mail, Phone, ArrowRight, ArrowLeft, Download } from 'lucide-react';
+import { WhatsAppIcon } from '../../../components/common/WhatsAppIcon';
 import { siteData } from '../../../data/siteData';
 import { servicesData } from '../../../data/services';
 
@@ -480,9 +481,16 @@ END:VCARD`;
                   <button
                     type="submit"
                     className="btn-primary"
-                    style={{ padding: '0.75rem 2rem', fontSize: '0.75rem', backgroundColor: '#25D366' }}
+                    style={{
+                      padding: '0.75rem 2rem',
+                      fontSize: '0.75rem',
+                      backgroundColor: '#25D366',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}
                   >
-                    <Send size={15} />
+                    <WhatsAppIcon size={16} color="#FFFFFF" />
                     <span>Send via WhatsApp</span>
                   </button>
                 </div>

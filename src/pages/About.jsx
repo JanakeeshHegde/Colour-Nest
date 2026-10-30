@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, ShieldCheck, MapPin, Phone, Mail, Layers, Sparkles, Compass } from 'lucide-react';
+import { WhatsAppIcon } from '../components/common/WhatsAppIcon';
 import { SEOHead } from '../components/common/SEOHead';
 import { siteData } from '../data/siteData';
 import { ArchitecturalLine } from '../components/common/ArchitecturalLine';
@@ -111,7 +112,8 @@ export const About = () => {
                     <Phone size={15} />
                     <span>Call Abhishek Rao</span>
                   </a>
-                  <a href={siteData.urls.whatsappDirect} target="_blank" rel="noreferrer" className="btn-secondary" data-cursor="WHATSAPP">
+                  <a href={siteData.urls.whatsappDirect} target="_blank" rel="noreferrer" className="btn-secondary" data-cursor="WHATSAPP" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                    <WhatsAppIcon size={15} color="#25D366" />
                     <span>Message on WhatsApp</span>
                   </a>
                 </div>

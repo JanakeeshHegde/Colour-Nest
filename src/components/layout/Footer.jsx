@@ -4,7 +4,6 @@ import { Phone, Mail, MapPin, Facebook } from 'lucide-react';
 import { siteData } from '../../data/siteData';
 
 export const Footer = () => {
-  const currentYear = new Date().getFullYear();
   const navLinks = siteData.navigation.filter(item => !item.is3D);
 
   return (
@@ -237,7 +236,7 @@ export const Footer = () => {
           }}
         >
           <div>
-            &copy; {currentYear} {siteData.name}. All rights reserved. Directed by {siteData.owner.name}.
+            <span>&copy; {new Date().getFullYear()} COLOUR NEST. All rights reserved.</span>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>

@@ -3,14 +3,14 @@ import { useSearchParams } from 'react-router-dom';
 import {
   ROOM_TYPES,
   WALL_COLORS,
+  WALL_FINISH_TYPES,
   FLOOR_PRESETS,
   WOOD_FINISHES,
   CEILING_COLORS,
   CEILING_STYLES,
   LIGHTING_PRESETS,
   CONFIGURABLE_SURFACES,
-  DEFAULT_SURFACES_STATE,
-  generateDesignEnquiryText
+  DEFAULT_SURFACES_STATE
 } from '../../../data/roomStudioConfig';
 
 export function useSpaceStudioState() {
@@ -39,7 +39,7 @@ export function useSpaceStudioState() {
   });
 
   const [selectedSurfaceId, setSelectedSurfaceId] = useState('wall-feature');
-  const [activeTab, setActiveTab] = useState('WALLS'); // WALLS, FLOOR, CEILING, WOOD, LIGHTING, SUMMARY
+  const [activeTab, setActiveTab] = useState('WALLS'); // WALLS, FLOOR, CEILING, WOOD, LIGHTING
   const [lighting, setLighting] = useState('BALANCED'); // SOFT DAYLIGHT, BALANCED, WARM EVENING
   const [cameraPreset, setCameraPreset] = useState('FRONT'); // FRONT, CORNER, WIDE
   const [resetCameraCounter, setResetCameraCounter] = useState(0);
@@ -49,19 +49,8 @@ export function useSpaceStudioState() {
   // Undo History Stack
   const [history, setHistory] = useState([]);
 
-  // Saved Designs in LocalStorage
-  const [savedDesigns, setSavedDesigns] = useState(() => {
-    try {
-      const data = localStorage.getItem('colournest_saved_designs');
-      return data ? JSON.parse(data) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  // UI Modals & Toast
-  const [isSavedModalOpen, setIsSavedModalOpen] = useState(false);
-  const [isEnquiryModalOpen, setIsEnquiryModalOpen] = useState(false);
+  // Reset Confirmation Modal & Toast Notification
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
   // Synchronize active config to localStorage
@@ -127,16 +116,33 @@ export function useSpaceStudioState() {
       ...prev,
       [selectedSurfaceId]: {
         ...prev[selectedSurfaceId],
-        material: 'paint',
         colorKey: customHex ? 'custom' : colorKey,
         color: hex,
         name,
-        finish,
-        roughness: wallPreset?.roughness || 0.82
+        finish
       }
     }));
 
     showToast(`Applied ${name} to ${CONFIGURABLE_SURFACES.find((s) => s.id === selectedSurfaceId)?.name || 'surface'}`);
+  };
+
+  // 1B. UPDATE WALL FINISH / TEXTURE TYPE
+  const handleUpdateWallFinish = (finishId) => {
+    const finishPreset = WALL_FINISH_TYPES[finishId];
+    if (!finishPreset) return;
+
+    pushHistory();
+    setSurfaces((prev) => ({
+      ...prev,
+      [selectedSurfaceId]: {
+        ...prev[selectedSurfaceId],
+        material: finishId,
+        finishType: finishId,
+        finish: finishPreset.name,
+        roughness: finishPreset.roughness
+      }
+    }));
+    showToast(`Finish: ${finishPreset.name}`);
   };
 
   // 2. UPDATE FLOOR MATERIAL
@@ -238,60 +244,29 @@ export function useSpaceStudioState() {
     showToast(`Reset ${CONFIGURABLE_SURFACES.find((s) => s.id === selectedSurfaceId)?.name || 'surface'} to default`);
   };
 
-  // 7. RESET ENTIRE ROOM ACTION
+  // 7. COMPLETE RESET STUDIO ACTION
+  // Restores all walls, floor, ceiling, wood finishes, lighting, camera, selections to original defaults
   const handleResetEntireRoom = () => {
     pushHistory();
-    setSurfaces({ ...DEFAULT_SURFACES_STATE });
+    // 1. Restore all wall, floor, ceiling, wood surface materials and colors
+    setSurfaces(JSON.parse(JSON.stringify(DEFAULT_SURFACES_STATE)));
+    // 2. Restore default lighting (BALANCED)
     setLighting('BALANCED');
+    // 3. Return camera to default FRONT perspective view
     setCameraPreset('FRONT');
     setResetCameraCounter((c) => c + 1);
-    showToast('Reset entire room to default contemporary interior');
-  };
-
-  // 8. SAVE DESIGN TO LOCALSTORAGE
-  const handleSaveDesign = () => {
-    const newDesign = {
-      id: 'design-' + Date.now(),
-      name: `${ROOM_TYPES[roomType]?.name} — ${surfaces['wall-feature']?.name || 'Custom'}`,
-      roomType,
-      surfaces: JSON.parse(JSON.stringify(surfaces)),
-      lighting,
-      date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-      timestamp: Date.now()
-    };
-
-    const updated = [newDesign, ...savedDesigns.slice(0, 9)];
-    setSavedDesigns(updated);
+    // 4. Clear temporary selections and highlights
+    setSelectedSurfaceId('wall-feature');
+    setActiveTab('WALLS');
+    // 5. Clean local storage state
     try {
-      localStorage.setItem('colournest_saved_designs', JSON.stringify(updated));
+      localStorage.removeItem('colournest_active_room_config');
     } catch (e) {
       console.warn('LocalStorage error:', e);
     }
-    showToast('Design saved to local storage portfolio');
-    setIsSavedModalOpen(true);
-  };
-
-  // 9. RESTORE SAVED DESIGN
-  const handleRestoreDesign = (design) => {
-    if (!design) return;
-    if (design.roomType) setRoomType(design.roomType);
-    if (design.surfaces) setSurfaces(design.surfaces);
-    if (design.lighting) setLighting(design.lighting);
-    setIsSavedModalOpen(false);
-    showToast(`Restored: ${design.name}`);
-  };
-
-  // 10. DOWNLOAD DESIGN SUMMARY SPECIFICATION
-  const handleDownloadSummary = () => {
-    const summaryText = generateDesignEnquiryText({ roomType, surfaces, lighting });
-    const blob = new Blob([summaryText], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `COLOUR_NEST_${roomType}_DESIGN_SPECIFICATION.txt`;
-    link.click();
-    URL.revokeObjectURL(url);
-    showToast('Downloaded spatial specification file');
+    // 6. Close modal & notify
+    setIsResetModalOpen(false);
+    showToast('Room design restored to original settings');
   };
 
   return {
@@ -314,26 +289,20 @@ export function useSpaceStudioState() {
     isMobilePanelOpen,
     setIsMobilePanelOpen,
     history,
-    savedDesigns,
-    isSavedModalOpen,
-    setIsSavedModalOpen,
-    isEnquiryModalOpen,
-    setIsEnquiryModalOpen,
+    isResetModalOpen,
+    setIsResetModalOpen,
     toastMessage,
     showToast,
     handleUndo,
     handleSelectSurface,
     handleUpdateWallColor,
+    handleUpdateWallFinish,
     handleUpdateFloor,
     handleUpdateCeilingColor,
     handleUpdateCeilingStyle,
     handleUpdateWood,
     handleSelectLighting,
     handleResetSelectedSurface,
-    handleResetEntireRoom,
-    handleSaveDesign,
-    handleRestoreDesign,
-    handleDownloadSummary
+    handleResetEntireRoom
   };
 }
-

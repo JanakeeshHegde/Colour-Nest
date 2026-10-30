@@ -1,12 +1,16 @@
 import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
+import { Html, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import {
   getPlasterTexture,
+  getPlasterNormalTexture,
   getWoodTexture,
+  getWoodNormalTexture,
   getStoneTexture,
-  getFabricTexture
+  getStoneNormalTexture,
+  getFabricTexture,
+  getFabricNormalTexture
 } from '../../utils/proceduralTextures';
 import {
   WALL_COLORS,
@@ -16,65 +20,19 @@ import {
   DEFAULT_SURFACES_STATE
 } from '../../data/roomStudioConfig';
 
-// Re-export constants for backward compatibility
 export { WALL_COLORS, FLOOR_PRESETS, WOOD_FINISHES };
-export const ROOM_PRESETS = {
-  LIVING: {
-    id: 'LIVING',
-    name: 'Living Pavilion',
-    subtitle: 'Contemporary residential pavilion with fluted timber, floating credenza & lounge seating',
-    serviceCategory: 'SPACE & INTERIORS'
-  },
-  BEDROOM: {
-    id: 'BEDROOM',
-    name: 'Master Suite',
-    subtitle: 'Serene Japandi master suite with integrated acoustic timber headboard & floating nightstands',
-    serviceCategory: 'INTERIORS'
-  },
-  KITCHEN: {
-    id: 'KITCHEN',
-    name: 'Culinary Studio',
-    subtitle: 'Architectural kitchen with honed waterfall island & linear illumination',
-    serviceCategory: 'CUSTOMISED INTERIORS'
-  },
-  COMMERCIAL: {
-    id: 'COMMERCIAL',
-    name: 'Commercial Space',
-    subtitle: 'Executive collaborative boardroom with acoustic baffles & presentation wall',
-    serviceCategory: 'COMMERCIAL INTERIORS'
-  }
-};
-
-// Legacy lighting mode mapping for compatibility
-export const LIGHT_MODES = {
-  morning: LIGHTING_PRESETS['SOFT DAYLIGHT'],
-  day: LIGHTING_PRESETS['BALANCED'],
-  evening: LIGHTING_PRESETS['WARM EVENING'],
-  night: {
-    id: 'night',
-    name: 'Dramatic Night',
-    ambientColor: '#171520',
-    ambientIntensity: 0.35,
-    sunColor: '#4A5C7A',
-    sunIntensity: 0.4,
-    sunPos: [-10, 4, 3],
-    coveIntensity: 2.2,
-    skyColor: '#0E0D14',
-    pointFillIntensity: 1.0
-  }
-};
 
 /**
- * ANIMATED SURFACE MATERIAL (ANIMATION 02 — MATERIAL APPLICATION)
- * Handles smooth color transition and gentle luminous sheen pulse when updated.
+ * High-Fidelity Animated Surface Material
+ * Smoothly transitions color and manages PBR normal maps, roughness, and subtle selection feedback.
  */
 function useAnimatedSurfaceMaterial({
   color,
   roughness = 0.85,
   metalness = 0.0,
   map = null,
-  bumpMap = null,
-  bumpScale = 0.03,
+  normalMap = null,
+  normalScale = [1, 1],
   isSelected = false,
   isHovered = false
 }) {
@@ -91,10 +49,9 @@ function useAnimatedSurfaceMaterial({
   const sheenProgress = useRef(0);
   const prevColorHex = useRef(safeColor);
 
-  // Trigger material application sheen sweep on color change
   useEffect(() => {
     if (prevColorHex.current !== safeColor) {
-      sheenProgress.current = 1.0; // Trigger sheen pulse
+      sheenProgress.current = 1.0;
       prevColorHex.current = safeColor;
     }
   }, [safeColor]);
@@ -102,19 +59,15 @@ function useAnimatedSurfaceMaterial({
   useFrame((_, delta) => {
     if (!materialRef.current) return;
 
-    // Smoothly lerp material color towards target color (Animation 02)
     currentColor.current.lerp(targetColor, Math.min(1, delta * 5.0));
     materialRef.current.color.copy(currentColor.current);
 
-    // Fade sheen pulse
     if (sheenProgress.current > 0) {
       sheenProgress.current = Math.max(0, sheenProgress.current - delta * 2.2);
     }
 
-    // Striking selection & hover visual feedback
-    const baseEmissive = isSelected ? 0.28 : isHovered ? 0.10 : 0.0;
-    const sheenAdd = sheenProgress.current * 0.16;
-    const totalEmissive = baseEmissive + sheenAdd;
+    const baseEmissive = isSelected ? 0.22 : isHovered ? 0.08 : 0.0;
+    const totalEmissive = baseEmissive + sheenProgress.current * 0.12;
 
     materialRef.current.emissive.set(isSelected ? '#E3D9A4' : '#FAF8F2');
     materialRef.current.emissiveIntensity = totalEmissive;
@@ -126,20 +79,22 @@ function useAnimatedSurfaceMaterial({
       roughness,
       metalness,
       map,
-      bumpMap,
-      bumpScale,
+      normalMap,
       emissive: new THREE.Color('#3C2D8C'),
       emissiveIntensity: 0
     });
+    if (normalMap) {
+      mat.normalScale = new THREE.Vector2(normalScale[0], normalScale[1]);
+    }
     materialRef.current = mat;
     return mat;
-  }, [roughness, metalness, map, bumpMap, bumpScale]);
+  }, [roughness, metalness, map, normalMap, normalScale[0], normalScale[1]]);
 
   return material;
 }
 
 /**
- * 3D Hotspot Interactive Marker with Raycasting and Expandable Tooltip
+ * Minimalist 3D Interactive Hotspot Marker
  */
 function HotspotMarker({ position, label, sublabel, onClick, active }) {
   const [hovered, setHovered] = useState(false);
@@ -155,7 +110,6 @@ function HotspotMarker({ position, label, sublabel, onClick, active }) {
 
   return (
     <group position={position}>
-      {/* 3D Pulsing Ring */}
       <mesh
         ref={ringRef}
         onPointerOver={(e) => {
@@ -181,7 +135,6 @@ function HotspotMarker({ position, label, sublabel, onClick, active }) {
         />
       </mesh>
 
-      {/* Floating Minimalist Pin / Tooltip */}
       <Html
         position={[0, 0, 0]}
         center
@@ -268,7 +221,7 @@ function HotspotMarker({ position, label, sublabel, onClick, active }) {
 }
 
 /**
- * Architectural Fluted Timber Wall Slats (wood-panel)
+ * Architectural Vertical Fluted Timber Slats (wood-panel)
  */
 function FlutedWoodPanel({
   position,
@@ -300,13 +253,13 @@ function FlutedWoodPanel({
         onSelect && onSelect('wood-panel');
       }}
     >
-      {/* Backing Sheet */}
+      {/* Black Acoustic Backing Sheet */}
       <mesh position={[0, 0, -0.02]} receiveShadow>
         <boxGeometry args={[width, height, 0.02]} />
-        <meshStandardMaterial color="#1E1914" roughness={0.9} />
+        <meshStandardMaterial color="#16141A" roughness={0.95} />
       </mesh>
 
-      {/* Individual Vertical Fluted Slats */}
+      {/* Vertical Fluted Timber Slats */}
       {slats.map((xPos, idx) => (
         <mesh
           key={idx}
@@ -319,7 +272,7 @@ function FlutedWoodPanel({
         </mesh>
       ))}
 
-      {/* Selection Framing Reveal */}
+      {/* Subtle Selection Framing */}
       {(isSelected || isHovered) && (
         <mesh position={[0, 0, 0.035]}>
           <boxGeometry args={[width + 0.02, height + 0.02, 0.005]} />
@@ -336,9 +289,9 @@ function FlutedWoodPanel({
 }
 
 /**
- * Modern Minimalist Floating Credenza (cabinet-main)
+ * Minimalist Floating Architectural Credenza (cabinet-main)
  */
-function ModernCredenza({ position, woodMaterial, isSelected, isHovered, onSelect }) {
+function ModernCredenza({ position, woodMaterial, onSelect }) {
   return (
     <group
       position={position}
@@ -356,11 +309,11 @@ function ModernCredenza({ position, woodMaterial, isSelected, isHovered, onSelec
       {[-1.46, 0, 1.46].map((x, i) => (
         <mesh key={i} position={[x, 0.45, 0.355]}>
           <boxGeometry args={[0.012, 0.63, 0.01]} />
-          <meshBasicMaterial color="#181410" />
+          <meshBasicMaterial color="#151219" />
         </mesh>
       ))}
 
-      {/* Minimalist Brass Handles */}
+      {/* Brushed Brass Bar Handles */}
       {[-1.8, -0.4, 0.4, 1.8].map((x, i) => (
         <mesh key={i} position={[x, 0.62, 0.365]} castShadow>
           <boxGeometry args={[0.015, 0.12, 0.015]} />
@@ -368,7 +321,7 @@ function ModernCredenza({ position, woodMaterial, isSelected, isHovered, onSelec
         </mesh>
       ))}
 
-      {/* Brass Plinth Cylindrical Feet */}
+      {/* Brushed Brass Plinth Legs */}
       {[
         [-1.9, 0.06, 0.25],
         [1.9, 0.06, 0.25],
@@ -382,11 +335,11 @@ function ModernCredenza({ position, woodMaterial, isSelected, isHovered, onSelec
         </mesh>
       ))}
 
-      {/* Decorative Ceramic Vase on Credenza */}
+      {/* Ceramic Stoneware Vase */}
       <group position={[-1.2, 0.9, 0.05]}>
         <mesh castShadow>
-          <cylinderGeometry args={[0.09, 0.14, 0.26, 20]} />
-          <meshStandardMaterial color="#FAF8F2" roughness={0.85} />
+          <cylinderGeometry args={[0.09, 0.14, 0.26, 24]} />
+          <meshStandardMaterial color="#FAF8F2" roughness={0.7} />
         </mesh>
         <mesh position={[0, 0.26, 0]} rotation={[0.1, 0, 0.15]}>
           <cylinderGeometry args={[0.005, 0.005, 0.35, 6]} />
@@ -394,7 +347,7 @@ function ModernCredenza({ position, woodMaterial, isSelected, isHovered, onSelec
         </mesh>
       </group>
 
-      {/* Monograph Books on Credenza */}
+      {/* Monograph Books */}
       <group position={[1.3, 0.8, -0.05]} rotation={[0, 0.08, 0]}>
         <mesh position={[0, 0, 0]} castShadow>
           <boxGeometry args={[0.36, 0.045, 0.48]} />
@@ -410,49 +363,49 @@ function ModernCredenza({ position, woodMaterial, isSelected, isHovered, onSelec
 }
 
 /**
- * Architectural Lounge Chair
+ * Contemporary Sculpted Lounge Chair (Ergonomic rounded cushions & Bouclé upholstery)
  */
 function ArchitecturalLoungeChair({ position, rotation, fabricMaterial }) {
   return (
     <group position={position} rotation={rotation}>
-      {/* Seat Cushion */}
-      <mesh position={[0, 0.32, 0]} castShadow receiveShadow material={fabricMaterial}>
-        <boxGeometry args={[1.1, 0.28, 1.1]} />
+      {/* Seat Cushion with Soft Rounded Profiles */}
+      <mesh position={[0, 0.34, 0]} castShadow receiveShadow material={fabricMaterial}>
+        <boxGeometry args={[1.15, 0.26, 1.1]} />
       </mesh>
       {/* Backrest Cushion */}
-      <mesh position={[0, 0.65, -0.42]} castShadow receiveShadow material={fabricMaterial}>
-        <boxGeometry args={[1.1, 0.45, 0.24]} />
+      <mesh position={[0, 0.68, -0.42]} castShadow receiveShadow material={fabricMaterial}>
+        <boxGeometry args={[1.15, 0.46, 0.26]} />
       </mesh>
       {/* Left & Right Armrests */}
-      <mesh position={[-0.45, 0.48, 0]} castShadow receiveShadow material={fabricMaterial}>
-        <boxGeometry args={[0.2, 0.25, 1.0]} />
+      <mesh position={[-0.48, 0.5, 0]} castShadow receiveShadow material={fabricMaterial}>
+        <boxGeometry args={[0.2, 0.26, 1.05]} />
       </mesh>
-      <mesh position={[0.45, 0.48, 0]} castShadow receiveShadow material={fabricMaterial}>
-        <boxGeometry args={[0.2, 0.25, 1.0]} />
+      <mesh position={[0.48, 0.5, 0]} castShadow receiveShadow material={fabricMaterial}>
+        <boxGeometry args={[0.2, 0.26, 1.05]} />
       </mesh>
-      {/* Plinth Base */}
-      <mesh position={[0, 0.09, 0]} castShadow receiveShadow>
-        <boxGeometry args={[1.05, 0.16, 1.05]} />
-        <meshStandardMaterial color="#211D2D" roughness={0.5} />
+      {/* Dark Architectural Plinth Base */}
+      <mesh position={[0, 0.1, 0]} castShadow receiveShadow>
+        <boxGeometry args={[1.05, 0.18, 1.05]} />
+        <meshStandardMaterial color="#211D2D" roughness={0.4} />
       </mesh>
     </group>
   );
 }
 
 /**
- * Sculptural Travertine Coffee Table with Decorative Dish
+ * Sculptural Honed Travertine Coffee Table
  */
 function CoffeeTable({ position }) {
   return (
     <group position={position}>
-      {/* Cylindrical Fluted Pedestal */}
+      {/* Fluted Cylindrical Pedestal */}
       <mesh position={[0, 0.16, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.76, 0.8, 0.28, 36]} />
-        <meshStandardMaterial color="#E8DFD1" roughness={0.38} metalness={0.02} />
+        <cylinderGeometry args={[0.76, 0.8, 0.28, 48]} />
+        <meshStandardMaterial color="#DDD5C7" roughness={0.32} metalness={0.02} />
       </mesh>
-      {/* Ceramic Dish on Table */}
+      {/* Decorative Ceramic Centerpiece */}
       <mesh position={[0.1, 0.32, 0]} castShadow>
-        <cylinderGeometry args={[0.22, 0.22, 0.03, 24]} />
+        <cylinderGeometry args={[0.22, 0.22, 0.03, 32]} />
         <meshStandardMaterial color="#211D2D" roughness={0.65} />
       </mesh>
     </group>
@@ -460,99 +413,7 @@ function CoffeeTable({ position }) {
 }
 
 /**
- * Architectural Floor Lamp with Arched Brass Arm & Linen Diffuser
- */
-function FloorLamp({ position }) {
-  return (
-    <group position={position}>
-      {/* Heavy Marble Plinth Base */}
-      <mesh position={[0, 0.05, 0]} castShadow>
-        <cylinderGeometry args={[0.22, 0.22, 0.1, 24]} />
-        <meshStandardMaterial color="#1E1C24" roughness={0.3} metalness={0.2} />
-      </mesh>
-      {/* Vertical Brass Stem */}
-      <mesh position={[0, 1.25, 0]} castShadow>
-        <cylinderGeometry args={[0.015, 0.015, 2.4, 12]} />
-        <meshStandardMaterial color="#E3D9A4" metalness={0.85} roughness={0.2} />
-      </mesh>
-      {/* Arched Overhang Rod */}
-      <mesh position={[0.25, 2.45, 0]} rotation={[0, 0, -0.45]} castShadow>
-        <cylinderGeometry args={[0.012, 0.012, 0.8, 12]} />
-        <meshStandardMaterial color="#E3D9A4" metalness={0.85} roughness={0.2} />
-      </mesh>
-      {/* Cylindrical Linen Shade */}
-      <mesh position={[0.5, 2.25, 0]} castShadow>
-        <cylinderGeometry args={[0.2, 0.2, 0.32, 24]} />
-        <meshStandardMaterial color="#FAF8F2" roughness={0.85} />
-      </mesh>
-      {/* Warm Ambient Lamp Point Light */}
-      <pointLight position={[0.5, 2.1, 0]} color="#FFE6B8" intensity={1.1} distance={4.5} decay={2} />
-    </group>
-  );
-}
-
-/**
- * Potted Architectural Plant (Fiddle-Leaf Ficus in Terracotta Planter)
- */
-function IndoorPlant({ position }) {
-  return (
-    <group position={position}>
-      {/* Terracotta Planter Pot */}
-      <mesh position={[0, 0.3, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.24, 0.18, 0.6, 20]} />
-        <meshStandardMaterial color="#B85C38" roughness={0.85} />
-      </mesh>
-      {/* Plant Trunk */}
-      <mesh position={[0, 0.8, 0]} castShadow>
-        <cylinderGeometry args={[0.02, 0.025, 0.6, 8]} />
-        <meshStandardMaterial color="#4A3B32" roughness={0.9} />
-      </mesh>
-      {/* Sculptural Broad Green Leaves */}
-      {[
-        { y: 0.8, r: [0.3, 0.5, 0], scale: [0.32, 0.02, 0.22] },
-        { y: 0.95, r: [-0.2, 1.8, 0.2], scale: [0.35, 0.02, 0.24] },
-        { y: 1.1, r: [0.4, 3.2, -0.3], scale: [0.38, 0.02, 0.25] },
-        { y: 1.25, r: [-0.3, 4.5, 0.1], scale: [0.36, 0.02, 0.23] }
-      ].map((leaf, i) => (
-        <mesh key={i} position={[0, leaf.y, 0]} rotation={leaf.r} castShadow>
-          <boxGeometry args={leaf.scale} />
-          <meshStandardMaterial color="#3B533E" roughness={0.65} />
-        </mesh>
-      ))}
-    </group>
-  );
-}
-
-/**
- * Architectural Doorway on Right Wall
- */
-function DoorwayEntrance({ position, isSelected, isHovered, onSelect }) {
-  return (
-    <group
-      position={position}
-      onClick={(e) => {
-        e.stopPropagation();
-        onSelect && onSelect('wall-right');
-      }}
-    >
-      {/* Door Frame Surround (Jamb & Casing) */}
-      <mesh position={[0, 1.22, 0]}>
-        <boxGeometry args={[0.12, 2.45, 1.3]} />
-        <meshStandardMaterial color="#1E1C24" roughness={0.4} metalness={0.3} />
-      </mesh>
-      {/* Inner Recessed Door Opening */}
-      <mesh position={[-0.01, 1.2, 0]}>
-        <boxGeometry args={[0.08, 2.4, 1.18]} />
-        <meshStandardMaterial color="#262232" roughness={0.5} />
-      </mesh>
-      {/* Warm Corridor Ambient Light Leaking from Doorway */}
-      <pointLight position={[0.3, 1.5, 0]} color="#FFE8CC" intensity={0.8} distance={3.5} decay={2} />
-    </group>
-  );
-}
-
-/**
- * Floor-to-Ceiling Window with Bronze Frames and Bright Horizon Vista
+ * Floor-to-Ceiling Window with Bronze Frames and Exterior Horizon Vista
  */
 function ArchitecturalWindow({ skyColor = '#E8F2FC' }) {
   return (
@@ -593,11 +454,39 @@ function ArchitecturalWindow({ skyColor = '#E8F2FC' }) {
         />
       </mesh>
 
-      {/* Exterior Vista Backdrop Plane (Bright Daylight Atmosphere) */}
+      {/* Exterior Vista Backdrop Plane (Natural Horizon) */}
       <mesh position={[0, 0, -2.5]}>
-        <planeGeometry args={[16, 8]} />
+        <planeGeometry args={[18, 9]} />
         <meshBasicMaterial color={skyColor} />
       </mesh>
+    </group>
+  );
+}
+
+/**
+ * Architectural Doorway on Right Wall
+ */
+function DoorwayEntrance({ position, onSelect }) {
+  return (
+    <group
+      position={position}
+      onClick={(e) => {
+        e.stopPropagation();
+        onSelect && onSelect('wall-right');
+      }}
+    >
+      {/* Door Frame Surround */}
+      <mesh position={[0, 1.22, 0]}>
+        <boxGeometry args={[0.12, 2.45, 1.3]} />
+        <meshStandardMaterial color="#1E1C24" roughness={0.4} metalness={0.3} />
+      </mesh>
+      {/* Inner Recessed Door Opening */}
+      <mesh position={[-0.01, 1.2, 0]}>
+        <boxGeometry args={[0.08, 2.4, 1.18]} />
+        <meshStandardMaterial color="#262232" roughness={0.5} />
+      </mesh>
+      {/* Warm Corridor Ambient Light Leaking from Doorway */}
+      <pointLight position={[0.3, 1.5, 0]} color="#FFE8CC" intensity={0.8} distance={3.5} decay={2} />
     </group>
   );
 }
@@ -717,7 +606,7 @@ function CeilingSystem({
 }
 
 /**
- * Bedroom Furniture Suite (Japandi Platform Bed, Nightstands, Bedside Lights)
+ * Bedroom Suite for Master Suite Mode
  */
 function BedroomSuite({ woodMaterial, fabricMaterial }) {
   return (
@@ -745,7 +634,7 @@ function BedroomSuite({ woodMaterial, fabricMaterial }) {
         </mesh>
       ))}
 
-      {/* Twin Nightstands with Pendant Lights */}
+      {/* Twin Floating Nightstands with Bedside Pendant Lights */}
       {[-2.4, 2.4].map((x, i) => (
         <group key={i} position={[x, 0.45, -3.2]}>
           <mesh castShadow receiveShadow material={woodMaterial}>
@@ -767,65 +656,8 @@ function BedroomSuite({ woodMaterial, fabricMaterial }) {
 }
 
 /**
- * Kitchen Suite (Honed Stone Island, Bar Stools, Rear Cabinetry)
- */
-function KitchenSuite({ woodMaterial }) {
-  return (
-    <group position={[0, 0, 0]}>
-      {/* Monolithic Honed Island with Waterfall Edge */}
-      <mesh position={[0, 0.6, -0.6]} castShadow receiveShadow>
-        <boxGeometry args={[4.8, 1.2, 1.6]} />
-        <meshStandardMaterial color="#E0DDD7" roughness={0.25} metalness={0.05} />
-      </mesh>
-      {/* 3 Modern Bar Stools */}
-      {[-1.4, 0, 1.4].map((x, i) => (
-        <group key={i} position={[x, 0, 0.8]}>
-          <mesh position={[0, 0.75, 0]} castShadow>
-            <cylinderGeometry args={[0.26, 0.26, 0.08, 20]} />
-            <meshStandardMaterial color="#3E2B1E" roughness={0.6} />
-          </mesh>
-          {[-0.14, 0.14].map((lx, j) => (
-            <mesh key={j} position={[lx, 0.36, 0]} castShadow>
-              <cylinderGeometry args={[0.015, 0.015, 0.72, 8]} />
-              <meshStandardMaterial color="#E3D9A4" metalness={0.85} roughness={0.25} />
-            </mesh>
-          ))}
-        </group>
-      ))}
-    </group>
-  );
-}
-
-/**
- * Commercial Boardroom Suite
- */
-function CommercialSuite({ woodMaterial }) {
-  return (
-    <group position={[0, 0, 0]}>
-      {/* Conference Table */}
-      <mesh position={[0, 0.72, -0.8]} castShadow receiveShadow material={woodMaterial}>
-        <boxGeometry args={[5.2, 0.08, 2.0]} />
-      </mesh>
-      {/* Presentation Screen Wall */}
-      <group position={[0, 2.8, -5.38]}>
-        <mesh castShadow receiveShadow>
-          <boxGeometry args={[4.2, 2.2, 0.06]} />
-          <meshStandardMaterial color="#111213" roughness={0.2} metalness={0.8} />
-        </mesh>
-        <mesh position={[0, 0, 0.035]}>
-          <planeGeometry args={[4.0, 2.0]} />
-          <meshBasicMaterial color="#1E232B" />
-        </mesh>
-      </group>
-    </group>
-  );
-}
-
-/**
  * =====================================================================
  * MAIN ARCHITECTURAL ROOM COMPONENT
- * Implements real 3D objects, independent surface states, raycasting,
- * and high-fidelity PBR lighting.
  * =====================================================================
  */
 export function ArchitecturalRoom({
@@ -834,119 +666,59 @@ export function ArchitecturalRoom({
   selectedSurfaceId = null,
   onSelectSurface = null,
   cameraPreset = 'FRONT',
-  // Legacy props support for backward compatibility with HeroRoom / ScrollStory
-  wallColorKey = 'ivory',
-  floorKey = 'stone',
-  woodKey = 'warm',
-  ceilingPreset = 'LAYERED',
   lightMode = 'BALANCED',
-  customLightAngle = null,
-  transProgress = 100,
   onHotspotClick = null,
   activeHotspot = null,
   showHotspots = true
 }) {
   const [hoveredSurface, setHoveredSurface] = useState(null);
 
-  // Procedural PBR Textures
-  const plasterBump = useMemo(() => getPlasterTexture(), []);
-  const woodTexture = useMemo(
-    () => getWoodTexture(WOOD_FINISHES[woodKey]?.tone || 'warm'),
-    [woodKey]
-  );
-  const stoneTexture = useMemo(
-    () => getStoneTexture(floorKey === 'concrete' ? 'concrete' : 'stone'),
-    [floorKey]
-  );
-  const fabricTexture = useMemo(() => getFabricTexture(), []);
+  // High-Resolution Procedural PBR Maps
+  const plasterSmoothNormal = useMemo(() => getPlasterNormalTexture('smooth'), []);
+  const plasterStuccoNormal = useMemo(() => getPlasterNormalTexture('stucco'), []);
+  const plasterAnticcoNormal = useMemo(() => getPlasterNormalTexture('anticco'), []);
 
-  // Compute resolved surfaces state (merging surfaces prop or fallback props)
+  const woodTexture = useMemo(() => getWoodTexture('warm'), []);
+  const woodNormal = useMemo(() => getWoodNormalTexture('warm'), []);
+
+  const stoneTexture = useMemo(() => getStoneTexture('stone'), []);
+  const stoneNormal = useMemo(() => getStoneNormalTexture('stone'), []);
+
+  const fabricTexture = useMemo(() => getFabricTexture(), []);
+  const fabricNormal = useMemo(() => getFabricNormalTexture(), []);
+
+  // Resolved Surfaces State
   const resolvedSurfaces = useMemo(() => {
     if (surfaces) {
       return { ...DEFAULT_SURFACES_STATE, ...surfaces };
     }
-    // Fallback if caller used legacy props
-    const wallCol = WALL_COLORS[wallColorKey] || WALL_COLORS.ivory;
-    const floorCol = FLOOR_PRESETS[floorKey] || FLOOR_PRESETS.stone;
-    const woodCol = WOOD_FINISHES[woodKey] || WOOD_FINISHES.warm;
-    return {
-      'wall-main': {
-        color: wallCol.hex,
-        roughness: wallCol.roughness,
-        name: wallCol.name
-      },
-      'wall-feature': {
-        color: wallColorKey === 'ivory' ? '#3C2D8C' : wallCol.hex,
-        roughness: wallCol.roughness,
-        name: wallCol.name
-      },
-      'wall-left': {
-        color: wallCol.hex,
-        roughness: wallCol.roughness,
-        name: wallCol.name
-      },
-      'wall-right': {
-        color: wallCol.hex,
-        roughness: wallCol.roughness,
-        name: wallCol.name
-      },
-      'floor-main': {
-        color: floorCol.color,
-        roughness: floorCol.roughness,
-        material: floorCol.materialType
-      },
-      'ceiling-main': {
-        color: '#FAF8F5',
-        stylePreset: ceilingPreset
-      },
-      'wood-panel': {
-        color: woodCol.color,
-        roughness: woodCol.roughness
-      },
-      'cabinet-main': {
-        color: woodCol.color,
-        roughness: woodCol.roughness
-      }
-    };
-  }, [surfaces, wallColorKey, floorKey, woodKey, ceilingPreset]);
+    return DEFAULT_SURFACES_STATE;
+  }, [surfaces]);
 
-  // Lighting Configuration (Supports both 'SOFT DAYLIGHT' / 'BALANCED' / 'WARM EVENING' and legacy 'morning' / 'day' / 'evening')
+  // Lighting Configuration
   const lightConfig = useMemo(() => {
-    if (LIGHTING_PRESETS[lightMode]) return LIGHTING_PRESETS[lightMode];
-    if (LIGHT_MODES[lightMode]) return LIGHT_MODES[lightMode];
-    return LIGHTING_PRESETS.BALANCED;
+    return LIGHTING_PRESETS[lightMode] || LIGHTING_PRESETS.BALANCED;
   }, [lightMode]);
 
-  // Sun Light Vector
-  const dirLightPos = useMemo(() => {
-    if (customLightAngle) {
-      const radius = 12;
-      const az = (customLightAngle.azimuth * Math.PI) / 180;
-      const el = (customLightAngle.elevation * Math.PI) / 180;
-      return [
-        radius * Math.cos(el) * Math.sin(az),
-        Math.max(2, radius * Math.sin(el)),
-        radius * Math.cos(el) * Math.cos(az)
-      ];
-    }
-    return lightConfig.sunPos || [-9, 8.5, 2];
-  }, [customLightAngle, lightConfig]);
-
-  // INDEPENDENT SURFACE MATERIALS WITH SMOOTH ANIMATION (ANIMATION 02)
+  // Dynamic PBR Materials for each independent surface
+  const wallMainFinish = resolvedSurfaces['wall-main']?.finishType || 'paint';
+  const wallMainNormal = wallMainFinish === 'stucco' ? plasterStuccoNormal : wallMainFinish === 'anticco' ? plasterAnticcoNormal : plasterSmoothNormal;
   const wallMainMaterial = useAnimatedSurfaceMaterial({
     color: resolvedSurfaces['wall-main']?.color || '#FAF8F2',
     roughness: resolvedSurfaces['wall-main']?.roughness || 0.85,
-    bumpMap: plasterBump,
-    bumpScale: 0.03,
+    normalMap: wallMainNormal,
+    normalScale: [0.35, 0.35],
     isSelected: selectedSurfaceId === 'wall-main',
     isHovered: hoveredSurface === 'wall-main'
   });
 
+  const wallFeatureFinish = resolvedSurfaces['wall-feature']?.finishType || 'stucco';
+  const wallFeatureNormal = wallFeatureFinish === 'anticco' ? plasterAnticcoNormal : wallFeatureFinish === 'paint' ? plasterSmoothNormal : plasterStuccoNormal;
   const wallFeatureMaterial = useAnimatedSurfaceMaterial({
     color: resolvedSurfaces['wall-feature']?.color || '#3C2D8C',
-    roughness: resolvedSurfaces['wall-feature']?.roughness || 0.76,
-    bumpMap: plasterBump,
-    bumpScale: 0.04,
+    roughness: resolvedSurfaces['wall-feature']?.roughness || 0.52,
+    normalMap: wallFeatureNormal,
+    normalScale: [1.2, 1.2],
     isSelected: selectedSurfaceId === 'wall-feature',
     isHovered: hoveredSurface === 'wall-feature'
   });
@@ -954,8 +726,8 @@ export function ArchitecturalRoom({
   const wallLeftMaterial = useAnimatedSurfaceMaterial({
     color: resolvedSurfaces['wall-left']?.color || '#FAF8F2',
     roughness: resolvedSurfaces['wall-left']?.roughness || 0.85,
-    bumpMap: plasterBump,
-    bumpScale: 0.03,
+    normalMap: plasterSmoothNormal,
+    normalScale: [0.3, 0.3],
     isSelected: selectedSurfaceId === 'wall-left',
     isHovered: hoveredSurface === 'wall-left'
   });
@@ -963,21 +735,19 @@ export function ArchitecturalRoom({
   const wallRightMaterial = useAnimatedSurfaceMaterial({
     color: resolvedSurfaces['wall-right']?.color || '#FAF8F2',
     roughness: resolvedSurfaces['wall-right']?.roughness || 0.85,
-    bumpMap: plasterBump,
-    bumpScale: 0.03,
+    normalMap: plasterSmoothNormal,
+    normalScale: [0.3, 0.3],
     isSelected: selectedSurfaceId === 'wall-right',
     isHovered: hoveredSurface === 'wall-right'
   });
 
+  const isFloorWood = resolvedSurfaces['floor-main']?.material === 'wood';
   const floorMaterial = useAnimatedSurfaceMaterial({
     color: resolvedSurfaces['floor-main']?.color || '#D9D5CD',
-    roughness: resolvedSurfaces['floor-main']?.roughness || 0.22,
-    map:
-      resolvedSurfaces['floor-main']?.material === 'wood' || floorKey === 'wood' || floorKey === 'walnut'
-        ? woodTexture
-        : stoneTexture,
-    bumpMap: stoneTexture,
-    bumpScale: 0.015,
+    roughness: resolvedSurfaces['floor-main']?.roughness || (isFloorWood ? 0.35 : 0.22),
+    map: isFloorWood ? woodTexture : stoneTexture,
+    normalMap: isFloorWood ? woodNormal : stoneNormal,
+    normalScale: isFloorWood ? [1.2, 1.2] : [0.9, 0.9],
     isSelected: selectedSurfaceId === 'floor-main',
     isHovered: hoveredSurface === 'floor-main'
   });
@@ -986,8 +756,8 @@ export function ArchitecturalRoom({
     color: resolvedSurfaces['wood-panel']?.color || '#A65E32',
     roughness: resolvedSurfaces['wood-panel']?.roughness || 0.35,
     map: woodTexture,
-    bumpMap: woodTexture,
-    bumpScale: 0.02,
+    normalMap: woodNormal,
+    normalScale: [1.3, 1.3],
     isSelected: selectedSurfaceId === 'wood-panel',
     isHovered: hoveredSurface === 'wood-panel'
   });
@@ -996,21 +766,24 @@ export function ArchitecturalRoom({
     color: resolvedSurfaces['cabinet-main']?.color || '#A65E32',
     roughness: resolvedSurfaces['cabinet-main']?.roughness || 0.35,
     map: woodTexture,
-    bumpMap: woodTexture,
-    bumpScale: 0.02,
+    normalMap: woodNormal,
+    normalScale: [1.3, 1.3],
     isSelected: selectedSurfaceId === 'cabinet-main',
     isHovered: hoveredSurface === 'cabinet-main'
   });
 
   const fabricMaterial = useMemo(() => {
-    return new THREE.MeshStandardMaterial({
+    const mat = new THREE.MeshStandardMaterial({
       color: '#E8E4DC',
       roughness: 0.85,
-      map: fabricTexture
+      map: fabricTexture,
+      normalMap: fabricNormal
     });
-  }, [fabricTexture]);
+    mat.normalScale = new THREE.Vector2(0.9, 0.9);
+    return mat;
+  }, [fabricTexture, fabricNormal]);
 
-  // Pointer event handlers for raycasting against actual meshes
+  // Raycasting helper
   const makeSurfaceProps = (surfaceId) => ({
     onClick: (e) => {
       e.stopPropagation();
@@ -1031,13 +804,13 @@ export function ArchitecturalRoom({
   return (
     <group>
       {/* ------------------------------------------------------------- */}
-      {/* HIGH-FIDELITY PBR LIGHTING SETUP                              */}
+      {/* 1. HIGH-FIDELITY ARCHITECTURAL LIGHTING                       */}
       {/* ------------------------------------------------------------- */}
       <ambientLight color={lightConfig.ambientColor} intensity={lightConfig.ambientIntensity} />
 
-      {/* Directional Sun Light */}
+      {/* Sun Light Streaming through Window */}
       <directionalLight
-        position={dirLightPos}
+        position={lightConfig.sunPos || [-9, 8.5, 2]}
         color={lightConfig.sunColor}
         intensity={lightConfig.sunIntensity}
         castShadow
@@ -1051,7 +824,7 @@ export function ArchitecturalRoom({
         shadow-bias={-0.0004}
       />
 
-      {/* Interior Ambient Fill Bounce */}
+      {/* Interior Point Fill */}
       <pointLight
         position={[-1.5, 3.2, 0]}
         color="#FFF2E0"
@@ -1061,7 +834,7 @@ export function ArchitecturalRoom({
       />
 
       {/* ------------------------------------------------------------- */}
-      {/* 1. FLOOR (floor-main)                                         */}
+      {/* 2. FLOOR & SKIRTING (floor-main)                              */}
       {/* ------------------------------------------------------------- */}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
@@ -1073,7 +846,7 @@ export function ArchitecturalRoom({
         <planeGeometry args={[14, 12]} />
       </mesh>
 
-      {/* Skirting / Baseboards along Wall Perimeters */}
+      {/* Skirting / Baseboards */}
       <mesh position={[0, 0.05, -5.48]} receiveShadow>
         <boxGeometry args={[14, 0.1, 0.02]} />
         <meshStandardMaterial color="#211D2D" roughness={0.3} />
@@ -1087,10 +860,20 @@ export function ArchitecturalRoom({
         <meshStandardMaterial color="#211D2D" roughness={0.3} />
       </mesh>
 
+      {/* Soft Contact Shadows on Floor Plane */}
+      <ContactShadows
+        position={[0, 0.005, 0]}
+        opacity={0.65}
+        scale={14}
+        blur={1.8}
+        far={4}
+        color="#15121B"
+      />
+
       {/* ------------------------------------------------------------- */}
-      {/* 2. BACK WALL (wall-main, wall-feature, wood-panel)            */}
+      {/* 3. BACK WALL (wall-main, wall-feature, wood-panel)            */}
       {/* ------------------------------------------------------------- */}
-      {/* Section A: Main Back Wall (Left 42%) */}
+      {/* Main Wall (Left 44%) */}
       <mesh
         position={[-3.8, 1.725, -5.5]}
         receiveShadow
@@ -1100,7 +883,7 @@ export function ArchitecturalRoom({
         <boxGeometry args={[6.4, 3.45, 0.1]} />
       </mesh>
 
-      {/* Section B: Feature Accent Wall (Center 32%) */}
+      {/* Feature Wall (Center 32%) */}
       <mesh
         position={[0.8, 1.725, -5.47]}
         receiveShadow
@@ -1110,7 +893,7 @@ export function ArchitecturalRoom({
         <boxGeometry args={[4.2, 3.45, 0.12]} />
       </mesh>
 
-      {/* Section C: Acoustic Fluted Timber Slats (Right 26%) */}
+      {/* Acoustic Fluted Timber Slats (Right 24%) */}
       <FlutedWoodPanel
         position={[4.95, 1.725, -5.44]}
         width={3.9}
@@ -1123,7 +906,7 @@ export function ArchitecturalRoom({
       />
 
       {/* ------------------------------------------------------------- */}
-      {/* 3. RIGHT WALL (wall-right) WITH DOORWAY REVEAL                */}
+      {/* 4. RIGHT WALL & DOORWAY (wall-right)                          */}
       {/* ------------------------------------------------------------- */}
       <mesh
         position={[7.0, 1.725, 0]}
@@ -1135,39 +918,34 @@ export function ArchitecturalRoom({
         <boxGeometry args={[12, 3.45, 0.1]} />
       </mesh>
 
-      {/* Doorway Entrance on Right Wall */}
+      {/* Doorway Entrance */}
       <DoorwayEntrance
         position={[6.95, 0, -2.5]}
-        isSelected={selectedSurfaceId === 'wall-right'}
-        isHovered={hoveredSurface === 'wall-right'}
         onSelect={onSelectSurface}
       />
 
-      {/* Architectural Display Niche on Right Wall */}
+      {/* Architectural Display Niche */}
       <group position={[6.92, 1.8, 2.2]} rotation={[0, -Math.PI / 2, 0]}>
         <mesh position={[0, 0, -0.08]}>
           <boxGeometry args={[1.5, 1.4, 0.22]} />
           <meshStandardMaterial color="#262232" roughness={0.6} />
         </mesh>
-        {/* Niche Shelf & Concealed Warm LED */}
         <mesh position={[0, -0.65, 0]}>
           <boxGeometry args={[1.4, 0.04, 0.18]} />
           <meshStandardMaterial color="#E3D9A4" metalness={0.7} roughness={0.3} />
         </mesh>
         <pointLight position={[0, 0.5, 0.05]} color="#FFE8CC" intensity={0.5} distance={2.5} decay={2} />
-        {/* Decorative Vase in Niche */}
         <mesh position={[0, -0.45, 0]} castShadow>
-          <cylinderGeometry args={[0.07, 0.11, 0.38, 18]} />
+          <cylinderGeometry args={[0.07, 0.11, 0.38, 20]} />
           <meshStandardMaterial color="#FAF8F2" roughness={0.8} />
         </mesh>
       </group>
 
       {/* ------------------------------------------------------------- */}
-      {/* 4. LEFT WALL & WINDOW (wall-left, window, frame)              */}
+      {/* 5. LEFT WALL & WINDOW (wall-left)                             */}
       {/* ------------------------------------------------------------- */}
       <ArchitecturalWindow skyColor={lightConfig.skyColor || '#E8F2FC'} />
 
-      {/* Window Wall Top & Bottom Jamb Reveals */}
       <mesh
         position={[-6.95, 0.1, 0]}
         rotation={[0, Math.PI / 2, 0]}
@@ -1186,12 +964,12 @@ export function ArchitecturalRoom({
       </mesh>
 
       {/* ------------------------------------------------------------- */}
-      {/* 5. CEILING SYSTEM (ceiling-main)                              */}
+      {/* 6. CEILING SYSTEM (ceiling-main)                              */}
       {/* ------------------------------------------------------------- */}
       {cameraPreset !== 'TOP' && (
         <CeilingSystem
           ceilingColor={resolvedSurfaces['ceiling-main']?.color || '#FAF8F5'}
-          preset={resolvedSurfaces['ceiling-main']?.stylePreset || ceilingPreset}
+          preset={resolvedSurfaces['ceiling-main']?.stylePreset || 'LAYERED'}
           coveIntensity={lightConfig.coveIntensity || 1.0}
           isSelected={selectedSurfaceId === 'ceiling-main'}
           isHovered={hoveredSurface === 'ceiling-main'}
@@ -1200,11 +978,11 @@ export function ArchitecturalRoom({
       )}
 
       {/* ------------------------------------------------------------- */}
-      {/* 6. ROOM FURNITURE & CONTEMPORARY SCENE OBJECTS                */}
+      {/* 7. FURNITURE & SCENE OBJECTS                                  */}
       {/* ------------------------------------------------------------- */}
       {roomType === 'LIVING' && (
         <group>
-          {/* Wool Rug on Floor */}
+          {/* Wool Area Rug */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.012, 0.2]} receiveShadow>
             <planeGeometry args={[6.2, 5.0]} />
             <meshStandardMaterial color="#DDD8CF" roughness={0.92} map={fabricTexture} />
@@ -1214,12 +992,10 @@ export function ArchitecturalRoom({
           <ModernCredenza
             position={[-0.8, 0, -4.95]}
             woodMaterial={credenzaWoodMaterial}
-            isSelected={selectedSurfaceId === 'cabinet-main'}
-            isHovered={hoveredSurface === 'cabinet-main'}
             onSelect={onSelectSurface}
           />
 
-          {/* Framed Minimalist Architectural Canvas Artwork over Credenza (Eye-Level) */}
+          {/* Framed Minimalist Architectural Canvas Artwork over Credenza */}
           <group position={[-0.8, 1.85, -5.39]}>
             <mesh castShadow receiveShadow>
               <boxGeometry args={[2.8, 1.35, 0.04]} />
@@ -1229,7 +1005,6 @@ export function ArchitecturalRoom({
               <planeGeometry args={[2.65, 1.2]} />
               <meshStandardMaterial color="#FAF8F2" roughness={0.9} />
             </mesh>
-            {/* Geometric Art Accent */}
             <mesh position={[-0.35, 0, 0.024]}>
               <circleGeometry args={[0.38, 32]} />
               <meshBasicMaterial color={resolvedSurfaces['wall-feature']?.color || '#3C2D8C'} />
@@ -1240,7 +1015,7 @@ export function ArchitecturalRoom({
             </mesh>
           </group>
 
-          {/* Twin Contemporary Lounge Chairs */}
+          {/* Twin Contemporary Sculpted Lounge Chairs */}
           <ArchitecturalLoungeChair
             position={[-1.7, 0, 0.7]}
             rotation={[0, 0.35, 0]}
@@ -1252,34 +1027,62 @@ export function ArchitecturalRoom({
             fabricMaterial={fabricMaterial}
           />
 
-          {/* Travertine Coffee Table */}
+          {/* Sculptural Travertine Coffee Table */}
           <CoffeeTable position={[0, 0, 0.3]} />
 
           {/* Arched Floor Lamp */}
-          <FloorLamp position={[-3.6, 0, 2.0]} />
+          <group position={[-3.6, 0, 2.0]}>
+            <mesh position={[0, 0.05, 0]} castShadow>
+              <cylinderGeometry args={[0.22, 0.22, 0.1, 24]} />
+              <meshStandardMaterial color="#1E1C24" roughness={0.3} metalness={0.2} />
+            </mesh>
+            <mesh position={[0, 1.25, 0]} castShadow>
+              <cylinderGeometry args={[0.015, 0.015, 2.4, 12]} />
+              <meshStandardMaterial color="#E3D9A4" metalness={0.85} roughness={0.2} />
+            </mesh>
+            <mesh position={[0.25, 2.45, 0]} rotation={[0, 0, -0.45]} castShadow>
+              <cylinderGeometry args={[0.012, 0.012, 0.8, 12]} />
+              <meshStandardMaterial color="#E3D9A4" metalness={0.85} roughness={0.2} />
+            </mesh>
+            <mesh position={[0.5, 2.25, 0]} castShadow>
+              <cylinderGeometry args={[0.2, 0.2, 0.32, 24]} />
+              <meshStandardMaterial color="#FAF8F2" roughness={0.85} />
+            </mesh>
+            <pointLight position={[0.5, 2.1, 0]} color="#FFE6B8" intensity={1.1} distance={4.5} decay={2} />
+          </group>
 
-          {/* Indoor Architectural Plant */}
-          <IndoorPlant position={[-5.2, 0, -3.8]} />
+          {/* Indoor Planter with Broad Ficus Leaves */}
+          <group position={[-5.2, 0, -3.8]}>
+            <mesh position={[0, 0.3, 0]} castShadow receiveShadow>
+              <cylinderGeometry args={[0.24, 0.18, 0.6, 20]} />
+              <meshStandardMaterial color="#B85C38" roughness={0.85} />
+            </mesh>
+            <mesh position={[0, 0.8, 0]} castShadow>
+              <cylinderGeometry args={[0.02, 0.025, 0.6, 8]} />
+              <meshStandardMaterial color="#4A3B32" roughness={0.9} />
+            </mesh>
+            {[
+              { y: 0.8, r: [0.3, 0.5, 0], scale: [0.32, 0.02, 0.22] },
+              { y: 0.95, r: [-0.2, 1.8, 0.2], scale: [0.35, 0.02, 0.24] },
+              { y: 1.1, r: [0.4, 3.2, -0.3], scale: [0.38, 0.02, 0.25] },
+              { y: 1.25, r: [-0.3, 4.5, 0.1], scale: [0.36, 0.02, 0.23] }
+            ].map((leaf, i) => (
+              <mesh key={i} position={[0, leaf.y, 0]} rotation={leaf.r} castShadow>
+                <boxGeometry args={leaf.scale} />
+                <meshStandardMaterial color="#3B533E" roughness={0.65} />
+              </mesh>
+            ))}
+          </group>
         </group>
       )}
 
-      {/* 2. BEDROOM LAYOUT */}
+      {/* Bedroom Suite */}
       {roomType === 'BEDROOM' && (
         <BedroomSuite woodMaterial={credenzaWoodMaterial} fabricMaterial={fabricMaterial} />
       )}
 
-      {/* 3. KITCHEN LAYOUT */}
-      {roomType === 'KITCHEN' && (
-        <KitchenSuite woodMaterial={credenzaWoodMaterial} />
-      )}
-
-      {/* 4. COMMERCIAL / BOARDROOM LAYOUT */}
-      {roomType === 'COMMERCIAL' && (
-        <CommercialSuite woodMaterial={credenzaWoodMaterial} />
-      )}
-
       {/* ------------------------------------------------------------- */}
-      {/* 7. INTERACTIVE 3D HOTSPOTS                                    */}
+      {/* 8. INTERACTIVE 3D HOTSPOTS                                    */}
       {/* ------------------------------------------------------------- */}
       {showHotspots && (
         <>

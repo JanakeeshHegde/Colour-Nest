@@ -1,17 +1,12 @@
 import React from 'react';
-import {
-  Bookmark,
-  Sparkles,
-  Undo2
-} from 'lucide-react';
+import { RotateCcw, Undo2 } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
 import {
   useSpaceStudioState,
   SpaceStudioCanvas,
   StudioControlPanel,
   StudioCameraToolbar,
-  SavedDesignsModal,
-  DesignEnquiryModal
+  ResetConfirmModal
 } from '../features/space-studio';
 import { ROOM_TYPES } from '../data/roomStudioConfig';
 
@@ -33,40 +28,39 @@ export const SpaceStudio = () => {
     isMobilePanelOpen,
     setIsMobilePanelOpen,
     history,
-    savedDesigns,
-    isSavedModalOpen,
-    setIsSavedModalOpen,
-    isEnquiryModalOpen,
-    setIsEnquiryModalOpen,
+    isResetModalOpen,
+    setIsResetModalOpen,
     toastMessage,
     showToast,
     handleUndo,
     handleSelectSurface,
     handleUpdateWallColor,
+    handleUpdateWallFinish,
     handleUpdateFloor,
     handleUpdateCeilingColor,
     handleUpdateCeilingStyle,
     handleUpdateWood,
     handleSelectLighting,
     handleResetSelectedSurface,
-    handleResetEntireRoom,
-    handleSaveDesign,
-    handleRestoreDesign,
-    handleDownloadSummary
+    handleResetEntireRoom
   } = useSpaceStudioState();
+
+  const currentRoom = ROOM_TYPES[roomType] || ROOM_TYPES.LIVING;
 
   return (
     <div
+      className="studio-page-container"
       style={{
         position: 'relative',
         width: '100%',
         height: '100vh',
-        minHeight: '700px',
+        minHeight: '640px',
         backgroundColor: '#17151D',
         color: '#FAF8F2',
         overflow: 'hidden',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        paddingTop: '68px' // Offset for fixed navbar
       }}
     >
       <SEOHead
@@ -75,57 +69,38 @@ export const SpaceStudio = () => {
       />
 
       {/* ------------------------------------------------------------- */}
-      {/* 3D CANVAS VIEWPORT AREA                                        */}
-      {/* ------------------------------------------------------------- */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
-        <SpaceStudioCanvas
-          roomType={roomType}
-          surfaces={surfaces}
-          selectedSurfaceId={selectedSurfaceId}
-          onSelectSurface={handleSelectSurface}
-          lighting={lighting}
-          cameraPreset={cameraPreset}
-          resetCameraTrigger={resetCameraCounter}
-          onHotspotClick={handleSelectSurface}
-          activeHotspot={selectedSurfaceId}
-          showHotspots={showHotspots}
-        />
-      </div>
-
-      {/* ------------------------------------------------------------- */}
-      {/* TOP HEADER OVERLAY (Fixed Brand Identity & Studio Controls)   */}
+      {/* TOP STUDIO BAR (Clean Identity & Global Action Controls)       */}
       {/* ------------------------------------------------------------- */}
       <header
-        className="studio-top-header"
+        className="studio-top-bar"
         style={{
-          position: 'relative',
-          zIndex: 20,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: 'calc(76px + 0.85rem) clamp(1rem, 2.5vw, 2.5rem) 0.65rem',
-          background: 'linear-gradient(180deg, rgba(23, 21, 29, 0.95) 0%, rgba(23, 21, 29, 0) 100%)',
-          pointerEvents: 'none'
+          padding: '0.65rem clamp(1rem, 2.5vw, 2rem)',
+          backgroundColor: 'rgba(23, 21, 29, 0.96)',
+          borderBottom: '1px solid rgba(227, 217, 164, 0.2)',
+          zIndex: 30,
+          flexShrink: 0
         }}
       >
-        {/* Left: Studio Identity & Room Switcher */}
-        <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+        {/* Left: Studio Badge & Active Space Name */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div
             style={{
-              backgroundColor: 'rgba(33, 29, 45, 0.85)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(227, 217, 164, 0.25)',
+              backgroundColor: 'rgba(33, 29, 45, 0.9)',
+              border: '1px solid rgba(227, 217, 164, 0.3)',
               borderRadius: '999px',
-              padding: '0.45rem 1.1rem',
+              padding: '4px 12px',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.65rem'
+              gap: '7px'
             }}
           >
             <span
               style={{
-                width: '8px',
-                height: '8px',
+                width: '7px',
+                height: '7px',
                 borderRadius: '50%',
                 backgroundColor: '#E3D9A4'
               }}
@@ -133,8 +108,8 @@ export const SpaceStudio = () => {
             <span
               style={{
                 fontFamily: 'var(--font-mono, monospace)',
-                fontSize: '0.72rem',
-                letterSpacing: '0.16em',
+                fontSize: '0.68rem',
+                letterSpacing: '0.14em',
                 color: '#FAF8F2',
                 fontWeight: 700
               }}
@@ -143,53 +118,27 @@ export const SpaceStudio = () => {
             </span>
           </div>
 
-          {/* Room Selector Pill */}
-          <div
+          <span
+            className="desktop-room-subtitle"
             style={{
-              backgroundColor: 'rgba(33, 29, 45, 0.85)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              borderRadius: '8px',
-              padding: '3px',
-              display: 'flex',
-              gap: '4px'
+              fontFamily: 'var(--font-mono, monospace)',
+              fontSize: '0.68rem',
+              color: '#B9B4C5'
             }}
-            className="desktop-room-selector"
           >
-            {Object.values(ROOM_TYPES).map((r) => (
-              <button
-                key={r.id}
-                onClick={() => setRoomType(r.id)}
-                style={{
-                  background: roomType === r.id ? 'var(--brand-indigo, #3C2D8C)' : 'transparent',
-                  color: roomType === r.id ? '#FFFFFF' : 'rgba(250, 248, 242, 0.7)',
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '5px 12px',
-                  fontFamily: 'var(--font-mono, monospace)',
-                  fontSize: '0.68rem',
-                  letterSpacing: '0.1em',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease'
-                }}
-              >
-                {r.name}
-              </button>
-            ))}
-          </div>
+            {currentRoom.name} • {currentRoom.serviceCategory}
+          </span>
         </div>
 
-        {/* Right: Quick Action Buttons (Undo, Save, Request Design) */}
-        <div style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-          {/* Action Buttons: Undo, Save, Request Design */}
+        {/* Right: Studio Quick Actions (Undo, Reset Studio) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <button
             onClick={handleUndo}
             disabled={history.length === 0}
             style={{
               backgroundColor: 'rgba(33, 29, 45, 0.85)',
-              backdropFilter: 'blur(12px)',
               border: '1px solid rgba(255, 255, 255, 0.12)',
-              borderRadius: '8px',
+              borderRadius: '6px',
               padding: '6px 10px',
               color: history.length > 0 ? '#FAF8F2' : 'rgba(255,255,255,0.3)',
               cursor: history.length > 0 ? 'pointer' : 'not-allowed',
@@ -197,22 +146,21 @@ export const SpaceStudio = () => {
               alignItems: 'center',
               gap: '5px',
               fontFamily: 'var(--font-mono, monospace)',
-              fontSize: '0.68rem'
+              fontSize: '0.66rem'
             }}
-            title="Undo last change"
+            title="Undo last material change"
           >
-            <Undo2 size={13} />
+            <Undo2 size={12} />
             <span className="desktop-btn-label">UNDO</span>
           </button>
 
           <button
-            onClick={handleSaveDesign}
+            onClick={() => setIsResetModalOpen(true)}
             style={{
               backgroundColor: 'rgba(33, 29, 45, 0.85)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              borderRadius: '8px',
-              padding: '6px 12px',
+              border: '1px solid rgba(227, 217, 164, 0.4)',
+              borderRadius: '6px',
+              padding: '6px 14px',
               color: '#FAF8F2',
               cursor: 'pointer',
               display: 'inline-flex',
@@ -220,107 +168,161 @@ export const SpaceStudio = () => {
               gap: '6px',
               fontFamily: 'var(--font-mono, monospace)',
               fontSize: '0.68rem',
-              fontWeight: 600
-            }}
-          >
-            <Bookmark size={13} />
-            <span className="desktop-btn-label">SAVE</span>
-          </button>
-
-          <button
-            onClick={() => setIsEnquiryModalOpen(true)}
-            style={{
-              backgroundColor: 'var(--brand-indigo, #3C2D8C)',
-              border: '1px solid #E3D9A4',
-              borderRadius: '8px',
-              padding: '6px 14px',
-              color: '#FFFFFF',
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              fontFamily: 'var(--font-mono, monospace)',
-              fontSize: '0.7rem',
               fontWeight: 700,
               letterSpacing: '0.08em',
-              boxShadow: '0 4px 14px rgba(60, 45, 140, 0.4)'
+              transition: 'background-color 0.2s ease, border-color 0.2s ease'
             }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(60, 45, 140, 0.4)';
+              e.currentTarget.style.borderColor = '#E3D9A4';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(33, 29, 45, 0.85)';
+              e.currentTarget.style.borderColor = 'rgba(227, 217, 164, 0.4)';
+            }}
+            title="Reset your room design to the original settings"
+            aria-label="Reset Studio"
           >
-            <Sparkles size={13} color="#E3D9A4" />
-            <span className="desktop-btn-label">REQUEST THIS DESIGN</span>
-            <span className="mobile-btn-label">ENQUIRE</span>
+            <RotateCcw size={12} color="#E3D9A4" />
+            <span className="desktop-btn-label">RESET STUDIO</span>
+            <span className="mobile-btn-label">RESET</span>
           </button>
         </div>
       </header>
 
       {/* ------------------------------------------------------------- */}
-      {/* FLOATING CAMERA VIEW CONTROLS (FRONT, CORNER, WIDE, LEFT, RIGHT, TOP, RESET) */}
+      {/* MAIN TWO-PART WORKSPACE (70% 3D Viewport / 30% Design Inspector) */}
       {/* ------------------------------------------------------------- */}
-      <StudioCameraToolbar
-        cameraPreset={cameraPreset}
-        setCameraPreset={setCameraPreset}
-        onResetView={() => {
-          setCameraPreset('FRONT');
-          setResetCameraCounter((c) => c + 1);
-          showToast('Reset camera to default view');
+      <div
+        className="studio-main-workspace"
+        style={{
+          display: 'flex',
+          flex: 1,
+          width: '100%',
+          height: 'calc(100% - 48px)',
+          overflow: 'hidden',
+          position: 'relative'
         }}
-      />
+      >
+        {/* LEFT / MAIN AREA: 3D VIEWPORT (~70% on Desktop) */}
+        <div
+          className="studio-viewport-container"
+          style={{
+            flex: '1 1 70%',
+            position: 'relative',
+            height: '100%',
+            overflow: 'hidden',
+            backgroundColor: '#17151D'
+          }}
+        >
+          {/* Floating Camera Toolbar */}
+          <StudioCameraToolbar
+            cameraPreset={cameraPreset}
+            setCameraPreset={setCameraPreset}
+            onResetView={() => {
+              setCameraPreset('FRONT');
+              setResetCameraCounter((c) => c + 1);
+              showToast('Reset camera to default view');
+            }}
+          />
+
+          {/* 3D Canvas */}
+          <SpaceStudioCanvas
+            roomType={roomType}
+            surfaces={surfaces}
+            selectedSurfaceId={selectedSurfaceId}
+            onSelectSurface={handleSelectSurface}
+            lighting={lighting}
+            cameraPreset={cameraPreset}
+            resetCameraTrigger={resetCameraCounter}
+            onHotspotClick={handleSelectSurface}
+            activeHotspot={selectedSurfaceId}
+            showHotspots={showHotspots}
+          />
+        </div>
+
+        {/* RIGHT SIDE: DESIGN INSPECTOR (~30% on Desktop) */}
+        <div
+          className="studio-inspector-container"
+          style={{
+            width: 'clamp(340px, 30vw, 420px)',
+            height: '100%',
+            position: 'relative',
+            flexShrink: 0
+          }}
+        >
+          <StudioControlPanel
+            roomType={roomType}
+            setRoomType={setRoomType}
+            surfaces={surfaces}
+            selectedSurfaceId={selectedSurfaceId}
+            setSelectedSurfaceId={setSelectedSurfaceId}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            lighting={lighting}
+            isMobilePanelOpen={isMobilePanelOpen}
+            setIsMobilePanelOpen={setIsMobilePanelOpen}
+            toastMessage={toastMessage}
+            handleUpdateWallColor={handleUpdateWallColor}
+            handleUpdateWallFinish={handleUpdateWallFinish}
+            handleUpdateFloor={handleUpdateFloor}
+            handleUpdateCeilingColor={handleUpdateCeilingColor}
+            handleUpdateCeilingStyle={handleUpdateCeilingStyle}
+            handleUpdateWood={handleUpdateWood}
+            handleSelectLighting={handleSelectLighting}
+            handleResetSelectedSurface={handleResetSelectedSurface}
+            onOpenResetConfirm={() => setIsResetModalOpen(true)}
+          />
+        </div>
+      </div>
 
       {/* ------------------------------------------------------------- */}
-      {/* FLOATING CUSTOMISATION PANEL (Right Dock) & CHIP               */}
+      {/* CONFIRMATION MODAL: Reset Studio                               */}
       {/* ------------------------------------------------------------- */}
-      <StudioControlPanel
-        surfaces={surfaces}
-        selectedSurfaceId={selectedSurfaceId}
-        setSelectedSurfaceId={setSelectedSurfaceId}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        lighting={lighting}
-        isMobilePanelOpen={isMobilePanelOpen}
-        setIsMobilePanelOpen={setIsMobilePanelOpen}
-        toastMessage={toastMessage}
-        handleUpdateWallColor={handleUpdateWallColor}
-        handleUpdateFloor={handleUpdateFloor}
-        handleUpdateCeilingColor={handleUpdateCeilingColor}
-        handleUpdateCeilingStyle={handleUpdateCeilingStyle}
-        handleUpdateWood={handleUpdateWood}
-        handleSelectLighting={handleSelectLighting}
-        handleResetSelectedSurface={handleResetSelectedSurface}
-        handleResetEntireRoom={handleResetEntireRoom}
-        handleDownloadSummary={handleDownloadSummary}
+      <ResetConfirmModal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+        onConfirm={handleResetEntireRoom}
       />
 
-      {/* ------------------------------------------------------------- */}
-      {/* MODALS                                                        */}
-      {/* ------------------------------------------------------------- */}
-      <SavedDesignsModal
-        isOpen={isSavedModalOpen}
-        onClose={() => setIsSavedModalOpen(false)}
-        savedDesigns={savedDesigns}
-        onRestore={handleRestoreDesign}
-      />
-
-      <DesignEnquiryModal
-        isOpen={isEnquiryModalOpen}
-        onClose={() => setIsEnquiryModalOpen(false)}
-        roomType={roomType}
-        surfaces={surfaces}
-        lighting={lighting}
-      />
-
-      {/* Responsive Styles */}
+      {/* Responsive Layout Styles */}
       <style>{`
-        .mobile-panel-header { display: none; }
         .mobile-btn-label { display: none; }
         .desktop-btn-label { display: inline; }
-        @media (max-width: 900px) {
-          .desktop-room-selector { display: none !important; }
+
+        @media (max-width: 1024px) {
+          .desktop-room-subtitle { display: none !important; }
+          .studio-main-workspace {
+            flex-direction: column !important;
+          }
+          .studio-viewport-container {
+            flex: 1 1 58svh !important;
+            height: 58svh !important;
+            min-height: 320px !important;
+          }
+          .studio-inspector-container {
+            width: 100% !important;
+            flex: 1 1 auto !important;
+            height: auto !important;
+            max-height: 42svh !important;
+          }
+          .mobile-panel-header {
+            display: flex !important;
+          }
         }
+
         @media (max-width: 768px) {
           .desktop-btn-label { display: none !important; }
           .mobile-btn-label { display: inline !important; }
-          .mobile-panel-header { display: flex !important; }
-          .studio-selection-chip.mobile-hidden { display: none !important; }
+          .studio-top-bar {
+            padding: 0.5rem 0.85rem !important;
+          }
+          .studio-viewport-container {
+            height: 54svh !important;
+          }
+          .studio-inspector-container {
+            max-height: 46svh !important;
+          }
         }
       `}</style>
     </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { MessageCircle } from 'lucide-react';
+import { WhatsAppIcon } from './WhatsAppIcon';
 import { siteData } from '../../data/siteData';
 
 export const WhatsAppFab = () => {
@@ -19,10 +19,11 @@ export const WhatsAppFab = () => {
         className="whatsapp-fab"
         data-cursor="CALL"
         aria-label="Get a free consultation on WhatsApp"
+        title="Chat with Colour Nest on WhatsApp"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <MessageCircle className="whatsapp-fab-icon" />
+        <WhatsAppIcon size={28} color="#FFFFFF" className="whatsapp-fab-icon" />
         <span style={{ whiteSpace: 'nowrap' }}>
           {isHovered ? 'GET A FREE CONSULTATION' : 'CONSULT ON WHATSAPP'}
         </span>
@@ -42,11 +43,23 @@ export const WhatsAppFab = () => {
           target="_blank"
           rel="noopener noreferrer"
           className="btn-primary"
-          style={{ flex: 1.4, padding: '0.65rem 0.5rem', fontSize: '0.72rem', backgroundColor: '#25D366' }}
+          style={{
+            flex: 1.4,
+            padding: '0.65rem 0.5rem',
+            fontSize: '0.72rem',
+            backgroundColor: '#25D366',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px'
+          }}
         >
-          Consult on WhatsApp
+          <WhatsAppIcon size={16} color="#FFFFFF" />
+          <span>Consult on WhatsApp</span>
         </a>
       </div>
     </aside>
   );
 };
+
+export default WhatsAppFab;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { WhatsAppIcon } from '../../../components/common/WhatsAppIcon';
 import { siteData } from '../../../data/siteData';
 
 export const ConsultationCtaSection = () => {
@@ -106,6 +107,7 @@ export const ConsultationCtaSection = () => {
               border: '1px solid #E7E1D6'
             }}
           >
+            <WhatsAppIcon size={16} color="#25D366" />
             <span>Message on WhatsApp</span>
           </a>
         </div>

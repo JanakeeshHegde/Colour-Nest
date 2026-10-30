@@ -102,7 +102,6 @@ function StudioCameraRig({ preset = 'FRONT', resetTrigger = 0, isReducedMotion =
       enableRotate={true}
       minDistance={1.8}
       maxDistance={9.5}
-      // Generous polar angle range: allows top-down view (0.08 rad) down to floor grazing
       minPolarAngle={0.08}
       maxPolarAngle={Math.PI / 2.04}
       minAzimuthAngle={-Math.PI / 1.45}

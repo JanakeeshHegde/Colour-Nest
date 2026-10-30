@@ -1,13 +1,13 @@
 import React from 'react';
 import {
   Phone,
-  MessageCircle,
   Mail,
   MapPin,
   ExternalLink,
   Navigation
 } from 'lucide-react';
 import { SEOHead } from '../components/common/SEOHead';
+import { WhatsAppIcon } from '../components/common/WhatsAppIcon';
 import { siteData } from '../data/siteData';
 import { ContactEnquiryWizard } from '../features/contact';
 
@@ -210,7 +210,7 @@ export const Contact = () => {
                     fontWeight: 600
                   }}
                 >
-                  <MessageCircle size={13} color="#25D366" />
+                  <WhatsAppIcon size={14} color="#25D366" />
                   <span>WhatsApp</span>
                 </a>
 
@@ -478,7 +478,7 @@ export const Contact = () => {
                       textDecoration: 'none'
                     }}
                   >
-                    <MessageCircle size={13} color="#25D366" />
+                    <WhatsAppIcon size={14} color="#25D366" />
                     <span>WHATSAPP</span>
                   </a>
                 </div>

@@ -9,7 +9,7 @@ import { useSmoothScroll } from './hooks/useSmoothScroll';
 // Layout Components
 import { Navbar, Footer } from './components/layout';
 // Common Components
-import { Preloader, ScrollProgress, WhatsAppFab } from './components/common';
+import { Preloader, ScrollProgress, WhatsAppFab, BackToTop } from './components/common';
 
 // Code-split active pages for fast initial load and token efficiency
 const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home || m.default })));
@@ -166,6 +166,7 @@ const AppContent = () => {
 
       {!is3DStudio && <Footer />}
       {!is3DStudio && <WhatsAppFab />}
+      <BackToTop />
     </div>
   );
 };

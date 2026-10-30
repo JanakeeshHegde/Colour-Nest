@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import {
-  MessageCircle,
   Mail,
   ArrowRight,
   ArrowLeft,
@@ -12,6 +11,7 @@ import {
   RotateCcw,
   Sparkles
 } from 'lucide-react';
+import { WhatsAppIcon } from '../../../components/common/WhatsAppIcon';
 import { siteData } from '../../../data/siteData';
 
 const PROJECT_TYPES = [
@@ -835,7 +835,7 @@ export const ContactEnquiryWizard = () => {
                       boxShadow: '0 6px 20px rgba(60, 45, 140, 0.3)'
                     }}
                   >
-                    <MessageCircle size={16} color="#E3D9A4" />
+                    <WhatsAppIcon size={16} color="#E3D9A4" />
                     <span>Confirm &amp; Send on WhatsApp</span>
                   </button>
 
@@ -1049,7 +1049,7 @@ export const ContactEnquiryWizard = () => {
                 gap: '6px'
               }}
             >
-              <MessageCircle size={14} color="#E3D9A4" />
+              <WhatsAppIcon size={14} color="#E3D9A4" />
               <span>Reopen WhatsApp</span>
             </button>
 
